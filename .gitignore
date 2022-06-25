@@ -1,0 +1,5 @@
+// database
+*.sqlite3
+
+// environment files
+*.env
