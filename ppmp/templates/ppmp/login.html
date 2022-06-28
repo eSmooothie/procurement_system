@@ -1,7 +1,7 @@
 {% include "theme/header.html" %}
-<div class="flex sm:justify-center items-center min-w-full min-h-screen">
-    <form action="/" method="post" class=" sm:w-1/2 w-full sm:border border-black px-5 py-3 rounded-md space-y-6">
-        <div class="text-center space-y-3">
+<div class="flex sm:justify-center items-center min-w-full min-h-screen sm:bg-gray-100">
+    <form action="/" method="post" class="sm:bg-white sm:w-1/2 w-full sm:border border-gray-200 px-5 py-3 rounded-md space-y-6 shadow-lg">
+        <div class="text-center space-y-3 pt-3">
             {% load static %}
             <div class="flex justify-center">
                 <img src="{% static 'images/logo/msu_iit_seal.png'%}" alt="msu_iit_logo" class=" h-32">
@@ -31,17 +31,19 @@
                 <p>{{ err_msg }}</p>
             {% endif %}
         </div>
-        <div class="flex items-start mb-6">
+        <div class="flex items-start">
             <div class="flex items-center h-5">
                 <input id="remember" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300">
             </div>
             <label for="remember" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
         </div>
-        <div class="flex justify-end">
-            <button type="submit" class="text-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium 
-        rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center bg-blue-700">Login</button>
+        <div class="flex justify-center">
+            <button type="submit" class="text-white hover:bg-blue-800 focus:ring-4 focus:outline-none 
+            focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-28 py-2.5 text-center bg-blue-700">Login</button>
         </div>
-        
+        <div class="flex items-start border-t-2 py-5">
+            <a href="#" class=" font-medium text-xs text-blue-700 hover:underline">Forget Password?</a>
+        </div>
     </form>
 </div>
 {% load static %}
