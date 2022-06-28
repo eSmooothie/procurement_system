@@ -1,6 +1,16 @@
 {% include "theme/header.html" %}
-<div class="flex justify-center items-center min-w-full min-h-screen">
-    <form action="/" method="post" class=" w-1/2 border border-black px-5 py-3 rounded-md space-y-6">
+<div class="flex sm:justify-center items-center min-w-full min-h-screen">
+    <form action="/" method="post" class=" sm:w-1/2 w-full sm:border border-black px-5 py-3 rounded-md space-y-6">
+        <div class="text-center space-y-3">
+            {% load static %}
+            <div class="flex justify-center">
+                <img src="{% static 'images/logo/msu_iit_seal.png'%}" alt="msu_iit_logo" class=" h-32">
+            </div>
+            <div>
+                <h2 class="font-medium text-3xl">MSU-IIT</h2>
+                <h2 class="font-medium text-2xl">Procurement System</h2>
+            </div>
+        </div>
         {% csrf_token %}
         <div class="">
             <label for="{{ form.username.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900">Username</label>
