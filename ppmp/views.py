@@ -8,7 +8,6 @@ from .forms import LoginForm
 logger = logging.getLogger(__name__)
 # Create your views here.
 def index(request):
-    logger.info("TEST FROM INDEX")
     context = page_context(
         test_data="TEST_123",
         )
@@ -25,8 +24,6 @@ def logout_user(request):
 
 def login_user(request):
     context = page_context(err_msg = None)
-    
-    logger.warning("TEST LOGIN")
 
     if request.method == 'POST':
        
@@ -41,10 +38,10 @@ def login_user(request):
 
             return render(request, template_name='ppmp/login.html', context=context)
 
-        # redirect to home
-        login(request, user)
+       
+        login(request, user) # login user
 
-        return redirect('home')
+        return redirect('home')  # redirect to home
     
     
     return render(request, template_name='ppmp/login.html', context=context)

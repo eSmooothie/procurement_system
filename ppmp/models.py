@@ -17,11 +17,7 @@ class Item(models.Model):
         return "Item ID#{self.id}"
 
 class ItemDescription(models.Model):
-    specifics_1 = models.CharField(blank=True, max_length=255)
-    specifics_2 = models.CharField(blank=True, max_length=255)
-    specifics_3 = models.CharField(blank=True, max_length=255)
-    specifics_4 = models.CharField(blank=True, max_length=255)
-    specifics_5 = models.CharField(blank=True, max_length=255)
+    specifics = models.CharField(blank=True, max_length=255)
     item = models.ForeignKey(Item, on_delete=models.RESTRICT)
 
     def __str__(self):
@@ -82,7 +78,7 @@ class Prices(models.Model):
     price = models.CharField(blank=True, max_length=255)
     date_created = models.DateTimeField(auto_now=True)
     unit = models.CharField(blank=True, max_length=255)
-    item = models.ForeignKey(Item, on_delete=models.RESTRICT)
+    item = models.ForeignKey(ItemDescription, on_delete=models.RESTRICT)
 
     def __str__(self):
         return "Prices ID#{self.id}"
@@ -99,10 +95,10 @@ class OrderDetails(models.Model):
     obligate_po_status = models.CharField(blank=True, max_length=255)
     served_status = models.CharField(blank=True, max_length=255)
     qr_code = models.CharField(blank=True, max_length=255)
-    first_quantity = models.CharField(blank=True, max_length=255)
-    second_quantity = models.CharField(blank=True, max_length=255)
-    third_quantity = models.CharField(blank=True, max_length=255)
-    fourth_quantity = models.CharField(blank=True, max_length=255)
+    fq_quantity = models.CharField(blank=True, max_length=255)
+    sq_quantity = models.CharField(blank=True, max_length=255)
+    tq_quantity = models.CharField(blank=True, max_length=255)
+    fq_quantity = models.CharField(blank=True, max_length=255)
     fifth_quantity = models.CharField(blank=True, max_length=255)
 
 
