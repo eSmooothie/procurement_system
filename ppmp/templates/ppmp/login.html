@@ -1,0 +1,39 @@
+{% include "theme/header.html" %}
+<div class="flex justify-center items-center min-w-full min-h-screen">
+    <form action="/" method="post" class=" w-1/2 border border-black px-5 py-3 rounded-md space-y-6">
+        {% csrf_token %}
+        <div class="">
+            <label for="{{ form.username.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900">Username</label>
+            <div class="flex items-center space-x-4">
+                <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username">
+                <span class="text-transparent"><i class="fa-solid fa-eye"></i></span>
+            </div>
+        </div>
+        <div class="">
+            <label for="{{ form.password.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900">Password</label>
+            <div class="flex items-center space-x-4">
+                <input type="password" name="password" autocomplete="current-password" required id="id_password">
+                <span id="toggle_password"><i class="fa-solid fa-eye"></i></span>
+            </div>
+        </div>
+        <div class=" text-red-600">
+            {% if err_msg %}
+                <p>{{ err_msg }}</p>
+            {% endif %}
+        </div>
+        <div class="flex items-start mb-6">
+            <div class="flex items-center h-5">
+                <input id="remember" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300">
+            </div>
+            <label for="remember" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
+        </div>
+        <div class="flex justify-end">
+            <button type="submit" class="text-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium 
+        rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center bg-blue-700">Login</button>
+        </div>
+        
+    </form>
+</div>
+{% load static %}
+<script src="{% static 'js/ppmp/login.js' %}"></script>
+{% include "theme/footer.html" %}
