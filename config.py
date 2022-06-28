@@ -1,13 +1,13 @@
 from dotenv import load_dotenv
 import logging
-import datetime
+from datetime import datetime 
 import os
 
 load_dotenv()
 
-# LOGGING
+# LOGGING-0[p988]
 LOG_DIR = 'logs/'
-LOG_FILE_NAME = "log_{}".format(datetime.now().strftime("%m/%d/%Y_%H:%M:%S"))
+LOG_FILE_NAME = "log_{}".format(datetime.now().strftime("%m_%d_%Y"))
 logging.basicConfig(
     filename=LOG_DIR+LOG_FILE_NAME,
     format='[%(asctime)s] -> %(message)s', 
