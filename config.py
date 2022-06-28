@@ -7,7 +7,7 @@ load_dotenv()
 
 # LOGGING-0[p988]
 LOG_DIR = 'logs/'
-LOG_FILE_NAME = "log_{}".format(datetime.now().strftime("%m_%d_%Y"))
+LOG_FILE_NAME = "{}.log".format(datetime.now().strftime("%m_%d_%Y"))
 logging.basicConfig(
     filename=LOG_DIR+LOG_FILE_NAME,
     format='[%(asctime)s] -> %(message)s', 
