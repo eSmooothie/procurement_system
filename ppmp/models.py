@@ -95,10 +95,10 @@ class OrderDetails(models.Model):
     obligate_po_status = models.CharField(blank=True, max_length=255)
     served_status = models.CharField(blank=True, max_length=255)
     qr_code = models.CharField(blank=True, max_length=255)
-    fq_quantity = models.CharField(blank=True, max_length=255)
-    sq_quantity = models.CharField(blank=True, max_length=255)
-    tq_quantity = models.CharField(blank=True, max_length=255)
-    fq_quantity = models.CharField(blank=True, max_length=255)
+    first_quart_quant = models.CharField(blank=True, max_length=255)
+    second_quart_quant = models.CharField(blank=True, max_length=255)
+    third_quart_quant = models.CharField(blank=True, max_length=255)
+    fourth_quart_quant = models.CharField(blank=True, max_length=255)
     fifth_quantity = models.CharField(blank=True, max_length=255)
 
 

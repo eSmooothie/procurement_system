@@ -14,7 +14,7 @@ def index(request):
 
     return render(
         request=request, 
-        template_name='ppmp/home.html', 
+        template_name='ppmp/ppmp.html', 
         context=context
         )
 
