@@ -11,13 +11,13 @@
                 <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">set price</button></a>
             {% endblock menu_buttons %}
         </div>
-        <div class="grid grid-cols-2">
+        <div class="grid grid-cols-2 gap-x-3">
             <span class=" col-span-1 flex items-center">
                 Hello! {{ user_fn }}
             </span>
             <div class=" col-span-1">
                 <a href="{% url 'logout_user' %}" class=" min-h-full">
-                    <button class="px-5 py-3 bg-red-600 hover:bg-red-500 uppercase flex items-center min-h-full space-x-2">
+                    <button class="px-5 py-3 bg-red-400 hover:bg-red-500 uppercase flex items-center min-h-full space-x-2">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i>
                         <span class="text-xs">log out</span>
                     </button>

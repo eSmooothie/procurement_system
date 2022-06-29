@@ -8,5 +8,5 @@ urlpatterns = [
     #ppmp
     path('home/', views.index, name='home'),
     path('home/ppmp', views.index, name='ppmp'),
-    path('home/ppmp/costcenter', views.index, name='cc_ppmp'),
+    path('home/ppmp/costcenter', views.cc_ppmp, name='cc_ppmp'),
 ]
