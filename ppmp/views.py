@@ -3,13 +3,20 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
 
 from .helper import *
-from .forms import LoginForm
+from .models import CostCenter, CostCenterUser
 
 logger = logging.getLogger(__name__)
 # Create your views here.
 def index(request):
+    # check if user is login
+    if not has_user(request):
+        return redirect("login_user")
+        
+    user_cost_centers = CostCenterUser.objects.select_related().filter(user__id=request.user.id)
+
     context = page_context(
-        test_data="TEST_123",
+        user_fn = request.user.first_name,
+        user_cost_centers=user_cost_centers,
         )
 
     return render(

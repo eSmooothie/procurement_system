@@ -28,14 +28,14 @@ class CostCenter(models.Model):
     name = models.CharField(blank=True, max_length=255)
 
     def __str__(self):
-        return "CostCenter Code:{self.code}"
+        return "CostCenter Code:{}".format(self.code)
 
 class CostCenterUser(models.Model):
     cc = models.ForeignKey(CostCenter, on_delete=models.RESTRICT)
     user = models.ForeignKey(User, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "CostCenterUser ID#{self.id}"
+        return "#{} - CC:{} U:{}".format(self.id, self.cc.code, self.user.id)
 
 class CostCenterBudget(models.Model):
     org_budget = models.CharField(blank=True, max_length=255)
@@ -43,7 +43,7 @@ class CostCenterBudget(models.Model):
     category = models.ForeignKey(Category, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "CostCenterBudget ID#{self.id}"
+        return "CostCenterBudget ID#{}".format(self.id)
 
 class SourceOfFund(models.Model):
     code = models.CharField(blank=True, max_length=255)

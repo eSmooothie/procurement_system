@@ -1,21 +1,33 @@
-
+{% include "theme/header.html" %}
 <div class="">
-    <div class=" bg-blue-700 text-white font-medium flex justify-between">
+    <div class=" bg-blue-700 text-white font-medium flex justify-between h-auto">
         <div class="">
-            <button class="px-5 py-3 hover:bg-blue-600 uppercase">PPMP</button>
-            <button class="px-5 py-3 hover:bg-blue-600 uppercase">APP</button>
-            <button class="px-5 py-3 hover:bg-blue-600 uppercase">view prs</button>
-            <button class="px-5 py-3 hover:bg-blue-600 uppercase">group items</button>
-            <button class="px-5 py-3 hover:bg-blue-600 uppercase">create rfq</button>
-            <button class="px-5 py-3 hover:bg-blue-600 uppercase">set price</button>
+            {% block menu_buttons %}
+                <button class="px-5 py-3 hover:bg-blue-600 uppercase">PPMP</button>
+                <button class="px-5 py-3 hover:bg-blue-600 uppercase">APP</button>
+                <button class="px-5 py-3 hover:bg-blue-600 uppercase">view prs</button>
+                <button class="px-5 py-3 hover:bg-blue-600 uppercase">group items</button>
+                <button class="px-5 py-3 hover:bg-blue-600 uppercase">create rfq</button>
+                <button class="px-5 py-3 hover:bg-blue-600 uppercase">set price</button>
+            {% endblock menu_buttons %}
         </div>
-        <div>
-            <a href="{% url 'logout_user' %}" class=" min-h-full">
-                <button class="px-5 py-3 bg-red-600 hover:bg-red-500 uppercase flex items-center min-h-full space-x-2">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    <span class="text-xs">log out</span>
-                </button>
-            </a>
+        <div class="grid grid-cols-2">
+            <span class=" col-span-1 flex items-center">
+                Hello! {{ user_fn }}
+            </span>
+            <div class=" col-span-1">
+                <a href="{% url 'logout_user' %}" class=" min-h-full">
+                    <button class="px-5 py-3 bg-red-600 hover:bg-red-500 uppercase flex items-center min-h-full space-x-2">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span class="text-xs">log out</span>
+                    </button>
+                </a>
+            </div>
         </div>
+
+    </div>
+    <div class="">
+        {% block content %}{% endblock content  %}
     </div>
 </div>
+{% include "theme/footer.html" %}

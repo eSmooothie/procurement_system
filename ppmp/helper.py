@@ -3,3 +3,7 @@ def page_context(title = "PPMP", **kwargs ) -> dict:
     context = kwargs
     context['PAGE_TITLE'] = title
     return context
+
+def has_user(request):
+    '''check user exist'''
+    return request.user.is_authenticated

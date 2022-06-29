@@ -1,9 +1,45 @@
-{% include "theme/header.html" %}
-<div>
-    {% include "ppmp/menu.html" %}
-
-    <div>
-        <h1>BODY</h1>
+{% extends "ppmp/menu.html" %}
+{% block menu_buttons %}
+    <button class="px-5 py-3 bg-blue-600 uppercase">PPMP</button>
+    <button class="px-5 py-3 hover:bg-blue-600 uppercase">APP</button>
+    <button class="px-5 py-3 hover:bg-blue-600 uppercase">view prs</button>
+    <button class="px-5 py-3 hover:bg-blue-600 uppercase">group items</button>
+    <button class="px-5 py-3 hover:bg-blue-600 uppercase">create rfq</button>
+    <button class="px-5 py-3 hover:bg-blue-600 uppercase">set price</button>
+{% endblock menu_buttons %}
+{% block content %}
+    <div class="">
+        <div class="p-3 space-y-3 sm:flex items-center flex-col">
+            <p class=" font-medium sm:w-1/2">Choose Cost Center</p>
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg border border-gray-200 sm:w-1/2">
+                <table class="w-full text-sm text-left text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">code</th>
+                            <th scope="col" class="px-6 py-3">name</th>
+                            <th scope="col" class="px-6 py-3">
+                                <span class="sr-only">Action</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user_cost_center in user_cost_centers %}
+                            <tr id="cc_{{ user_cost_center.cc.id }}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer cost_center">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                {{ user_cost_center.cc.code }}
+                                </th>
+                                <td class="px-6 py-4">
+                                {{ user_cost_center.cc.name }}
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">TBA</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-</div>
-{% include "theme/footer.html" %}
+{% endblock content %}
+
