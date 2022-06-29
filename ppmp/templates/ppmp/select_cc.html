@@ -1,11 +1,15 @@
 {% extends "ppmp/menu.html" %}
 {% block menu_buttons %}
-    <button class="px-5 py-3 bg-blue-600 uppercase">PPMP</button>
-    <button class="px-5 py-3 hover:bg-blue-600 uppercase">APP</button>
-    <button class="px-5 py-3 hover:bg-blue-600 uppercase">view prs</button>
-    <button class="px-5 py-3 hover:bg-blue-600 uppercase">group items</button>
-    <button class="px-5 py-3 hover:bg-blue-600 uppercase">create rfq</button>
-    <button class="px-5 py-3 hover:bg-blue-600 uppercase">set price</button>
+    {% if selected_app %}
+        <a href="{% url 'ppmp' %}"><button class="px-5 py-3 bg-cyan-500 uppercase">PPMP</button></a>
+    {% else %}
+        <a href="{% url 'ppmp' %}"><button class="px-5 py-3 hover:bg-cyan-500 uppercase">PPMP</button></a>
+    {% endif %}
+    <button class="px-5 py-3 hover:bg-cyan-500 uppercase">APP</button>
+    <button class="px-5 py-3 hover:bg-cyan-500 uppercase">view prs</button>
+    <button class="px-5 py-3 hover:bg-cyan-500 uppercase">group items</button>
+    <button class="px-5 py-3 hover:bg-cyan-500 uppercase">create rfq</button>
+    <button class="px-5 py-3 hover:bg-cyan-500 uppercase">set price</button>
 {% endblock menu_buttons %}
 {% block content %}
     <div class="">
@@ -24,7 +28,7 @@
                     </thead>
                     <tbody>
                         {% for user_cost_center in user_cost_centers %}
-                            <tr id="cc_{{ user_cost_center.cc.id }}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer cost_center">
+                            <tr id="cc_{{ user_cost_center.cc.id }}" data-cost-center-id="{{ user_cost_center.cc.id }}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer cost_center_row">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                                 {{ user_cost_center.cc.code }}
                                 </th>
@@ -41,5 +45,7 @@
             </div>
         </div>
     </div>
+    {% load static %}
+    <script src="{% static 'js/ppmp/_script.js' %}"></script>
 {% endblock content %}
 

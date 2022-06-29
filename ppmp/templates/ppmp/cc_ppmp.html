@@ -1,0 +1,36 @@
+{% extends "ppmp/menu.html" %}
+{% block menu_buttons %}
+    <button class="px-5 py-3 bg-cyan-600 uppercase">PPMP</button>
+    <button class="px-5 py-3 hover:bg-cyan-500 uppercase">APP</button>
+    <button class="px-5 py-3 hover:bg-cyan-500 uppercase">view prs</button>
+    <button class="px-5 py-3 hover:bg-cyan-500 uppercase">group items</button>
+    <button class="px-5 py-3 hover:bg-cyan-500 uppercase">create rfq</button>
+    <button class="px-5 py-3 hover:bg-cyan-500 uppercase">set price</button>
+{% endblock menu_buttons %}
+{% block content %}
+    <div class="">
+        <div class="p-3 space-y-3 sm:flex items-center flex-col">
+            <p class=" font-medium sm:w-1/2">Cost Center PPMP</p>
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg border border-gray-200 sm:w-1/2">
+                <table class="w-full text-sm text-left text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">PPMP ID</th>
+                            <th scope="col" class="px-6 py-3">cost center</th>
+                            <th scope="col" class="px-6 py-3">ppmp year</th>
+                            <th scope="col" class="px-6 py-3">ppmp type</th>
+                            <th scope="col" class="px-6 py-3">fund code</th>
+                            <th scope="col" class="px-6 py-3">fund source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% load static %}
+    <script src="{% static 'js/ppmp/_script.js' %}"></script>
+{% endblock content %}
+

@@ -1,14 +1,14 @@
 {% include "theme/header.html" %}
 <div class="">
-    <div class=" bg-blue-700 text-white font-medium flex justify-between h-auto">
+    <div class=" bg-cyan-400 text-black font-medium flex justify-between h-auto">
         <div class="">
             {% block menu_buttons %}
-                <button class="px-5 py-3 hover:bg-blue-600 uppercase">PPMP</button>
-                <button class="px-5 py-3 hover:bg-blue-600 uppercase">APP</button>
-                <button class="px-5 py-3 hover:bg-blue-600 uppercase">view prs</button>
-                <button class="px-5 py-3 hover:bg-blue-600 uppercase">group items</button>
-                <button class="px-5 py-3 hover:bg-blue-600 uppercase">create rfq</button>
-                <button class="px-5 py-3 hover:bg-blue-600 uppercase">set price</button>
+                <a href="{% url 'ppmp' %}"><button class="px-5 py-3 hover:bg-cyan-500 uppercase">PPMP</button></a>
+                <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">APP</button></a>   
+                <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">view prs</button></a>
+                <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">group items</button></a>
+                <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">create rfq</button></a>
+                <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">set price</button></a>
             {% endblock menu_buttons %}
         </div>
         <div class="grid grid-cols-2">
