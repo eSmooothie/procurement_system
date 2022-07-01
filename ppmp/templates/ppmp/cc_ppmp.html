@@ -14,14 +14,63 @@
 {% block content %}
     <div class="">
         <div class="p-3 space-y-3 sm:flex items-center flex-col">
-            <div class="sm:w-[90%] flex justify-start">
-                <a href="{% url 'ppmp' %}" class="hover:bg-blue-500 bg-blue-400 px-5 py-1 uppercase rounded-md font-medium">
-                    <button class="">
+            <div class="sm:w-[90%] flex justify-start items-center">
+                <a href="{% url 'ppmp' %}" class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-md font-medium" 
+                data-tooltip-target="tooltip-select-cc" >
+                    <button class="flex items-center space-x-2">
                     <i class="fa-solid fa-arrow-left"></i>
                     <span>Back</span>
                 </button></a>
+                <div id="tooltip-select-cc" role="tooltip" class="inline-block absolute invisible z-10 py-2 
+                px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 
+                tooltip ">
+                    Back to selecting Cost Center
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
+                <div class="w-full">
+                    <p class=" font-medium text-xl text-center">Cost Center PPMP</p>
+                    <div class="sm:flex justify-around">
+                        <p>Cost Center Code: <span class="font-medium">{{ cost_center_data.code }}</span></p>
+                        <p>Cost Center Name: <span class="font-medium">{{ cost_center_data.name }}</span></p>
+                    </div>
+                </div>
             </div>
-            <p class=" font-medium sm:w-[90%]">Cost Center PPMP</p>
+            <div class="sm:w-[90%] sm:grid grid-cols-5 mb-2 gap-x-3 items-end">
+                <div class="col-span-1">
+                    <label for="id_cc_ppmp_year" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
+                        Year</label>
+                    <!-- TODO: Update PPMP table based on selected year -->
+                    <select name="cc_ppmp_year" id="id_cc_ppmp_year" class="bg-gray-50 border border-gray-300 
+                    text-gray-900 text-sm rounded-lg 
+                    focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <option value="2022">2022</option>
+                    </select>
+                </div>
+                <span class="col-span-1"></span>
+                <div>
+                    <button class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-md font-medium col-span-1 w-full">
+                        <p class="truncate">Create PPMP</p>
+                    </button>
+                </div>
+                <div>
+                    <button class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-md font-medium col-span-1 w-full"
+                    data-tooltip-target="tooltip-view-edit-ppmp-details" >
+                        <p class="truncate">View/Edit PPMP Details</p>
+                    </button>
+                    <div id="tooltip-view-edit-ppmp-details" role="tooltip" class="lg:hidden inline-block absolute invisible z-10 py-2 
+                    px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 
+                    tooltip ">
+                        View/Edit PPMP Details
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
+                </div>
+                <div>
+                    <button class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-md font-medium col-span-1 w-full">
+                        <p class="truncate">Edit PPMP Info</p>
+                    </button>
+                </div>
+                
+            </div>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg border border-gray-200 sm:w-[90%]">
                 <table class="w-full text-sm text-left text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700">
@@ -35,7 +84,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+                        <tr id="ppmp_id" data-cost-center-id=".." class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer cost_center_row">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                sample_ppmp_id
+                            </th>
+                            <td class="px-6 py-4">
+                                sample_cost_center_code
+                            </td>
+                            <td class="px-6 py-4">
+                                sample_ppmp_year
+                            </td>
+                            <td class="px-6 py-4">
+                                sample_ppmp_type
+                            </td>
+                            <td class="px-6 py-4">
+                                sample_fund_code
+                            </td>
+                            <td class="px-6 py-4">
+                                sample_fund_source
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

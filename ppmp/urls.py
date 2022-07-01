@@ -1,12 +1,14 @@
 from django.urls import path
 
-from . import views
+from .views import ppmp_views , login_view
 
 urlpatterns = [
-    path('', views.login_user, name='login_user'),
-    path('logout/', views.logout_user, name="logout_user"),
+    #auth user
+    path('', login_view.login_user, name='login_user'),
+    path('auth/user', login_view.auth_user, name="auth_user"),
+    path('logout/', login_view.logout_user, name="logout_user"),
     #ppmp
-    path('home/', views.index, name='home'),
-    path('home/ppmp', views.index, name='ppmp'),
-    path('home/ppmp/costcenter', views.cc_ppmp, name='cc_ppmp'),
+    path('home/', ppmp_views.index, name='home'),
+    path('home/ppmp', ppmp_views.index, name='ppmp'),
+    path('home/ppmp/costcenter', ppmp_views.cc_ppmp, name='cc_ppmp'),
 ]

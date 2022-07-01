@@ -1,17 +1,14 @@
 import logging
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from .helper import *
-from .models import CostCenter, CostCenterUser
+from ..helper import *
+from ..models import CostCenter, CostCenterUser
 
 logger = logging.getLogger(__name__)
 # Select Cost Center
-def index(request):
-    # check if user is login
-    if not has_user(request):
-        return redirect("login_user")
-        
+@login_required(login_url='login_user')
+def index(request):        
     user_cost_centers = CostCenterUser.objects.select_related().filter(user__id=request.user.id)
 
     if request.path == "/home/ppmp":
@@ -32,12 +29,8 @@ def index(request):
         )
 
 # Select 
+@login_required(login_url='login_user')
 def cc_ppmp(request):
-
-    # check if user is login
-    if not has_user(request):
-        return redirect("login_user")
-    
     # retrieve all request parameter
     request_params = request.GET
 
@@ -77,34 +70,3 @@ def cc_ppmp(request):
         context=context
         )
 
-def logout_user(request):
-    logger.info("at logout_user: user with username {} logout.".format(request.user.username))
-
-    logout(request)
-    
-    return redirect('login_user')
-
-def login_user(request):
-    context = page_context(err_msg = None)
-
-    if request.method == 'POST':
-       
-        username = request.POST['username']
-        password = request.POST['password']
-
-        # authenticate user if exist
-        user = authenticate(request, username=username, password=password)
-
-        if user is None:
-            logger.info("at login_user: user with username {} attempting to login.".format(username))
-            context['err_msg'] = "Incorrect username or password."
-
-            return render(request, template_name='ppmp/login.html', context=context)
-
-       
-        login(request, user) # login user
-        logger.info("at login_user: user with username {} successfully login.".format(username))
-        return redirect('home')  # redirect to home
-    
-    
-    return render(request, template_name='ppmp/login.html', context=context)
