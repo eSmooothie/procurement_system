@@ -17,14 +17,14 @@ def auth_user(request):
         user = authenticate(request, username=username, password=password)
 
         if user is None:
-            logger.info("at login_user: user with username {} attempting to login.".format(username))
+            logger.info("at login_user: user with username '{}' attempting to login.".format(username))
             request.session['login_err_msg'] = "Incorrect username or password."
 
             return redirect('login_user')
 
        
         login(request, user) # login user
-        logger.info("at login_user: user with username {} successfully login.".format(username))
+        logger.info("at login_user: user with username '{}' successfully login.".format(username))
         return redirect('home')  # redirect to home
     else:
         return redirect('login_user')
