@@ -169,7 +169,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        'ppmp': {
+        'file_log': {
             'handlers': ['file'],
             'level': 'INFO',
             'propagate': True,

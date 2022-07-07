@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 
 from ..helper import *
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("file_log")
 
 
 def auth_user(request):

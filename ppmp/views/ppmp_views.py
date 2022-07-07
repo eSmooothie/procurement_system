@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from ..helper import *
 from ..models import CostCenter, CostCenterUser
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("file_log")
 
 # Select Cost Center
 @login_required(login_url='login_user')
