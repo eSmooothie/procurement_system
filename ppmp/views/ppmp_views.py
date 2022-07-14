@@ -17,8 +17,10 @@ def index(request):
     else:
         selected_app = None
 
+    user_fn = request.user.first_name if request.user.first_name is not None else "No Name"
+
     context = page_context(
-        user_fn = request.user.first_name,
+        user_fn = user_fn,
         user_cost_centers=user_cost_centers,
         selected_app=selected_app,
         )
@@ -29,7 +31,6 @@ def index(request):
         context=context
         )
 
-# Select 
 @login_required(login_url='login_user')
 def cc_ppmp(request):
     # retrieve all request parameter

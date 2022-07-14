@@ -8,10 +8,10 @@ $(document).ready(function(e){
         var password_input_field = document.getElementById('id_password');
         if(password_input_field.type === "password"){
             password_input_field.type = "text";
-            $(this).append("<i class='fa-solid fa-eye-slash'></i>");
+            $(this).append("<img src=\"/static/images/icon/eye-slash-solid.svg\" class=\" h-4 w-4\" alt=\"eye-slash-solid\">");
         }else{
             password_input_field.type = "password";
-            $(this).append("<i class='fa-solid fa-eye'></i>")
+            $(this).append("<img src=\"/static/images/icon/eye-solid.svg\" class=\" h-4 w-4\" alt=\"eye-solid\">")
         }
     });
 });

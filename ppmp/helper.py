@@ -1,9 +1,5 @@
 def page_context(title = "PPMP", **kwargs ) -> dict:
     '''Map the data to be displayed in the template.'''
-    context = kwargs
-    context['PAGE_TITLE'] = title
+    context = kwargs # Retrieve all passed parameters .
+    context['PAGE_TITLE'] = title # Add page_title key.
     return context
-
-def has_user(request):
-    '''check user exist'''
-    return request.user.is_authenticated
