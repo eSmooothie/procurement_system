@@ -46,6 +46,11 @@ def login_user(request):
     else: 
         err_msg = None
 
+    # check if user is already login
+    if request.user.is_authenticated:
+        return redirect('home')
+        
+
     context = page_context(
         err_msg = err_msg,
     )
