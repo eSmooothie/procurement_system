@@ -9,7 +9,7 @@ urlpatterns = [
     path('auth/user', login_view.auth_user, name="auth_user"),
     path('logout/', login_view.logout_user, name="logout_user"),
     #api
-    path('api/ppmp', PpmpListApiView.as_view()),
+    # path('api/ppmp', PpmpListApiView.as_view()),
     #ppmp
     path('home/', ppmp_views.index, name='home'),
     path('home/ppmp', ppmp_views.index, name='ppmp'),
