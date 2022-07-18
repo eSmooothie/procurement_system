@@ -7,6 +7,8 @@ from ..models import CostCenter, CostCenterUser
 
 logger = logging.getLogger("file_log")
 
+import random
+
 # Select Cost Center
 @login_required(login_url='login_user')
 def index(request):        
@@ -35,7 +37,7 @@ def index(request):
 def cc_ppmp(request):
     # retrieve all request parameter
     request_params = request.GET
-
+    
     if not "cc_id" in request_params:
         # display err msg if cc_id not set
         logger.error("user_id#{}: at cc_ppmp: cc_id not set.".format(request.user.id))
@@ -60,9 +62,28 @@ def cc_ppmp(request):
     
     cost_center_data = CostCenterUser.objects.filter(user__id=request.user.id).get(cc__id=cc_id).cc    
 
+    #TODO:query all the ppmp under the selected cost center.
+    if "ppmp_year" in request_params:
+        selected_year = request_params.get("ppmp_year")
+        
+    else:
+        # retrieve the latest year among ppmp data under selected cost center
+        selected_year = '2022'
+    
+    ppmp_year = ['2022', '2021', '2020']
+    # dummy ppmp table data
+    ppmp_list = {
+        '2022': random.sample(range(10, 99), 5),
+        '2021': random.sample(range(10, 99), 3),
+        '2020': random.sample(range(10, 99), 4),
+    }
+
     context = page_context(
         user_fn = request.user.first_name,
         cost_center_data=cost_center_data,
+        ppmp_year = ppmp_year,
+        selected_year = selected_year,
+        cc_ppmp_list = ppmp_list.get(selected_year),
         selected_app="ppmp",
         )
 

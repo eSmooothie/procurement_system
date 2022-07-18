@@ -43,7 +43,13 @@
                     <select name="cc_ppmp_year" id="id_cc_ppmp_year" class="bg-gray-50 border border-gray-300 
                     text-gray-900 text-sm rounded-lg 
                     focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                        <option value="2022">2022</option>
+                        {% for year in ppmp_year %}
+                            {% if selected_year == year %}
+                                <option value="{{ year }}" selected>{{ year }}</option>
+                            {% else %}
+                                <option value="{{ year }}">{{ year }}</option>
+                            {% endif %}
+                        {% endfor %}
                     </select>
                 </div>
                 <span class="col-span-1"></span>
@@ -84,26 +90,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr id="ppmp_id" data-cost-center-id=".." class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer cost_center_row">
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                                sample_ppmp_id
-                            </th>
-                            <td class="px-6 py-4">
-                                sample_cost_center_code
-                            </td>
-                            <td class="px-6 py-4">
-                                sample_ppmp_year
-                            </td>
-                            <td class="px-6 py-4">
-                                sample_ppmp_type
-                            </td>
-                            <td class="px-6 py-4">
-                                sample_fund_code
-                            </td>
-                            <td class="px-6 py-4">
-                                sample_fund_source
-                            </td>
-                        </tr>
+                        {% for ppmp_data in cc_ppmp_list %}
+                            <tr id="{{ ppmp_data }}" data-ppmp-id="{{ ppmp_data }}" class="bg-white border-b dark:bg-gray-800 
+                            dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer cost_center_ppmp_list">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                    sample_ppmp_{{ ppmp_data }}
+                                </th>
+                                <td class="px-6 py-4">
+                                    sample_cost_center_code
+                                </td>
+                                <td class="px-6 py-4">
+                                    sample_ppmp_year
+                                </td>
+                                <td class="px-6 py-4">
+                                    sample_ppmp_type
+                                </td>
+                                <td class="px-6 py-4">
+                                    sample_fund_code
+                                </td>
+                                <td class="px-6 py-4">
+                                    sample_fund_source
+                                </td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
