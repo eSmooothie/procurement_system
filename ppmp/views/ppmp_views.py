@@ -70,7 +70,7 @@ def cc_ppmp(request):
         # retrieve the latest year among ppmp data under selected cost center
         selected_year = '2022'
     
-    ppmp_year = ['2022', '2021', '2020']
+    ppmp_year = ['2022', '2021', '2020','2019']
     # dummy ppmp table data
     ppmp_list = {
         '2022': random.sample(range(10, 99), 5),
