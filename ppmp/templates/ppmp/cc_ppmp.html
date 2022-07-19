@@ -18,7 +18,8 @@
                 <a href="{% url 'ppmp' %}" class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-md font-medium" 
                 data-tooltip-target="tooltip-select-cc" >
                     <button class="flex items-center space-x-2">
-                    <i class="fa-solid fa-arrow-left"></i>
+                        {% load static %}
+                        <img src="{% static 'images/icon/arrow-left-solid.svg' %}" alt="arrow-left-solid" class=" h-4 w-4">
                     <span>Back</span>
                 </button></a>
                 <div id="tooltip-select-cc" role="tooltip" class="inline-block absolute invisible z-10 py-2 

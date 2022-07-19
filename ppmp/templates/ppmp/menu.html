@@ -18,7 +18,8 @@
             <div class=" col-span-1">
                 <a href="{% url 'logout_user' %}" class=" min-h-full">
                     <button class="px-5 py-3 bg-red-400 hover:bg-red-500 uppercase flex items-center min-h-full space-x-2">
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        {% load static %}
+                        <img src="{% static 'images/icon/arrow-right-from-bracket-solid.svg' %}" alt="arrow-right-from-bracket-solid" class=" h-4 w-4">
                         <span class="text-xs">log out</span>
                     </button>
                 </a>
