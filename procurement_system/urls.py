@@ -19,6 +19,7 @@ from django.urls import include, path
 urlpatterns = [
     path('', include('ppmp.urls')),
     path('admin/', admin.site.urls),
+    path('api/', include('ppmp.api.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
 ]

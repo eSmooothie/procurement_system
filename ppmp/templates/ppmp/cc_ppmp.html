@@ -150,7 +150,7 @@
 <!-- CREATE PPMP MODAL -->
 <div id="create-ppmp-modal" tabindex="-1" aria-hidden="true"  data-modal-placement="top-center"
 class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-    <div class="relative p-4 w-full max-w-4xl h-full md:h-auto">
+    <div class="relative p-4 w-full max-w-6xl h-full md:h-auto">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <!-- Modal header -->
@@ -164,7 +164,7 @@ class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 
                 </button>
             </div>
             <!-- Modal body -->
-            <form action="">
+            <!-- <form action=""> -->
                 <div class="p-6 space-y-6">
                     <div class=" space-y-2">
                         <p>Cost Center: <span class=" font-medium">({{ selected_ppmp.cc.code }})</span> <span class=" font-medium">{{ selected_ppmp.cc.name }}</span></p>
@@ -184,12 +184,82 @@ class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 
                         <div>
                             <div class="relative">
                                 <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"></div>
-                                <input id="select-category-input" type="search" id="default-search" 
+                                <input id="select-category-input" type="text" 
                                 class="block p-4 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border 
                                 border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Select Category" required>
                                 <button type="button" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 
                                 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Submit</button>
                             </div>
+                        </div>
+                        <div id="ppmp_item_list" class="hidden">
+                            <table class="w-full text-sm text-left text-gray-500 ">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700">
+                                    <tr class="text-center">
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="3">Item</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="2">Unit Details</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="2">First Quarter</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="2">Second Quarter</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="2">Third Quarter</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="2">Fourth Quarter</th>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Code</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">S</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Description</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Unit</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Price</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Quantity</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Amount</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Quantity</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Amount</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Quantity</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Amount</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Quantity</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="">
+                                        <tr id="{{ ppmp_data }}" data-ppmp-id="{{ ppmp_data.id }}" class=" bg-white border-b 
+                                            hover:cursor-pointer cost_center_ppmp_list ">
+                                            <th scope="row" class="px-3 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                                1
+                                            </th>
+                                            <td class="px-3 py-2">
+                                            </td>
+                                            <td class="px-3 py-2">
+                                            </td>
+                                            <td class="px-3 py-2">
+                                            </td>
+                                            <td class="px-3 py-2">
+                                            </td>
+                                            <td class="px-3 py-2">
+                                            </td>
+                                            <td class="px-3 py-2">
+                                            </td>
+                                            <td class="px-3 py-2">
+                                            </td>
+                                            <td class="px-3 py-2">
+                                            </td>
+                                            <td class="px-3 py-2">
+                                            </td>
+                                            <td class="px-3 py-2">
+                                            </td>
+                                            <td class="px-3 py-2">
+                                            </td>
+                                            <td class="px-3 py-2">
+                                            </td>
+                                        </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr id="tfoot_tr" class="bg-white border-b dark:bg-gray-800 
+                                    dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer">
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap text-center" 
+                                        colspan="13">
+                                            <button>Add Data</button>
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -198,11 +268,11 @@ class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 
                     <button data-modal-toggle="create-ppmp-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 
                     hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 
                     dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Close</button>
-                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 
+                    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 
                     focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center 
                     dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>                        
                 </div>
-            </form>
+            <!-- </form> -->
         </div>
     </div>
 </div>

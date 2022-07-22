@@ -48,6 +48,9 @@ $(document).ready(function(e){
         select: function(event, ui){
             var category_selected = ui.item;
             console.log(category_selected);
+
+            $("#ppmp_item_list").removeClass("hidden");
+            
         }
     });
 });
@@ -72,7 +75,7 @@ function toggle_create_modal(){
 
     const modal = new Modal(target, options);
 
-    // modal.show();
+    modal.show();
 }
 
 var getUrlParameter = function getUrlParameter(sParam) {
