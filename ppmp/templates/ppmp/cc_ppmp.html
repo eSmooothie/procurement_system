@@ -63,7 +63,8 @@
                 </div>
                 <div>
                     <!-- TODO: Change bg color if user select a ppmp -->
-                    <button class="hover:bg-gray-400 bg-gray-300 px-5 py-2.5 rounded-md font-medium col-span-1 w-full" disabled>
+                    <button id="edit_selected_ppmp_btn" 
+                    class="hover:bg-gray-400 bg-gray-300 px-5 py-2.5 rounded-md font-medium col-span-1 w-full" disabled>
                         <p class="truncate">Edit PPMP</p>
                     </button>
                 </div>
@@ -81,10 +82,10 @@
                             <th scope="col" class="px-6 py-3">fund source</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="ppmp_list_tbody">
                         {% for ppmp_data in cc_ppmp_list %}
-                            <tr id="{{ ppmp_data }}" data-ppmp-id="{{ ppmp_data.id }}" class="bg-white border-b dark:bg-gray-800 
-                            dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer cost_center_ppmp_list">
+                            <tr id="{{ ppmp_data }}" data-ppmp-id="{{ ppmp_data.id }}" class="bg-white border-b hover:bg-gray-200 
+                                hover:cursor-pointer cost_center_ppmp_list">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                                     {{ ppmp_data.id }}
                                 </th>
