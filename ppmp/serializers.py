@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Ppmp, Category
+from .models import CostCenterBudget, Ppmp, Category
 
 def required(value):
     if value is None:
@@ -17,4 +17,9 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
+
+class CCBudgetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CostCenterBudget
+        field = '__all__'
         

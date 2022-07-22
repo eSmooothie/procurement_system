@@ -57,7 +57,7 @@ def cc_ppmp(request, cc_id):
     cost_center_data = CostCenterUser.objects.filter(user__id=request.user.id).get(cc__id=cc_id).cc    
 
     
-    ppmp_year = []
+    ppmp_year = list()
     # retrieve all years in ppmp
     year_in_ppmp = Ppmp.objects.only('year').distinct('year').order_by('-year')
 

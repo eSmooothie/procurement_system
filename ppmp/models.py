@@ -7,14 +7,14 @@ class Category(models.Model):
     name = models.CharField(blank=True, max_length=255)
 
     def __str__(self):
-        return "Code:{}".format(self.code)
+        return "cat_id:{}-{}".format(self.id, self.name)
 
 class Item(models.Model):
     general_name = models.CharField(blank=True, max_length=255)
     category = models.ForeignKey(Category, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "ID#{}-{}".format(self.id,self.general_name)
+        return "item_id:{}-{}".format(self.id,self.general_name)
 
 class ItemDescription(models.Model):
     spec_1 = models.CharField(blank=True, max_length=255)
@@ -25,36 +25,38 @@ class ItemDescription(models.Model):
     item = models.ForeignKey(Item, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "ItemDescription ID#{self.id}"
+        return "itemdesc_id:{}".format(self.id)
 
 class CostCenter(models.Model):
     code = models.CharField(blank=True, max_length=255)
     name = models.CharField(blank=True, max_length=255)
 
     def __str__(self):
-        return "Code:{}".format(self.code)
+        return "cc_id:{}-{}".format(self.id, self.name)
 
 class CostCenterUser(models.Model):
     cc = models.ForeignKey(CostCenter, on_delete=models.RESTRICT)
     user = models.ForeignKey(User, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "#{} - CC:{} U:{}".format(self.id, self.cc.code, self.user.id)
+        return "ccuser_id{}-CC:{}-U:{}".format(self.id, self.cc.name, self.user.id)
 
 class CostCenterBudget(models.Model):
     org_budget = models.CharField(blank=True, max_length=255)
+    date_set = models.DateTimeField(blank=True, null=True)
     cc = models.ForeignKey(CostCenter, on_delete=models.RESTRICT)
     category = models.ForeignKey(Category, on_delete=models.RESTRICT)
+    curr_budget = models.CharField(blank=True, max_length=255)
 
     def __str__(self):
-        return "ID#{}".format(self.id)
+        return "ccbudget_id:{}".format(self.id)
 
 class SourceOfFund(models.Model):
     code = models.CharField(blank=True, max_length=255)
     description = models.CharField(blank=True, max_length=255)
 
     def __str__(self):
-        return "ID#{}".format(self.id)
+        return "sof_id:{}-{}".format(self.id, self.description)
 
 class Ppmp(models.Model):
     year = models.CharField(blank=True, max_length=255)
@@ -63,7 +65,7 @@ class Ppmp(models.Model):
     cc = models.ForeignKey(CostCenter, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "ID#{}-{}".format(self.id, self.year)
+        return "ppmp_id:{}-{}".format(self.id, self.year)
 class App(models.Model):
     
     date_created = models.DateTimeField(auto_now=True)
@@ -75,7 +77,7 @@ class App(models.Model):
     item_desc = models.ForeignKey(ItemDescription, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "ID#{}-{}".format(self.id, self.year)
+        return "app_id:{}-{}".format(self.id, self.year)
 
 class Prices(models.Model):
     
@@ -85,7 +87,7 @@ class Prices(models.Model):
     item = models.ForeignKey(ItemDescription, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "ID#{}-Item:{}-{}",format(self.id, self.item, self.price)
+        return "price_id:{}-Item:{}-{}",format(self.id, self.item, self.price)
 
 class OrderDetails(models.Model):
     
@@ -107,7 +109,7 @@ class OrderDetails(models.Model):
 
 
     def __str__(self):
-        return "ID#{}".format(self.id)
+        return "orddetails_id:{}".format(self.id)
 
 class PpmpTrack(models.Model):
     
@@ -116,7 +118,7 @@ class PpmpTrack(models.Model):
     barcode = models.CharField(blank=True, max_length=255)
 
     def __str__(self):
-        return "ID#{}".format(self.id)
+        return "ppmptrack_id:{}".format(self.id)
 
 class PurchaseRequest(models.Model):
     specification_details = models.CharField(blank=True, max_length=255)
@@ -125,7 +127,7 @@ class PurchaseRequest(models.Model):
     order_details = models.ForeignKey(OrderDetails, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "ID#{}".format(self.id)
+        return "purchreq_id:{}".format(self.id)
 
 
 

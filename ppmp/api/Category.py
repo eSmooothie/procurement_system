@@ -12,7 +12,7 @@ from ..models import Category
 from ..serializers import CategorySerializer
 
 class CategoryAPI(APIView):
-    # authentication_classes = [SessionAuthentication]
+    authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -26,7 +26,7 @@ class CategoryAPI(APIView):
         serialize = CategorySerializer(categories, many=True)
         
 
-        data = []
+        data = list()
 
         for d in serialize.data:
             formatted_data = {
