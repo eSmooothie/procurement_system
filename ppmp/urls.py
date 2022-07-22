@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import ppmp_views , login_view
-from .views.api import ( PpmpListApiView )
+from .views.api import ( PpmpListApiView, CategoryAPI )
 
 urlpatterns = [
     #auth user
@@ -10,6 +10,7 @@ urlpatterns = [
     path('logout/', login_view.logout_user, name="logout_user"),
     #api
     # path('api/ppmp', PpmpListApiView.as_view()),
+    path('api/categories/search', CategoryAPI.as_view(), name="CategoryAPIsearch"),
     #ppmp
     path('home/', ppmp_views.index, name='home'),
     path('home/ppmp', ppmp_views.index, name='ppmp'),

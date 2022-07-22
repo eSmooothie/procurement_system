@@ -56,13 +56,6 @@ def cc_ppmp(request, cc_id):
     
     cost_center_data = CostCenterUser.objects.filter(user__id=request.user.id).get(cc__id=cc_id).cc    
 
-    #TODO:query all the ppmp under the selected cost center.
-    if "ppmp_year" in request_params:
-        selected_year = request_params.get("ppmp_year")
-        
-    else:
-        # retrieve the latest year among ppmp data under selected cost center
-        selected_year = '2022'
     
     ppmp_year = []
     # retrieve all years in ppmp
@@ -71,16 +64,23 @@ def cc_ppmp(request, cc_id):
     for year in year_in_ppmp:
         ppmp_year.append(year.year)
 
+    selected_year = request_params.get("ppmp_year") if "ppmp_year" in request_params else ppmp_year[0]
+
+    selected_ppmp_id = request_params.get("ppmp_id") if "ppmp_id" in request_params else None
+
+    selected_ppmp = Ppmp.objects.get(id=selected_ppmp_id)
+
+    
     # get only the ppmp based on the selected year
     ppmp_list = Ppmp.objects.filter(cc_id=cc_id,year=selected_year).all
 
-    print(ppmp_list)
-
+    
     context = page_context(
         user_fn = request.user.first_name,
         cost_center_data=cost_center_data,
         ppmp_year = ppmp_year,
         selected_year = selected_year,
+        selected_ppmp = selected_ppmp,
         cc_ppmp_list = ppmp_list,
         selected_app="ppmp",
         )
