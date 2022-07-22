@@ -138,6 +138,7 @@ USE_TZ = True
 # SESSION
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/

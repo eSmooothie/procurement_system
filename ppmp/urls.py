@@ -13,5 +13,5 @@ urlpatterns = [
     #ppmp
     path('home/', ppmp_views.index, name='home'),
     path('home/ppmp', ppmp_views.index, name='ppmp'),
-    path('home/ppmp/costcenter', ppmp_views.cc_ppmp, name='cc_ppmp'),
+    path('home/ppmp/costcenter/<int:cc_id>/', ppmp_views.cc_ppmp, name='cc_ppmp'),
 ]

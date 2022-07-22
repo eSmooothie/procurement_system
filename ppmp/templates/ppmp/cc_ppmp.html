@@ -54,6 +54,7 @@
                     </select>
                 </div>
                 <span class="col-span-1"></span>
+                <span class="col-span-1"></span>
                 <div>
                     <button class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-md font-medium col-span-1 w-full" 
                     data-modal-toggle="create-ppmp-modal">
@@ -61,20 +62,9 @@
                     </button>
                 </div>
                 <div>
-                    <button class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-md font-medium col-span-1 w-full"
-                    data-tooltip-target="tooltip-view-edit-ppmp-details" >
-                        <p class="truncate">View/Edit PPMP Details</p>
-                    </button>
-                    <div id="tooltip-view-edit-ppmp-details" role="tooltip" class="lg:hidden inline-block absolute invisible z-10 py-2 
-                    px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 
-                    tooltip ">
-                        View/Edit PPMP Details
-                    <div class="tooltip-arrow" data-popper-arrow></div>
-                </div>
-                </div>
-                <div>
-                    <button class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-md font-medium col-span-1 w-full">
-                        <p class="truncate">Edit PPMP Info</p>
+                    <!-- TODO: Change bg color if user select a ppmp -->
+                    <button class="hover:bg-gray-400 bg-gray-300 px-5 py-2.5 rounded-md font-medium col-span-1 w-full" disabled>
+                        <p class="truncate">Edit PPMP</p>
                     </button>
                 </div>
                 
@@ -93,30 +83,30 @@
                     </thead>
                     <tbody>
                         {% for ppmp_data in cc_ppmp_list %}
-                            <tr id="{{ ppmp_data }}" data-ppmp-id="{{ ppmp_data }}" class="bg-white border-b dark:bg-gray-800 
+                            <tr id="{{ ppmp_data }}" data-ppmp-id="{{ ppmp_data.id }}" class="bg-white border-b dark:bg-gray-800 
                             dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer cost_center_ppmp_list">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                                    sample_ppmp_{{ ppmp_data }}
+                                    {{ ppmp_data.id }}
                                 </th>
                                 <td class="px-6 py-4">
-                                    sample_cost_center_code
+                                    {{ ppmp_data.cc.name }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    sample_ppmp_year
+                                    {{ ppmp_data.year }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    sample_ppmp_type
+                                    {{ ppmp_data.type }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    sample_fund_code
+                                    {{ ppmp_data.sof.code }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    sample_fund_source
+                                    {{ ppmp_data.sof.description }}
                                 </td>
                             </tr>
                         {% endfor %}
                     </tbody>
-                    {% if cc_ppmp_list is None %}
+                    {% if not cc_ppmp_list %}
                     <tfoot>
                         <tr id="tfoot_tr" class="bg-white border-b dark:bg-gray-800 
                         dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer">

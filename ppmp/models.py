@@ -17,7 +17,11 @@ class Item(models.Model):
         return "Item ID#{self.id}"
 
 class ItemDescription(models.Model):
-    specifics = models.CharField(blank=True, max_length=255)
+    spec_1 = models.CharField(blank=True, max_length=255)
+    spec_2 = models.CharField(blank=True, max_length=255)
+    spec_3 = models.CharField(blank=True, max_length=255)
+    spec_4 = models.CharField(blank=True, max_length=255)
+    spec_5 = models.CharField(blank=True, max_length=255)
     item = models.ForeignKey(Item, on_delete=models.RESTRICT)
 
     def __str__(self):
@@ -55,11 +59,11 @@ class SourceOfFund(models.Model):
 class Ppmp(models.Model):
     year = models.CharField(blank=True, max_length=255)
     type = models.CharField(blank=True, max_length=255)
-    sof_num = models.ForeignKey(SourceOfFund, on_delete=models.RESTRICT)
-    cc_num = models.ForeignKey(CostCenter, on_delete=models.RESTRICT)
+    sof = models.ForeignKey(SourceOfFund, on_delete=models.RESTRICT)
+    cc = models.ForeignKey(CostCenter, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "Ppmp ID#{self.id}"
+        return "ID#{}-{}".format(self.id, self.year)
 class App(models.Model):
     
     date_created = models.DateTimeField(auto_now=True)
@@ -71,7 +75,7 @@ class App(models.Model):
     item_desc = models.ForeignKey(ItemDescription, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "App ID#{self.id}"
+        return "App ID#{}".format(self.id)
 
 class Prices(models.Model):
     

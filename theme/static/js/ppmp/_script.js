@@ -5,7 +5,7 @@ $(document).ready(function(e){
         e.preventDefault();
         var cost_center_id = $(this).attr("data-cost-center-id");
         
-        window.location.href = base_url + "/home/ppmp/costcenter?cc_id=" + cost_center_id;
+        window.location.href = base_url + "/home/ppmp/costcenter/" + cost_center_id + "/";
     });
 
     $(".cost_center_ppmp_list").on('click', function(e){
@@ -22,7 +22,7 @@ $(document).ready(function(e){
         
         var cc_id = getUrlParameter('cc_id');
         
-        window.location.href = base_url + "/home/ppmp/costcenter?cc_id=" + cc_id + "&ppmp_year=" + selected_year;
+        window.location.href = base_url + window.location.pathname + "?ppmp_year=" + selected_year;
     });
 });
 
