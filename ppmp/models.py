@@ -7,14 +7,14 @@ class Category(models.Model):
     name = models.CharField(blank=True, max_length=255)
 
     def __str__(self):
-        return "Category Code:{self.code}"
+        return "Code:{}".format(self.code)
 
 class Item(models.Model):
     general_name = models.CharField(blank=True, max_length=255)
     category = models.ForeignKey(Category, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "Item ID#{self.id}"
+        return "ID#{}-{}".format(self.id,self.general_name)
 
 class ItemDescription(models.Model):
     spec_1 = models.CharField(blank=True, max_length=255)
@@ -32,7 +32,7 @@ class CostCenter(models.Model):
     name = models.CharField(blank=True, max_length=255)
 
     def __str__(self):
-        return "CostCenter Code:{}".format(self.code)
+        return "Code:{}".format(self.code)
 
 class CostCenterUser(models.Model):
     cc = models.ForeignKey(CostCenter, on_delete=models.RESTRICT)
@@ -47,14 +47,14 @@ class CostCenterBudget(models.Model):
     category = models.ForeignKey(Category, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "CostCenterBudget ID#{}".format(self.id)
+        return "ID#{}".format(self.id)
 
 class SourceOfFund(models.Model):
     code = models.CharField(blank=True, max_length=255)
     description = models.CharField(blank=True, max_length=255)
 
     def __str__(self):
-        return "SourceOfFund ID#{self.id}"
+        return "ID#{}".format(self.id)
 
 class Ppmp(models.Model):
     year = models.CharField(blank=True, max_length=255)
@@ -75,7 +75,7 @@ class App(models.Model):
     item_desc = models.ForeignKey(ItemDescription, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "App ID#{}".format(self.id)
+        return "ID#{}-{}".format(self.id, self.year)
 
 class Prices(models.Model):
     
@@ -85,7 +85,7 @@ class Prices(models.Model):
     item = models.ForeignKey(ItemDescription, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "Prices ID#{self.id}"
+        return "ID#{}-Item:{}-{}",format(self.id, self.item, self.price)
 
 class OrderDetails(models.Model):
     
@@ -107,7 +107,7 @@ class OrderDetails(models.Model):
 
 
     def __str__(self):
-        return "OrderDetails ID#{self.id}"
+        return "ID#{}".format(self.id)
 
 class PpmpTrack(models.Model):
     
@@ -116,7 +116,7 @@ class PpmpTrack(models.Model):
     barcode = models.CharField(blank=True, max_length=255)
 
     def __str__(self):
-        return "PpmpTrack ID#{self.id}"
+        return "ID#{}".format(self.id)
 
 class PurchaseRequest(models.Model):
     specification_details = models.CharField(blank=True, max_length=255)
@@ -125,7 +125,7 @@ class PurchaseRequest(models.Model):
     order_details = models.ForeignKey(OrderDetails, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "PurchaseRequest ID#{self.id}"
+        return "ID#{}".format(self.id)
 
 
 
