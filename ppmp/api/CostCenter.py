@@ -34,7 +34,7 @@ class CostCenterPPMPDetails(APIView):
         
         cc_budget = CostCenterBudget.objects.select_related().filter(cc_id=cc_id).filter(category_id=cat_id).first()
         cost_center = cc_budget.cc
-
+        
         print(cost_center)
 
         return Response([], status=status.HTTP_200_OK)
