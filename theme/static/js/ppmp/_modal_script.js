@@ -32,6 +32,12 @@ var getCostCenterPPMPDetails  = function getCostCenterPPMPDetails(sof_id, cc_id,
         },
     }).done(function(data){
         console.log(data);
+
+        
+        var th = $("<th></th>").addClass("px-3 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap").attr("scope","row").text("TEST");
+        var td = $("<td></td>").addClass("px-3 py-2");
+        var tr = $("<tr></tr>").addClass("bg-white border-b hover:cursor-pointer").attr("id",1).append(th,td);
+        $("#order_details_tbody").append(tr)
     }).fail(function(xhr, text_status, error_code){
         console.log(xhr);
     })

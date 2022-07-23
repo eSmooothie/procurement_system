@@ -1,15 +1,15 @@
 from rest_framework import serializers
-from .models import CostCenterBudget, Ppmp, Category
+from .models import App, CostCenter, CostCenterBudget, ItemDescription, OrderDetails, Ppmp, Category, Prices
 
 def required(value):
     if value is None:
         raise serializers.ValidationError('This field is required')
 
 class PpmpSerializer(serializers.ModelSerializer):
-    year = serializers.IntegerField(validators=[required])
+
     class Meta:
         model = Ppmp
-        fields = ['year', 'type', 'sof_num', 'cc_num']
+        fields = '__all__'
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -18,8 +18,37 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
+class CostCenterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CostCenter
+        fields = '__all__'
+
+class PriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Prices
+        fields = '__all__'
+
+class APPSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = App
+        fields = '__all__'
+
+class ItemDescriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ItemDescription
+        fields = '__all__'
+
+class OrderDetailsSerializer(serializers.ModelSerializer):
+    item_desc = ItemDescriptionSerializer(read_only=True)
+    ppmp = PpmpSerializer(read_only=True)
+    app = APPSerializer(read_only=True)
+    price = PriceSerializer(read_only=True)
+    class Meta:
+        model = OrderDetails
+        fields = '__all__'
+
 class CCBudgetSerializer(serializers.ModelSerializer):
     class Meta:
         model = CostCenterBudget
-        field = '__all__'
+        fields = '__all__'
         

@@ -91,10 +91,10 @@ class Prices(models.Model):
 
 class OrderDetails(models.Model):
     
-    item_desc = models.ForeignKey(ItemDescription, on_delete=models.RESTRICT)
-    ppmp = models.ForeignKey(Ppmp,null=True, on_delete=models.RESTRICT)
-    price = models.ForeignKey(Prices,null=True,on_delete=models.RESTRICT)
-    app = models.ForeignKey(App,null=True,on_delete=models.RESTRICT)
+    item_desc = models.ForeignKey(ItemDescription, on_delete=models.RESTRICT, related_name="item_desc")
+    ppmp = models.ForeignKey(Ppmp,null=True, on_delete=models.RESTRICT, related_name="ppmp")
+    price = models.ForeignKey(Prices,null=True,on_delete=models.RESTRICT, related_name="prices")
+    app = models.ForeignKey(App,null=True,on_delete=models.RESTRICT, related_name="app")
     app_status = models.CharField(blank=True,null=True, max_length=255)
     received_quotation_status = models.CharField(blank=True,null=True, max_length=255)
     award_winning_bidder_status = models.CharField(blank=True,null=True, max_length=255)

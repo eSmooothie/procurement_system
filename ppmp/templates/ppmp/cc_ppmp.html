@@ -180,8 +180,7 @@ class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 
                         <div class="">
                             <p>Budget: <span class=" font-medium">TBA</span></p>
                             <div class="grid grid-cols-3 py-2 gap-x-3">
-                                <button type="button" class="col-span-1 px-2 py-1.5 bg-blue-300 hover:bg-blue-400 rounded-md w-full">Suggest item</button>
-                                <button type="button" class="col-span-1 px-2 py-1.5 bg-blue-300 hover:bg-blue-400 rounded-md w-full">Lock</button>
+                                
                             </div>
                         </div>
                         <div>
@@ -221,8 +220,8 @@ class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 
                                         <th scope="col" class="px-3 py-1.5 border border-gray-700">Amount</th>
                                     </tr>
                                 </thead>
-                                <tbody id="">
-                                        <tr id="{{ ppmp_data }}" data-ppmp-id="{{ ppmp_data.id }}" class=" bg-white border-b 
+                                <tbody id="order_details_tbody">
+                                        <tr id="" class=" bg-white border-b 
                                             hover:cursor-pointer">
                                             <th scope="row" class="px-3 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                                                 1
@@ -269,11 +268,16 @@ class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 
                 <!-- Modal footer -->
                 <div class="flex items-center justify-between p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
                     <button data-modal-toggle="create-ppmp-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 
-                    hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 
-                    dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Close</button>
-                    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 
-                    focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center 
-                    dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>                        
+                    hover:text-gray-900 focus:z-10">Close</button>
+                    <div class="space-x-3">
+                        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 
+                        focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Suggest item</button>
+                        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 
+                        focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Lock</button>
+                        <button type="button" class="text-white bg-green-600 hover:bg-green-700
+                        focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button> 
+                    </div>
+                                           
                 </div>
             <!-- </form> -->
         </div>
