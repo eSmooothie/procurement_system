@@ -21,7 +21,7 @@ class CostCenterPPMPDetails(APIView):
         
         print(request.query_params)
 
-        if "cat_id" not in request.query_params or "cc_id" not in request.query_params or "sof_id" not in request.query_params:
+        if "cat_id" not in request.query_params or "cc_id" not in request.query_params or "sof_id" not in request.query_params or "ppmp_id" not in request.query_params:
             return Response({
                 "detail" : "Missing query parameters."
             }, status=status.HTTP_200_OK)
@@ -29,12 +29,13 @@ class CostCenterPPMPDetails(APIView):
         cat_id = request.query_params.get('cat_id')
         cc_id = request.query_params.get('cc_id')
         sof_id = request.query_params.get('sof_id')
+        ppmp_id = request.query_params.get('ppmp_id')
 
         #TODO: Query all ppmp data related to 
         
         cc_budget = CostCenterBudget.objects.select_related().filter(cc_id=cc_id).filter(category_id=cat_id).first()
         cost_center = cc_budget.cc
         
-        print(cost_center)
+        
 
         return Response([], status=status.HTTP_200_OK)

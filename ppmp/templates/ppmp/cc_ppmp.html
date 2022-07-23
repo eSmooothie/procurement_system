@@ -144,6 +144,7 @@
 
     {% load static %}
     <script src="{% static 'js/ppmp/_script.js' %}"></script>
+    <script src="{% static 'js/ppmp/_modal_script.js' %}"></script>
 {% endblock content %}
 {% block modals %}
 
@@ -167,7 +168,7 @@ class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 
             <!-- <form action=""> -->
                 <div class="p-6 space-y-6">
                     <div class=" space-y-2">
-                        <p id="modal_cost_center_paragraph" data-cc-id="{{ selected_ppmp.cc.id }}">
+                        <p id="modal_cost_center_paragraph" data-cc-id="{{ selected_ppmp.cc.id }}" data-ppmp-id="{{ selected_ppmp.id }}">
                             Cost Center: <span class=" font-medium">({{ selected_ppmp.cc.code }})</span> <span class=" font-medium">{{ selected_ppmp.cc.name }}</span></p>
                         <div class="">
                             <p id="modal_sof_p" data-sof-id="{{ selected_ppmp.sof.id }}">

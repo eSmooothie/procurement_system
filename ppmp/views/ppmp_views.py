@@ -59,22 +59,18 @@ def cc_ppmp(request, cc_id):
     
     ppmp_year = list()
     # retrieve all years in ppmp
-    year_in_ppmp = Ppmp.objects.only('year').distinct('year').order_by('-year')
+    year_in_ppmp = Ppmp.objects.distinct('year').filter(cc_id=cost_center_data.id).order_by('-year')
 
     for year in year_in_ppmp:
         ppmp_year.append(year.year)
 
     selected_year = request_params.get("ppmp_year") if "ppmp_year" in request_params else ppmp_year[0]
 
-    selected_ppmp_id = request_params.get("ppmp_id") if "ppmp_id" in request_params else None
+    selected_ppmp = Ppmp.objects.get(id=request_params.get("ppmp_id")) if "ppmp_id" in request_params else None
 
-    selected_ppmp = Ppmp.objects.get(id=selected_ppmp_id)
-
-    
     # get only the ppmp based on the selected year
-    ppmp_list = Ppmp.objects.filter(cc_id=cc_id,year=selected_year).all
+    ppmp_list = Ppmp.objects.filter(cc_id=cc_id,year=selected_year).all()
 
-    
     context = page_context(
         user_fn = request.user.first_name,
         cost_center_data=cost_center_data,

@@ -72,7 +72,7 @@ class App(models.Model):
     quarter = models.CharField(blank=True, max_length=255)
     year = models.CharField(blank=True, max_length=255)
     type = models.CharField(blank=True, max_length=255)
-    group_id = models.CharField(blank=True, max_length=255)
+    group_id = models.CharField(blank=True,null=True, max_length=255)
     source_of_fund = models.ForeignKey(SourceOfFund, on_delete=models.RESTRICT)
     item_desc = models.ForeignKey(ItemDescription, on_delete=models.RESTRICT)
 
@@ -92,30 +92,29 @@ class Prices(models.Model):
 class OrderDetails(models.Model):
     
     item_desc = models.ForeignKey(ItemDescription, on_delete=models.RESTRICT)
-    ppmp = models.ForeignKey(Ppmp, on_delete=models.RESTRICT)
-    price = models.ForeignKey(Prices,on_delete=models.RESTRICT)
-    app = models.ForeignKey(App,on_delete=models.RESTRICT)
-    app_status = models.CharField(blank=True, max_length=255)
-    received_quatation_status = models.CharField(blank=True, max_length=255)
-    award_winning_bidder_status = models.CharField(blank=True, max_length=255)
-    obligate_po_status = models.CharField(blank=True, max_length=255)
-    served_status = models.CharField(blank=True, max_length=255)
-    qr_code = models.CharField(blank=True, max_length=255)
-    first_quart_quant = models.CharField(blank=True, max_length=255)
-    second_quart_quant = models.CharField(blank=True, max_length=255)
-    third_quart_quant = models.CharField(blank=True, max_length=255)
-    fourth_quart_quant = models.CharField(blank=True, max_length=255)
-    fifth_quantity = models.CharField(blank=True, max_length=255)
-
+    ppmp = models.ForeignKey(Ppmp,null=True, on_delete=models.RESTRICT)
+    price = models.ForeignKey(Prices,null=True,on_delete=models.RESTRICT)
+    app = models.ForeignKey(App,null=True,on_delete=models.RESTRICT)
+    app_status = models.CharField(blank=True,null=True, max_length=255)
+    received_quotation_status = models.CharField(blank=True,null=True, max_length=255)
+    award_winning_bidder_status = models.CharField(blank=True,null=True, max_length=255)
+    obligate_po_status = models.CharField(blank=True,null=True, max_length=255)
+    served_status = models.CharField(blank=True,null=True, max_length=255)
+    qr_code = models.CharField(blank=True,null=True, max_length=255)
+    first_quart_quant = models.CharField(blank=True,null=True, max_length=255)
+    second_quart_quant = models.CharField(blank=True,null=True, max_length=255)
+    third_quart_quant = models.CharField(blank=True,null=True, max_length=255)
+    fourth_quart_quant = models.CharField(blank=True,null=True, max_length=255)
+    date = models.CharField(blank=True, null=True, max_length=255)
 
     def __str__(self):
         return "orddetails_id:{}".format(self.id)
 
 class PpmpTrack(models.Model):
-    
-    datetime = models.DateTimeField(auto_now=True)
-    cc_name = models.CharField(blank=True, max_length=255)
-    barcode = models.CharField(blank=True, max_length=255)
+    orderdetails = models.ForeignKey(OrderDetails,null=True, on_delete=models.RESTRICT)
+    datetime = models.CharField(blank=True,null=True, max_length=255)
+    cc_name = models.CharField(blank=True,null=True, max_length=255)
+    barcode = models.CharField(blank=True,null=True, max_length=255)
 
     def __str__(self):
         return "ppmptrack_id:{}".format(self.id)
