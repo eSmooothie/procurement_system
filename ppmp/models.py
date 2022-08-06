@@ -11,7 +11,7 @@ class Category(models.Model):
 
 class Item(models.Model):
     general_name = models.CharField(blank=True, max_length=255)
-    category = models.ForeignKey(Category, on_delete=models.RESTRICT)
+    category = models.ForeignKey(Category, on_delete=models.RESTRICT, related_name="category")
 
     def __str__(self):
         return "item_id:{}-{}".format(self.id,self.general_name)
@@ -22,7 +22,7 @@ class ItemDescription(models.Model):
     spec_3 = models.CharField(blank=True, max_length=255)
     spec_4 = models.CharField(blank=True, max_length=255)
     spec_5 = models.CharField(blank=True, max_length=255)
-    item = models.ForeignKey(Item, on_delete=models.RESTRICT)
+    item = models.ForeignKey(Item, on_delete=models.RESTRICT, related_name="item")
 
     def __str__(self):
         return "itemdesc_id:{}".format(self.id)

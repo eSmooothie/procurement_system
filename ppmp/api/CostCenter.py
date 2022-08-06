@@ -19,9 +19,12 @@ class CostCenterPPMPDetails(APIView):
 
     def get(self, request):
         
-        if "cat_id" not in request.query_params or "cc_id" not in request.query_params or "sof_id" not in request.query_params or "ppmp_id" not in request.query_params:
+        if ("cat_id" not in request.query_params or 
+        "cc_id" not in request.query_params or 
+        "sof_id" not in request.query_params or 
+        "ppmp_id" not in request.query_params):
             return Response({
-                "detail" : "Missing query parameters."
+                "details" : "Missing query parameters."
             }, status=status.HTTP_200_OK)
 
         cat_id = request.query_params.get('cat_id')
@@ -40,7 +43,7 @@ class CostCenterPPMPDetails(APIView):
         cc_budget_serializer = CCBudgetSerializer(cc_budget, many=True)
         data['budget'] = cc_budget_serializer.data
 
-        orderdetails = OrderDetails.objects.select_related().filter(ppmp_id=ppmp_id).all()
+        orderdetails = OrderDetails.objects.select_related().filter(ppmp_id=ppmp_id).filter(item_desc__item__category_id=cat_id).all()
         orderdetails_serializer = OrderDetailsSerializer(orderdetails, many=True)
         data['order_details'] = orderdetails_serializer.data
 

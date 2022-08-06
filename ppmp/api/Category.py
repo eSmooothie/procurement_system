@@ -16,10 +16,10 @@ class CategoryAPI(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        term = request.query_params['term'] if "term" in request.query_params else None
+        keyword = request.query_params['term'] if "term" in request.query_params else None
 
-        if term:
-            categories = Category.objects.filter(name__icontains=term)
+        if keyword:
+            categories = Category.objects.filter(name__icontains=keyword)
         else:
             categories = Category.objects.all()
 
