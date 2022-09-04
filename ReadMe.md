@@ -17,15 +17,21 @@ py -m venv <env_name>
 3. Install required modules
 ```
 pip install -r requirement.txt
-``` or 
+```
+
+or
+
 ```
 py -m pip install -r requirement.txt
 ```
+
 4. Modify `.env` variables
+
 5. Start django serer
 ```
 py manage.py runserver [port]
 ```
+
 6. Start django tailwind
 ```
 py manage.py tailwind start
