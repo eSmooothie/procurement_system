@@ -2,12 +2,14 @@
 
 ### Requirement
  python 3.9 or higher
+
 -----------
+
 ### Setup
 1. Create a python virtual environment
     py -m venv <env_name>
 2. Activate virtual environment
-```<env_name>\Scripts\activate```
+`<env_name>\Scripts\activate`
 3. Install required modules
 ```pip install -r requirement.txt``` or ```py -m pip install -r requirement.txt```
 4. Modify `.env` variables
