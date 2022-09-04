@@ -7,7 +7,8 @@
 
 ### Setup
 1. Create a python virtual environment
-    py -m venv <env_name>
+```py -m venv <env_name>
+```
 2. Activate virtual environment
 `<env_name>\Scripts\activate`
 3. Install required modules
