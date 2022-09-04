@@ -1,7 +1,7 @@
 ## Procurement System
 
 ### Requirement
- <p>python 3.9 or higher</p>
+ python 3.9 or higher
 -----------
 ### Setup
 1. Create a python virtual environment
