@@ -38,6 +38,3 @@ py manage.py tailwind start
 ```
 
 ----------------
-
-### TO DO
-Set environment variables in .env file
