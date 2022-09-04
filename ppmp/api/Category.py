@@ -32,7 +32,7 @@ class CategoryAPI(APIView):
             formatted_data = {
                 'id' : d['id'],
                 'code' : d['code'],
-                'value' : d['name'],
+                'value' : f"{d['name']} ({d['code']})",
             }
 
             data.append(formatted_data)
