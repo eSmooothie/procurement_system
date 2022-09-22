@@ -65,6 +65,7 @@ INTERNAL_IPS = [
 ]
 
 TAILWIND_APP_NAME = 'theme'
+# change
 NPM_BIN_PATH = r'C:\Program Files\nodejs\npm.cmd'
 # end tailwindCSS
 
