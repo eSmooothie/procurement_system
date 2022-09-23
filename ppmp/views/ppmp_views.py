@@ -8,6 +8,7 @@ from ..models import CostCenter, CostCenterUser, Ppmp
 logger = logging.getLogger("file_log")
 
 import random
+from datetime import date
 
 # Select Cost Center
 @login_required(login_url='login_user')
@@ -56,13 +57,16 @@ def cc_ppmp(request, cc_id):
     
     cost_center_data = CostCenterUser.objects.filter(user__id=request.user.id).get(cc__id=cc_id).cc    
 
-    
     ppmp_year = list()
     # retrieve all years in ppmp
     year_in_ppmp = Ppmp.objects.distinct('year').filter(cc_id=cost_center_data.id).order_by('-year')
 
     for year in year_in_ppmp:
         ppmp_year.append(year.year)
+
+    if not ppmp_year:
+        todays_date = date.today()
+        ppmp_year.append(todays_date.year)
 
     selected_year = request_params.get("ppmp_year") if "ppmp_year" in request_params else ppmp_year[0]
 

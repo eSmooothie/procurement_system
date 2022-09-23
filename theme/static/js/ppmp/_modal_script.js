@@ -37,7 +37,7 @@ var getCostCenterPPMPDetails  = function getCostCenterPPMPDetails(sof_id, cc_id,
         $("#order_details_tbody").empty();
 
         // display current budget for that ppmp
-        const cc_curr_budget = (data.budget.length !== 0)? data.budget[0].curr_budget : "NO BUDGET SET";
+        const cc_curr_budget = (data.budget.length !== 0)? data.budget[0].curr_budget : 0;
         $("#cc_ppmp_budget").text(moneyParser(cc_curr_budget));
 
         // display ppmp items to table
