@@ -1,13 +1,15 @@
 import logging
+from unicodedata import category
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from ..helper import *
-from ..models import CostCenter, CostCenterUser, Ppmp
+from ..models import Category, CostCenter, CostCenterBudget, CostCenterUser, OrderDetails, Ppmp, SourceOfFund
 
 logger = logging.getLogger("file_log")
 
 import random
+from babel.numbers import format_currency
 from datetime import date
 
 # Select Cost Center
@@ -75,6 +77,9 @@ def cc_ppmp(request, cc_id):
     # get only the ppmp based on the selected year
     ppmp_list = Ppmp.objects.filter(cc_id=cc_id,year=selected_year).all()
 
+    
+    category_data = Category.objects.get(pk=request_params['cat_id']) if "cat_id" in request_params else ""
+
     context = page_context(
         user_fn = request.user.first_name,
         cost_center_data=cost_center_data,
@@ -83,6 +88,7 @@ def cc_ppmp(request, cc_id):
         selected_ppmp = selected_ppmp,
         cc_ppmp_list = ppmp_list,
         selected_app="ppmp",
+        category_data = category_data
         )
 
     return render(

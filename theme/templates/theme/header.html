@@ -29,4 +29,8 @@
              padding-right: 20px;
          } 
     </style>
+    {% csrf_token %}
+    <script>
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    </script>
     <body class="h-full sm:bg-gray-50">
