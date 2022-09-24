@@ -23,12 +23,8 @@ class CostCenterSerializer(serializers.ModelSerializer):
         model = CostCenter
         fields = '__all__'
 
-class PriceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Prices
-        fields = '__all__'
-
 class APPSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = App
         fields = '__all__'
@@ -42,6 +38,12 @@ class ItemDescriptionSerializer(serializers.ModelSerializer):
     item = ItemSerializer(read_only=True)
     class Meta:
         model = ItemDescription
+        fields = '__all__'
+
+class PriceSerializer(serializers.ModelSerializer):
+    item = ItemDescriptionSerializer(read_only=True)
+    class Meta:
+        model = Prices
         fields = '__all__'
 
 class OrderDetailsSerializer(serializers.ModelSerializer):

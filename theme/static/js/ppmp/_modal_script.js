@@ -85,6 +85,7 @@ $(document).ready(function(){
         }
     });
 
+    // update quantity
     $("#order_details_tbody").on("input", ".update_quant_val", function(){
         const item_node = $(this).parents()[1];
         const quant = $(this).parent().attr("data-quant");
@@ -92,6 +93,7 @@ $(document).ready(function(){
         $(item_node).attr(quant, val);
     });
 
+    //cancel
     $("#cancel_btn_selected_ppmp").on("click", function(){
         $("#edit_btn_selected_ppmp").removeClass("hidden");
         $("#suggest_item_btn_selected_ppmp").removeClass("hidden");
@@ -109,6 +111,7 @@ $(document).ready(function(){
         });
     });
 
+    //save
     $("#save_btn_selected_ppmp").on("click", function(){
         const updated_orderitem = $("#order_details_tbody").children("tr");
         
@@ -120,17 +123,20 @@ $(document).ready(function(){
             const second = $(this).attr("data-second-quant");
             const third = $(this).attr("data-third-quant");
             const fourth = $(this).attr("data-fourth-quant");
+            const price_id = $(this).attr("data-price-id");
 
             const data = {
                 'item_id' : item_id,
                 'first' : first,
                 'second' : second,
                 'third' : third,
-                'fourth' : fourth
+                'fourth' : fourth,
+                'price_id': price_id,
             }
 
             updated_orderitem_list.push(data);
         });
+        // console.log(updated_orderitem_list);
         send_post_request({
             url:"/api/orderitem/update",
             data: {
@@ -139,6 +145,51 @@ $(document).ready(function(){
                 "cat_id" : getUrlParameter("cat_id"),
             },
             done: function(data){window.location.reload();}
+        });
+    });
+
+    //remove
+    $("#order_details_tbody").on("click", ".delete_item", function(){
+        var item_node = $(this).parents()[1];
+        $(item_node).remove();
+    });
+
+    $("#add_btn_selected_ppmp").on("click", function(e){
+        const order_detail_node = $("#order_details_tbody");
+
+        const input_label = $("<label></label>").attr({for:"add_btn_search_item"}).text("Search Item");
+        const input_field = $("<input />").attr({type:"text",placeholder:"Select item"}).addClass("w-full add_btn_search_item")
+
+        const td = $("<td></td>").addClass("px-3 py-2").attr({colspan:"5"}).append(input_label, input_field);
+        const tr = $("<tr></tr>").addClass("bg-white border-b hover:cursor-pointer text-xs order_item_details").append(td);
+
+        order_detail_node.append(tr);
+    });
+
+    $("#order_details_tbody").on("input", ".add_btn_search_item", function(){
+        $(this).autocomplete({
+            autoFocus: true,
+            minLength:2,
+            source: base_url + "/api/items?cat_id=" + getUrlParameter("cat_id"),
+            select: function(event, ui){
+                var selected_item = ui.item;
+                
+                console.log(selected_item);
+
+                const tr = generateTableRowOrderItemDetails({
+                    item_id:selected_item.item_id,
+                    item_name:selected_item.value,
+                    price:selected_item.price,
+                    price_unit:selected_item.unit,
+                    generic_item_id:selected_item.general_item_id,
+                    price_id:selected_item.price_id,
+                    is_new:true,
+                });
+
+                $(tr).insertBefore($(this).parents()[1]);
+                $(this).parents()[1].remove();
+                
+            }
         });
     });
 
@@ -152,6 +203,62 @@ $(document).ready(function(){
     });
 });
 
+
+var generateTableRowOrderItemDetails = function generateTableRowOrderItemDetails({item_id="",item_name="",price_unit="",generic_item_id="",
+price="", price_id="", first_quant="0",second_quant="0",third_quant="0",fourth_quant="0",is_new=false}){
+    
+    const item_code_td = $("<th></th>").addClass("px-3 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap").attr("scope","row").text(generic_item_id);
+    const item_s_td = $("<td></td>").addClass("px-3 py-2").text("x");
+    const item_desc_td = $("<td></td>").addClass("px-3 py-2").text(item_name);
+    const unit_td = $("<td></td>").addClass("px-3 py-2").text(price_unit);
+    const price_td = $("<td></td>").addClass("px-3 py-2").text(moneyParser(price));
+    
+    let ammount = parseFloat(first_quant) * parseFloat(price);
+    const first_quant_td = $("<td></td>").addClass("px-3 py-2 editable").attr("data-quant","data-first-quant").text(first_quant);
+    const first_ammt_td = $("<td></td>").addClass("px-3 py-2").text(moneyParser(ammount));
+    
+    ammount = parseFloat(second_quant) * parseFloat(price);
+    const second_quant_td = $("<td></td>").addClass("px-3 py-2 editable").attr("data-quant","data-second-quant").text(second_quant);
+    const second_ammt_td = $("<td></td>").addClass("px-3 py-2").text(moneyParser(ammount));
+    
+    ammount = parseFloat(third_quant) * parseFloat(price);
+    const third_quant_td = $("<td></td>").addClass("px-3 py-2 editable").attr("data-quant","data-third-quant").text(third_quant);
+    const third_ammt_td = $("<td></td>").addClass("px-3 py-2").text(moneyParser(ammount));
+    
+    ammount = parseFloat(fourth_quant) * parseFloat(price);
+    const fourth_quant_td = $("<td></td>").addClass("px-3 py-2 editable").attr("data-quant","data-fourth-quant").text(fourth_quant);
+    const fourth_ammt_td = $("<td></td>").addClass("px-3 py-2").text(moneyParser(ammount));
+    
+
+    const delete_opt_td = $("<td></td>").addClass("px-3 py-2 hidden delete_item_container").append(
+        $("<button></button>").addClass("delete_item hover:underline text-red-500").text("Remove")
+        );
+
+    const tr = $("<tr></tr>").addClass("bg-white border-b hover:cursor-pointer text-xs order_item_details").attr("id",item_id).append(
+        item_code_td, item_s_td, item_desc_td, unit_td, price_td, first_quant_td, first_ammt_td, second_quant_td, 
+        second_ammt_td, third_quant_td, third_ammt_td, fourth_quant_td, fourth_ammt_td, delete_opt_td);
+    
+    tr.attr({
+        "data-first-quant":first_quant,
+        "data-second-quant":second_quant,
+        "data-third-quant":third_quant,
+        "data-fourth-quant":fourth_quant,
+        "data-price-id":price_id,
+    });
+
+    if(is_new){
+        delete_opt_td.removeClass("hidden");
+
+        $(tr).children('.editable').each(function(){
+            const curr_val = $(this).text();
+            $(this).empty();
+            const input_elem = $("<input />").addClass("w-full border border-b p-1 update_quant_val").attr({type:"number",min:"0", value:curr_val});
+            $(this).append(input_elem);
+        });
+    }
+
+    return tr
+}
 
 
 var getCostCenterPPMPDetails  = function getCostCenterPPMPDetails(sof_id, cc_id, cat_id, ppmp_id){
@@ -186,42 +293,35 @@ var getCostCenterPPMPDetails  = function getCostCenterPPMPDetails(sof_id, cc_id,
             if (Object.hasOwnProperty.call(data.order_details, key)) {
                 const order_detail = data.order_details[key];
 
-                const item_code = $("<th></th>").addClass("px-3 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap").attr("scope","row").text(order_detail.item_desc.item.id);
-                const item_s = $("<td></td>").addClass("px-3 py-2").text("x");
-                const item_name = order_detail.item_desc.item.general_name + "-" + order_detail.item_desc.spec_1
-                const item_desc = $("<td></td>").addClass("px-3 py-2").text(item_name);
-                const unit = $("<td></td>").addClass("px-3 py-2").text(order_detail.price.unit);
-                const price = $("<td></td>").addClass("px-3 py-2").text(moneyParser(order_detail.price.price));
-                
-                let ammount = parseFloat(order_detail.first_quart_quant) * parseFloat(order_detail.price.price);
-                const first_quant = $("<td></td>").addClass("px-3 py-2 editable").attr("data-quant","data-first-quant").text(order_detail.first_quart_quant);
-                const first_ammt = $("<td></td>").addClass("px-3 py-2").text(moneyParser(ammount));
-                
-                ammount = parseFloat(order_detail.second_quart_quant) * parseFloat(order_detail.price.price);
-                const second_quant = $("<td></td>").addClass("px-3 py-2 editable").attr("data-quant","data-second-quant").text(order_detail.second_quart_quant);
-                const second_ammt = $("<td></td>").addClass("px-3 py-2").text(moneyParser(ammount));
-                
-                ammount = parseFloat(order_detail.third_quart_quant) * parseFloat(order_detail.price.price);
-                const third_quant = $("<td></td>").addClass("px-3 py-2 editable").attr("data-quant","data-third-quant").text(order_detail.third_quart_quant);
-                const third_ammt = $("<td></td>").addClass("px-3 py-2").text(moneyParser(ammount));
-                
-                ammount = parseFloat(order_detail.fourth_quart_quant) * parseFloat(order_detail.price.price);
-                const fourth_quant = $("<td></td>").addClass("px-3 py-2 editable").attr("data-quant","data-fourth-quant").text(order_detail.fourth_quart_quant);
-                const fourth_ammt = $("<td></td>").addClass("px-3 py-2").text(moneyParser(ammount));
-                
-                const delete_opt = $("<td></td>").addClass("px-3 py-2 hidden delete_item_container").append(
-                    $("<button></button>").addClass("delete_item hover:underline text-red-500").text("Remove")
-                    );
+                let item_name = order_detail.item_desc.item.general_name;
 
-                const tr = $("<tr></tr>").addClass("bg-white border-b hover:cursor-pointer text-xs order_item_details").attr("id",order_detail.item_desc.id).append(item_code,
-                    item_s, item_desc, unit, price, first_quant, first_ammt, second_quant, second_ammt, third_quant, third_ammt,
-                    fourth_quant, fourth_ammt,delete_opt);
-                
-                tr.attr({
-                    "data-first-quant":order_detail.first_quart_quant,
-                    "data-second-quant":order_detail.second_quart_quant,
-                    "data-third-quant":order_detail.third_quart_quant,
-                    "data-fourth-quant":order_detail.fourth_quart_quant
+                if(order_detail.item_desc.spec_1 !== "None"){
+                    item_name += "-" + order_detail.item_desc.spec_1;
+                }
+                if(order_detail.item_desc.spec_2 !== "None"){
+                    item_name += "-" + order_detail.item_desc.spec_2;
+                }
+                if(order_detail.item_desc.spec_3 !== "None"){
+                    item_name += "-" + order_detail.item_desc.spec_3;
+                }
+                if(order_detail.item_desc.spec_4 !== "None"){
+                    item_name += "-" + order_detail.item_desc.spec_4;
+                }
+                if(order_detail.item_desc.spec_5 !== "None"){
+                    item_name += "-" + order_detail.item_desc.spec_5;
+                }
+
+                const tr = generateTableRowOrderItemDetails({
+                    item_id:order_detail.item_desc.id,
+                    item_name:item_name,
+                    price_unit:order_detail.price.unit,
+                    price:order_detail.price.price,
+                    generic_item_id:order_detail.item_desc.item.id,
+                    first_quant:order_detail.first_quart_quant,
+                    second_quant:order_detail.second_quart_quant,
+                    third_quant:order_detail.third_quart_quant,
+                    fourth_quant:order_detail.fourth_quart_quant,
+                    price_id:order_detail.price.id,
                 });
 
                 $("#order_details_tbody").append(tr);

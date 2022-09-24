@@ -101,7 +101,7 @@ class Prices(models.Model):
     item = models.ForeignKey(ItemDescription, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "price_id:{}-Item:{}-{}",format(self.id, self.item, self.price)
+        return "price_id:{}-Item:{}-{}".format(self.id, self.item, self.price)
 
 class OrderDetails(models.Model):
     
