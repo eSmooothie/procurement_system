@@ -4,8 +4,14 @@ function create_ppmp_modal_activity(){
     const _target = document.getElementById('create-ppmp-modal');
     const _opt = {
         backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40',
+        onHide: () => {
+            let ppmp_year = getUrlParameter("ppmp_year");
+            let ppmp_id = getUrlParameter("ppmp_id");
+            let path = window.location.pathname;
+            window.location.href = base_url + path + "?ppmp_year="+ ppmp_year +"&ppmp_id=" + ppmp_id; 
+        },
         onToggle: () => {
-            
+ 
         },
     };
     const _modal = new Modal(_target, _opt);
@@ -174,7 +180,7 @@ $(document).ready(function(){
             select: function(event, ui){
                 var selected_item = ui.item;
                 
-                console.log(selected_item);
+                // console.log(selected_item);
 
                 const tr = generateTableRowOrderItemDetails({
                     item_id:selected_item.item_id,
@@ -279,7 +285,7 @@ var getCostCenterPPMPDetails  = function getCostCenterPPMPDetails(sof_id, cc_id,
             ppmp_id : ppmp_id
         },
     }).done(function(data){
-        console.log(data);
+        // console.log(data);
 
         // console.log(data.budget);
         $("#order_details_tbody").empty();
