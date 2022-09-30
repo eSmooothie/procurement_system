@@ -53,7 +53,7 @@ $(document).ready(function(){
         var cat_id = getUrlParameter("cat_id");
         var cc_id = $("#modal_cost_center_paragraph").attr("data-cc-id");
         var ppmp_id = $("#modal_cost_center_paragraph").attr("data-ppmp-id");
-        var sof_id = $("#modal_sof_p").attr("data-sof-id"); 
+        var sof_id = $("#modal_sof_p").attr("data-sof-id");   
         getCostCenterPPMPDetails(sof_id, cc_id, cat_id, ppmp_id);
     }
 
@@ -64,7 +64,10 @@ $(document).ready(function(){
         select: function(event, ui){
             var category_selected = ui.item;
             
-            window.location.href = window.location.href + "&cat_id=" + category_selected.id + "&toogle_ppmp_modal="+1;
+            let ppmp_year = getUrlParameter("ppmp_year");
+            let ppmp_id = getUrlParameter("ppmp_id");
+            let path = window.location.pathname;
+            window.location.href = base_url + path + "?ppmp_year="+ ppmp_year +"&ppmp_id=" + ppmp_id + "&cat_id=" + category_selected.id + "&toogle_ppmp_modal="+1;
         }
     });
 
@@ -204,7 +207,33 @@ $(document).ready(function(){
         var is_active = ($(this).attr("data-is-active") === "true");
 
         if(is_active){
-            console.log("PRINT ME");
+            data = {
+                cc_id : $("#modal_cost_center_paragraph").attr("data-cc-id"),
+                ppmp_yr : getUrlParameter("ppmp_year"),
+                ppmp_id : getUrlParameter("ppmp_id"),
+                cat_id : getUrlParameter("cat_id")
+            }
+            console.log(data);
+            $.ajax({
+                headers: {'X-CSRFToken': csrftoken},
+                url: base_url + "/pdf/download/",
+                method: "POST",
+                data:data,
+                xhrFields: {
+                    responseType: 'blob'
+                },
+            }).done(function(data){
+                var a = document.createElement('a');
+                var url = window.URL.createObjectURL(data);
+                a.href = url;
+                a.download = 'report.pdf';
+                document.body.append(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            }).fail(function(xhr){
+                console.log(xhr)
+            });
         }
     });
 });
@@ -288,12 +317,19 @@ var getCostCenterPPMPDetails  = function getCostCenterPPMPDetails(sof_id, cc_id,
         // console.log(data);
 
         // console.log(data.budget);
-        $("#order_details_tbody").empty();
+       
 
         // display current budget for that ppmp
         const cc_curr_budget = (data.budget.length !== 0)? data.budget[0].curr_budget : 0;
         $("#cc_ppmp_budget").text(moneyParser(cc_curr_budget));
 
+        if (data.order_details.length == 0){
+            $("#order_details_no_data").removeClass("hidden");
+        }else{
+            $("#order_details_tbody").empty();
+        }
+
+        $("#order_details_thead").removeClass("hidden");
         // display ppmp items to table
         for (const key in data.order_details) {
             if (Object.hasOwnProperty.call(data.order_details, key)) {

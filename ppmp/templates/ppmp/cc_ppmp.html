@@ -40,7 +40,6 @@
                 <div class="col-span-1">
                     <label for="id_cc_ppmp_year" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
                         Year</label>
-                    <!-- TODO: Update PPMP table based on selected year -->
                     <select name="cc_ppmp_year" id="id_cc_ppmp_year" class="bg-gray-50 border border-gray-300 
                     text-gray-900 text-sm rounded-lg 
                     focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
@@ -186,7 +185,7 @@ class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 
                         </div>
                         <div id="ppmp_item_list" class="">
                             <table class="w-full text-sm text-left text-gray-500 ">
-                                <thead class="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700">
+                                <thead id="order_details_thead" class="hidden text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700">
                                     <tr class="text-center">
                                         <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="3">Item</th>
                                         <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="2">Unit Details</th>
@@ -216,7 +215,13 @@ class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 
                                     
                                 </thead>
                                 <tbody id="order_details_tbody" class="border">
-                                    
+                                    <tr id="order_details_no_data" class="bg-white border-b dark:bg-gray-800 
+                                    dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer hidden">
+                                        <th scope="row" class="font-medium text-gray-900 whitespace-nowrap text-center py-3" 
+                                        colspan="14">
+                                            <span>NO ORDERED ITEMS</span>
+                                        </th>
+                                    </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr id="tfoot_tr" class="bg-white border-b dark:bg-gray-800 

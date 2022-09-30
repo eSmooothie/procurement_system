@@ -6,15 +6,15 @@ READ ABOUT: DJANGO REST FRAMEWORK
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
-from ..models import ItemDescription, Prices
-from ..serializers import ItemDescriptionSerializer, PriceSerializer
+from ..models import Prices
+from ..serializers import PriceSerializer
 
 class ItemAPI(APIView):
-    # authentication_classes = [SessionAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         if "cat_id" in request.query_params:
