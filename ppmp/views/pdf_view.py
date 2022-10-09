@@ -3,12 +3,56 @@ from django.http import HttpResponse
 from django.conf import settings
 import os
 
+from ..models import Category, CostCenter, ItemDescription, OrderDetails, Ppmp, Prices
+
+class ItemInfo:
+	def __init__(self, item:OrderDetails):
+		item_specs = []
+			
+		if item.item_desc.spec_1 != 'None':
+			item_specs.append(item.item_desc.spec_1)
+		if item.item_desc.spec_2 != 'None':
+			item_specs.append(item.item_desc.spec_2)
+		if item.item_desc.spec_3 != 'None':
+			item_specs.append(item.item_desc.spec_3)
+		if item.item_desc.spec_4 != 'None':
+			item_specs.append(item.item_desc.spec_4)
+		if item.item_desc.spec_5 != 'None':
+			item_specs.append(item.item_desc.spec_5)
+
+		self.unit = item.price.unit
+		self.name = item.item_desc.item.general_name + "-" + ",".join(item_specs)
+		self.unit_price = item.price.price
+		self.qty_quart_distrib = (item.first_quart_quant, item.second_quart_quant, item.third_quart_quant, item.fourth_quart_quant)
+
+	def compute_quarter_amnt(self, quarter:int):
+		qty = float(self.qty_quart_distrib[quarter-1])
+		price = float(self.unit_price)
+		amnt = qty * price
+		return round(amnt, 2)
+
+	def get_all_quarter_distrib(self):
+		out = []
+
+		for i in range(1, len(self.qty_quart_distrib) + 1):
+			qty = self.qty_quart_distrib[i-1]
+			amnt = self.compute_quarter_amnt(quarter=i)
+			out.append((int(qty), amnt))
+
+		return out
 class PDF(FPDF):
-	def __init__(self, debug=False):
+	def __init__(self, cc_id, ppmp_id, cat_id, debug=False):
 		super().__init__(orientation='landscape', format='letter')
+		
+		self.cc = CostCenter.objects.get(id=cc_id)
+		self.ppmp = Ppmp.objects.get(id=ppmp_id)
+		self.cat = Category.objects.get(id=cat_id)
+		self.orderdetails = OrderDetails.objects.select_related().filter(ppmp_id=ppmp_id).filter(item_desc__item__category_id=cat_id).all()
+
 		self.margin = 8
 		self.debug = debug
 		self.set_margin(self.margin)
+		self.set_title(title=f'''ppmp_{self.ppmp.id}_report''')
 		self.auto_page_break = True
 		
 	def header(self):
@@ -35,20 +79,30 @@ class PDF(FPDF):
 		self.order_details()
 		
 	def asignature(self):
-		dist_quarters = [('',100),('',100),('',100),('',100)]
+		summary = {}
+		dist_quarters = [0] * 4
+		for item in self.orderdetails:
+			info = ItemInfo(item)
+			distrib = info.get_all_quarter_distrib()
+			for i in range(len(distrib)):
+				amnt = distrib[i][1]
+				dist_quarters[i] += amnt
+		
 		
 		self.set_font('Arial', size=8, style="B")
 		self.cell(w=10, txt=" ", border=1, align='C', ln=0, h=5)
 		self.cell(w=51, txt="Running Total>>", border=1, align='R', h=5)
 		self.cell(w=20, txt="", border=1, align='C', h=5)
 		self.cell(w=10, txt="", border=1, align='C', h=5)
-		self.cell(w=20, txt="XXXX", border=1, align='C', h=5)
+		self.cell(w=20, txt=f'''{sum(dist_quarters)}''', border=1, align='C', h=5)
 
-		for qty, ammt in dist_quarters:
-			self.cell(w=10, txt=f'''{qty}''', border=1, align='C', h=5)
+		for ammt in dist_quarters:
+			self.cell(w=10, txt=" ", border=1, align='C', h=5)
 			self.cell(w=28, txt=f'''{ammt}''', border=1, align='C', h=5)
 
-		self.ln(60)
+		
+		self.set_y(self.eph - 20)
+		print("a:",self.get_y())
 		# self.ln(10)
 		self.set_font('Arial', size=8)
 		self.cell(w=54.6, txt="Prepared By:", border=self.debug)
@@ -86,30 +140,30 @@ class PDF(FPDF):
 		self.set_font('Arial', size=10)
 		self.cell(txt="Cost Center:   ", border=self.debug)
 		self.set_font('Arial', size=10, style="BU")
-		self.cell(txt=f'''<CC.CODE>''', border=self.debug)
+		self.cell(txt=f'''{self.cc.code}''', border=self.debug)
 		self.cell(w=10, border=self.debug)
-		self.cell(txt=f'''<CC.NAME>''', border=self.debug)
+		self.cell(txt=f'''{self.cc.name}''', border=self.debug)
 		self.ln(5)
 
 		self.set_font('Arial', size=10)
 		self.cell(txt="Source of Fund:   ", border=self.debug)
 		self.set_font('Arial', size=10, style="BU")
-		self.cell(txt=f'''<SOF.NAME>''', border=self.debug)
+		self.cell(txt=f'''{self.ppmp.sof.description}''', border=self.debug)
 		self.ln(5)
 
 		self.set_font('Arial', size=10)
 		self.cell(txt="PPMP ID:   ", border=self.debug)
-		self.cell(txt=f'''<PPMP.ID>''', border=self.debug)
+		self.cell(txt=f'''{self.ppmp.id}''', border=self.debug)
 		self.cell(w=10, border=self.debug)
-		self.cell(txt=f'''<PPMP.TYPE>''', border=self.debug)
+		self.cell(txt=f'''{self.ppmp.type}''', border=self.debug)
 		self.ln(5)
 
 		self.set_font('Arial', size=10)
 		self.cell(txt="Account Code:   ", border=self.debug)
 		self.set_font('Arial', size=10, style="B")
-		self.cell(txt=f'''<CAT.CODE>''', border=self.debug)
+		self.cell(txt=f'''{self.cat.code}''', border=self.debug)
 		self.cell(w=10, border=self.debug)
-		self.cell(txt=f'''<CAT.NAME>''', border=self.debug)
+		self.cell(txt=f'''{self.cat.name}''', border=self.debug)
 		self.ln(5)
 
 		self.set_font('Arial', size=10)
@@ -146,16 +200,18 @@ class PDF(FPDF):
 		self.cell(w=28, txt="AMOUNT", border=1, align='C', h=cell_h, ln=1)
 		self.set_font('Arial', size=8)
 		
-		
 	def items(self):
-		for i in range(50):
-			self.item_cell()
+		for item in self.orderdetails:
+					
+			self.item_cell(item=ItemInfo(item))
 			# add page break
 			# modify to depending on the current x and y
-			if i > 0 and i % 20 == 0:
+			curr_y = self.get_y()
+			print("curr_y: ",curr_y)
+			if curr_y >= 160:
 				self.add_page()
+			
 
-	
 	def get_initial_xy(self):
 		return (self.get_x(), self.get_y())
 
@@ -179,11 +235,8 @@ class PDF(FPDF):
 
 		return h
 
-	def item_cell(self, item={}):
-		unit = "X"
-		unit_price = "XXX"
-
-		dist_quarters = [(1,200),(1,200),(1,200),(1,200)]
+	def item_cell(self, item:ItemInfo):
+		dist_quarters = item.get_all_quarter_distrib()
 
 		ttl_qty = 0
 		ttl_ammt = 0
@@ -192,19 +245,17 @@ class PDF(FPDF):
 			ttl_qty += qty
 			ttl_ammt += ammt
 
-		name = "qweqweqweqweqweqweqA"
-
 		word_h = 3
 		x, y = self.get_initial_xy()
-		cell_h = self.compute_cell_height(word_h, name)
+		cell_h = self.compute_cell_height(word_h, item.name)
 
-		self.multi_cell(w=10, txt=f'''{unit}''', border=1, align='C', ln=0, h=cell_h)
-		self.multi_cell(w=51, txt=f'''{name}''', border=1, h=5)
+		self.multi_cell(w=10, txt=f'''{item.unit}''', border=1, align='C', ln=0, h=cell_h)
+		self.multi_cell(w=51, txt=f'''{item.name}''', border=1, h=5)
 		x2 = self.get_x()
 		y2 = self.get_y()
 		self.set_xy(x=x2, y=y2)
 
-		self.cell(w=20, txt=f'''{unit_price}''', border=1, align='C', h=cell_h)
+		self.cell(w=20, txt=f'''{item.unit_price}''', border=1, align='C', h=cell_h)
 		self.cell(w=10, txt=f'''{ttl_qty}''', border=1, align='C', h=cell_h)
 		self.cell(w=20, txt=f'''{ttl_ammt}''', border=1, align='C', h=cell_h)
 
@@ -228,6 +279,10 @@ class PDF(FPDF):
 
 def create_pdf(request):
 	
-	pdf = PDF(debug=False)
+	cc_id = request.POST['cc_id']
+	ppmp_id = request.POST['ppmp_id']
+	cat_id = request.POST['cat_id']
+	
+	pdf = PDF(cc_id=cc_id, ppmp_id=ppmp_id, cat_id=cat_id, debug=False)
 
 	return HttpResponse(bytes(pdf.build()), content_type='application/pdf')

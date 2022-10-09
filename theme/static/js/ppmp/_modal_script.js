@@ -213,7 +213,7 @@ $(document).ready(function(){
                 ppmp_id : getUrlParameter("ppmp_id"),
                 cat_id : getUrlParameter("cat_id")
             }
-            console.log(data);
+        
             $.ajax({
                 headers: {'X-CSRFToken': csrftoken},
                 url: base_url + "/pdf/download/",
@@ -226,13 +226,13 @@ $(document).ready(function(){
                 var a = document.createElement('a');
                 var url = window.URL.createObjectURL(data);
                 a.href = url;
-                a.download = 'report.pdf';
+                a.download = "ppmp_" + getUrlParameter("ppmp_id") + "_report.pdf";
                 document.body.append(a);
                 a.click();
                 a.remove();
                 window.URL.revokeObjectURL(url);
             }).fail(function(xhr){
-                console.log(xhr)
+                console.log(xhr);
             });
         }
     });
