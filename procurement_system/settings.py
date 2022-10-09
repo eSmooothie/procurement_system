@@ -15,7 +15,7 @@ from config import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+TAILWIND_STATIC_DIR = os.path.abspath(os.path.join(BASE_DIR, 'theme/static/'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -69,13 +69,13 @@ TAILWIND_APP_NAME = 'theme'
 NPM_BIN_PATH = r'C:\Program Files\nodejs\npm.cmd'
 # end tailwindCSS
 
+
 ROOT_URLCONF = 'procurement_system.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            
         ],
         'APP_DIRS': True,
         'OPTIONS': {
