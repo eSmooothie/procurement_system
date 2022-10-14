@@ -236,7 +236,7 @@ $(document).ready(function(){
                 var a = document.createElement('a');
                 var url = window.URL.createObjectURL(data);
                 a.href = url;
-                a.download = "ppmp_" + getUrlParameter("ppmp_id") + "_report.pdf";
+                a.download = "ppmp_report.pdf";
                 document.body.append(a);
                 a.click();
                 a.remove();

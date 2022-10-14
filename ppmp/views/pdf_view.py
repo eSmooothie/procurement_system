@@ -1,5 +1,5 @@
-from fpdf import FPDF
-from django.http import HttpResponse
+from fpdf import FPDF, XPos, YPos
+from django.http import HttpResponse, HttpResponseNotFound
 from django.conf import settings
 import os
 
@@ -90,7 +90,7 @@ class PDF(FPDF):
 		
 		
 		self.set_font('Arial', size=8, style="B")
-		self.cell(w=10, txt=" ", border=1, align='C', ln=0, h=5)
+		self.cell(w=14, txt=" ", border=1, align='C', ln=0, h=5)
 		self.cell(w=51, txt="Running Total>>", border=1, align='R', h=5)
 		self.cell(w=20, txt="", border=1, align='C', h=5)
 		self.cell(w=10, txt="", border=1, align='C', h=5)
@@ -98,7 +98,7 @@ class PDF(FPDF):
 
 		for ammt in dist_quarters:
 			self.cell(w=10, txt=" ", border=1, align='C', h=5)
-			self.cell(w=28, txt=f'''{ammt}''', border=1, align='C', h=5)
+			self.cell(w=27, txt=f'''{ammt}''', border=1, align='C', h=5)
 
 		
 		self.set_y(self.eph - 20)
@@ -171,33 +171,33 @@ class PDF(FPDF):
 	def order_details(self):
 		self.set_font('Arial', size=9, style='B')
 		cell_h = 5
-		self.cell(w=10, txt="Unit", border=1, h=10)
+		self.cell(w=14, txt="Unit", border=1, align='C', h=10)
 		self.cell(w=51, txt="DETAILS", border=1, h=cell_h)
 		self.cell(w=20, txt="UNIT", border="LTR", align='C', h=cell_h)
 		self.cell(w=30, txt="TOTAL", border=1, align='C', h=cell_h)
 
-		self.cell(w=38, txt="FIRST QUARTER", border=1, align='C', h=cell_h)
-		self.cell(w=38, txt="SECOND QUARTER", border=1, align='C', h=cell_h)
-		self.cell(w=38, txt="THIRD QUARTER", border=1, align='C', h=cell_h)
-		self.cell(w=38, txt="FOURTH QUARTER", border=1, ln=1, align='C', h=cell_h)
+		self.cell(w=37, txt="FIRST QUARTER", border=1, align='C', h=cell_h)
+		self.cell(w=37, txt="SECOND QUARTER", border=1, align='C', h=cell_h)
+		self.cell(w=37, txt="THIRD QUARTER", border=1, align='C', h=cell_h)
+		self.cell(w=37, txt="FOURTH QUARTER", border=1, ln=1, align='C', h=cell_h)
 
-		self.cell(w=10, txt=" ", h=cell_h)
+		self.cell(w=14, txt=" ", h=cell_h)
 		self.cell(w=51, txt="(Nomenclature & Description)", border=1, h=cell_h)
 		self.cell(w=20, txt="PRICE", border="LBR", align='C', h=cell_h)
 		self.cell(w=10, txt="QTY", border=1, align='C', h=cell_h)
 		self.cell(w=20, txt="AMOUNT", border=1, align='C', h=cell_h)
 
 		self.cell(w=10, txt="QTY", border=1, align='C', h=cell_h)
-		self.cell(w=28, txt="AMOUNT", border=1, align='C', h=cell_h)
+		self.cell(w=27, txt="AMOUNT", border=1, align='C', h=cell_h)
 
 		self.cell(w=10, txt="QTY", border=1, align='C', h=cell_h)
-		self.cell(w=28, txt="AMOUNT", border=1, align='C', h=cell_h)
+		self.cell(w=27, txt="AMOUNT", border=1, align='C', h=cell_h)
 
 		self.cell(w=10, txt="QTY", border=1, align='C', h=cell_h)
-		self.cell(w=28, txt="AMOUNT", border=1, align='C', h=cell_h)
+		self.cell(w=27, txt="AMOUNT", border=1, align='C', h=cell_h)
 
 		self.cell(w=10, txt="QTY", border=1, align='C', h=cell_h)
-		self.cell(w=28, txt="AMOUNT", border=1, align='C', h=cell_h, ln=1)
+		self.cell(w=27, txt="AMOUNT", border=1, align='C', h=cell_h, ln=1)
 		self.set_font('Arial', size=8)
 		
 	def items(self):
@@ -210,30 +210,6 @@ class PDF(FPDF):
 			print("curr_y: ",curr_y)
 			if curr_y >= 160:
 				self.add_page()
-			
-
-	def get_initial_xy(self):
-		return (self.get_x(), self.get_y())
-
-	def compute_cell_height(self, word_h, name: str):
-		x, y = self.get_initial_xy()
-		self.set_draw_color(r=255, g=255, b=255)
-		self.set_text_color(r=255, g=255, b=255)
-		self.multi_cell(w=10, txt="X", border=1, align='C', ln=0)
-		x1 = self.get_x()
-		y1 = self.get_y() 
-		self.set_xy(x=x1, y=y1-word_h)
-		
-		self.multi_cell(w=51, txt=name, border=1, h=5)
-		x2 = self.get_x()
-		y2 = self.get_y()
-		
-		h = y1-y2 - word_h
-		self.set_xy(x=x, y=y-h)
-		self.set_draw_color(r=0, g=0, b=0)
-		self.set_text_color(r=0, g=0, b=0)
-
-		return h
 
 	def item_cell(self, item:ItemInfo):
 		dist_quarters = item.get_all_quarter_distrib()
@@ -245,26 +221,50 @@ class PDF(FPDF):
 			ttl_qty += qty
 			ttl_ammt += ammt
 
-		word_h = 3
-		x, y = self.get_initial_xy()
-		cell_h = self.compute_cell_height(word_h, item.name)
+		desc = self.multi_cell(w=51, txt=f'''{item.name}''', align='C',split_only=True)
+		print("DESC: ", desc)	
 
-		self.multi_cell(w=10, txt=f'''{item.unit}''', border=1, align='C', ln=0, h=cell_h)
-		self.multi_cell(w=51, txt=f'''{item.name}''', border=1, h=5)
-		x2 = self.get_x()
-		y2 = self.get_y()
-		self.set_xy(x=x2, y=y2)
+		display=True
+		
+		border_design = [1,'LTR', 'LR', 'LBR']
 
-		self.cell(w=20, txt=f'''{item.unit_price}''', border=1, align='C', h=cell_h)
-		self.cell(w=10, txt=f'''{ttl_qty}''', border=1, align='C', h=cell_h)
-		self.cell(w=20, txt=f'''{ttl_ammt}''', border=1, align='C', h=cell_h)
+		for i in range(len(desc)):
+			word = desc[i]
+			if len(desc) == 1:
+				b = border_design[0]
+			elif i == 0:
+				b = border_design[1]
+			elif i == len(desc) - 1:
+				b = border_design[3]
+			else:
+				b = border_design[2]
 
-		for qty, ammt in dist_quarters:
-			self.cell(w=10, txt=f'''{qty}''', border=1, align='C', h=cell_h)
-			self.cell(w=28, txt=f'''{ammt}''', border=1, align='C', h=cell_h)
+			if display:
+				self.cell(w=14, txt=f'''{item.unit}''', border=b, align='C', h=5)
+			else:
+				self.cell(w=14, txt=f''' ''', border=b, align='C', h=5)
 
-		self.set_xy(x=x, y=y-cell_h)
+			self.cell(w=51,txt=word,border=b, align='C', h=5,)
 
+			if display:
+				self.cell(w=20, txt=f'''{item.unit_price}''', border=b, align='C', h=5)
+				self.cell(w=10, txt=f'''{ttl_qty}''', border=b, align='C', h=5)
+				self.cell(w=20, txt=f'''{ttl_ammt}''', border=b, align='C', h=5)
+
+				for qty, ammt in dist_quarters:
+					self.cell(w=10, txt=f'''{qty}''', border=b, align='C', h=5)
+					self.cell(w=27, txt=f'''{ammt}''', border=b, align='C', h=5)
+			else:
+				self.cell(w=20, txt=f''' ''', border=b, align='C', h=5)
+				self.cell(w=10, txt=f''' ''', border=b, align='C', h=5)
+				self.cell(w=20, txt=f''' ''', border=b, align='C', h=5)
+
+				for qty, ammt in dist_quarters:
+					self.cell(w=10, txt=f''' ''', border=b, align='C', h=5)
+					self.cell(w=27, txt=f''' ''', border=b, align='C', h=5)
+			self.ln()
+			display = False
+		
 	def build(self):
 		self.add_page()
 		self.header()
@@ -279,10 +279,17 @@ class PDF(FPDF):
 
 def create_pdf(request):
 	
-	cc_id = request.POST['cc_id']
-	ppmp_id = request.POST['ppmp_id']
-	cat_id = request.POST['cat_id']
+	if request.method == 'POST':
+		cc_id = request.POST['cc_id']
+		ppmp_id = request.POST['ppmp_id']
+		cat_id = request.POST['cat_id']
 	
-	pdf = PDF(cc_id=cc_id, ppmp_id=ppmp_id, cat_id=cat_id, debug=False)
+	# cc_id = 1
+	# ppmp_id = 13
+	# cat_id = 912
+	
+		pdf = PDF(cc_id=cc_id, ppmp_id=ppmp_id, cat_id=cat_id, debug=False)
 
-	return HttpResponse(bytes(pdf.build()), content_type='application/pdf')
+		return HttpResponse(bytes(pdf.build()), content_type='application/pdf')
+
+	return HttpResponseNotFound("<h1> PAGE NOT FOUND :P </h2>")
