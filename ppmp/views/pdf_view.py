@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.conf import settings
 import os
 
-from ..models import Category, CostCenter, ItemDescription, OrderDetails, Ppmp, Prices
+from ..models import Category, CostCenter, OrderDetails, Ppmp
 
 class ItemInfo:
 	def __init__(self, item:OrderDetails):
@@ -40,7 +40,7 @@ class ItemInfo:
 			out.append((int(qty), amnt))
 
 		return out
-class PDF(FPDF):
+class PPMP_PDF(FPDF):
 	def __init__(self, cc_id, ppmp_id, cat_id, debug=False):
 		super().__init__(orientation='landscape', format='letter')
 		
@@ -131,7 +131,7 @@ class PDF(FPDF):
 		self.cell(w=10, txt=" ", align='C')
 		self.cell(w=44.6, h=5, txt="Chancellor", align='C')
 
-	def detail(self, context={}):
+	def detail(self):
 		self.set_font('Arial', size=10, style="B")
 		self.cell(w=self.epw, txt=f'''PROJECT PROCUREMENT MANAGEMENT PLAN, YYYY''', border=self.debug)
 		
@@ -288,7 +288,7 @@ def create_pdf(request):
 	# ppmp_id = 13
 	# cat_id = 912
 	
-		pdf = PDF(cc_id=cc_id, ppmp_id=ppmp_id, cat_id=cat_id, debug=False)
+		pdf = PPMP_PDF(cc_id=cc_id, ppmp_id=ppmp_id, cat_id=cat_id, debug=False)
 
 		return HttpResponse(bytes(pdf.build()), content_type='application/pdf')
 
