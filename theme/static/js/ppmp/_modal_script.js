@@ -80,10 +80,12 @@ $(document).ready(function(){
             $("#tfoot_tr").removeClass("hidden");
             $("#save_btn_selected_ppmp").removeClass("hidden");
             $("#cancel_btn_selected_ppmp").removeClass("hidden");
+            $("#add_new_data_btn_selected_ppmp").removeClass("hidden");
 
             $("#edit_btn_selected_ppmp").addClass("hidden");
             $("#suggest_item_btn_selected_ppmp").addClass("hidden");
             $("#print_btn_selected_ppmp").addClass("hidden");
+            $(".view_log_container").addClass("hidden");
             // parent > selector > selector
             $("#order_details_tbody").children('tr').children('.editable').each(function(){
                 const curr_val = $(this).text();
@@ -107,16 +109,22 @@ $(document).ready(function(){
         $("#edit_btn_selected_ppmp").removeClass("hidden");
         $("#suggest_item_btn_selected_ppmp").removeClass("hidden");
         $("#print_btn_selected_ppmp").removeClass("hidden");
+        $(".view_log_container").removeClass("hidden");
 
         $(".delete_item_container").addClass("hidden");
         $("#tfoot_tr").addClass("hidden");
         $("#save_btn_selected_ppmp").addClass("hidden");
         $("#cancel_btn_selected_ppmp").addClass("hidden");
+        $("#add_new_data_btn_selected_ppmp").addClass("hidden");
 
         $("#order_details_tbody").children('tr').children('.editable').each(function(){
             const curr_val = $(this).children().first().val();
             $(this).empty();
             $(this).text(curr_val);
+        });
+
+        $("#order_details_tbody").children('tr.new_order_item_data').each(function(){
+            $(this).remove();
         });
     });
 
@@ -163,16 +171,18 @@ $(document).ready(function(){
         $(item_node).remove();
     });
 
-    $("#add_btn_selected_ppmp").on("click", function(e){
+    $("#add_new_data_btn_selected_ppmp").on("click", function(e){
         const order_detail_node = $("#order_details_tbody");
 
         const input_label = $("<label></label>").attr({for:"add_btn_search_item"}).text("Search Item");
-        const input_field = $("<input />").attr({type:"text",placeholder:"Select item"}).addClass("w-full add_btn_search_item")
+        const input_field = $("<input />").attr({type:"text",placeholder:"Search item"}).addClass("w-full add_btn_search_item")
 
         const td = $("<td></td>").addClass("px-3 py-2").attr({colspan:"5"}).append(input_label, input_field);
-        const tr = $("<tr></tr>").addClass("bg-white border-b hover:cursor-pointer text-xs order_item_details").append(td);
+        const tr = $("<tr></tr>").addClass("bg-white border-b hover:cursor-pointer text-xs order_item_details new_order_item_data").append(td);
 
         order_detail_node.append(tr);
+
+        $("#ppmp_item_list").animate({scrollTop: $(tr).offset().top}, 1000);
     });
 
     $("#order_details_tbody").on("input", ".add_btn_search_item", function(){
@@ -236,6 +246,8 @@ $(document).ready(function(){
             });
         }
     });
+
+
 });
 
 
@@ -243,8 +255,8 @@ var generateTableRowOrderItemDetails = function generateTableRowOrderItemDetails
 price="", price_id="", first_quant="0",second_quant="0",third_quant="0",fourth_quant="0",is_new=false}){
     
     const item_code_td = $("<th></th>").addClass("px-3 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap").attr("scope","row").text(generic_item_id);
-    const item_s_td = $("<td></td>").addClass("px-3 py-2").text("x");
-    const item_desc_td = $("<td></td>").addClass("px-3 py-2").text(item_name);
+    
+    const item_desc_td = $("<td></td>").addClass("px-3 py-2").attr("colspan","2").text(item_name);
     const unit_td = $("<td></td>").addClass("px-3 py-2").text(price_unit);
     const price_td = $("<td></td>").addClass("px-3 py-2").text(moneyParser(price));
     
@@ -264,14 +276,20 @@ price="", price_id="", first_quant="0",second_quant="0",third_quant="0",fourth_q
     const fourth_quant_td = $("<td></td>").addClass("px-3 py-2 editable").attr("data-quant","data-fourth-quant").text(fourth_quant);
     const fourth_ammt_td = $("<td></td>").addClass("px-3 py-2").text(moneyParser(ammount));
     
+    const log_opt_td = $("<td></td>").addClass("px-3 py-2 view_log_container").append(
+        $("<button></button>").addClass("view_log text-blue-500 hover:underline").text("logs")
+    ).attr({
+        'ppmp_id': getUrlParameter("ppmp_id"),
+        'item_id' : item_id
+    });
 
     const delete_opt_td = $("<td></td>").addClass("px-3 py-2 hidden delete_item_container").append(
         $("<button></button>").addClass("delete_item hover:underline text-red-500").text("Remove")
         );
 
     const tr = $("<tr></tr>").addClass("bg-white border-b hover:cursor-pointer text-xs order_item_details").attr("id",item_id).append(
-        item_code_td, item_s_td, item_desc_td, unit_td, price_td, first_quant_td, first_ammt_td, second_quant_td, 
-        second_ammt_td, third_quant_td, third_ammt_td, fourth_quant_td, fourth_ammt_td, delete_opt_td);
+        item_code_td, item_desc_td, unit_td, price_td, first_quant_td, first_ammt_td, second_quant_td, 
+        second_ammt_td, third_quant_td, third_ammt_td, fourth_quant_td, fourth_ammt_td, delete_opt_td, log_opt_td);
     
     tr.attr({
         "data-first-quant":first_quant,
@@ -283,6 +301,8 @@ price="", price_id="", first_quant="0",second_quant="0",third_quant="0",fourth_q
 
     if(is_new){
         delete_opt_td.removeClass("hidden");
+
+        $(tr).addClass("new_order_item_data");
 
         $(tr).children('.editable').each(function(){
             const curr_val = $(this).text();
@@ -369,7 +389,7 @@ var getCostCenterPPMPDetails  = function getCostCenterPPMPDetails(sof_id, cc_id,
                 $("#order_details_tbody").append(tr);
             }
         }
-        
+
         $("#edit_btn_selected_ppmp").removeClass("bg-gray-400 hover:bg-gray-400 focus:ring-gray-300");
         $("#edit_btn_selected_ppmp").addClass("bg-blue-700 hover:bg-blue-800 focus:ring-blue-300");
         $("#edit_btn_selected_ppmp").attr("data-is-active", true);

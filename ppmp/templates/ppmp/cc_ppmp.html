@@ -135,8 +135,8 @@
 
 <!-- CREATE PPMP MODAL -->
 <div id="create-ppmp-modal" tabindex="-1" aria-hidden="true"  data-modal-placement="top-center"
-class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-    <div class="relative p-4 w-full max-w-7xl h-full md:h-auto">
+class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full h-100">
+    <div id="ppmp-container" class="relative p-4 w-full max-w-7xl h-full md:h-auto ">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <!-- Modal header -->
@@ -183,7 +183,7 @@ class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 
                                 {% endif %}
                             </div>
                         </div>
-                        <div id="ppmp_item_list" class="">
+                        <div id="ppmp_item_list" class="overflow-y-auto max-h-[300px]">
                             <table class="w-full text-sm text-left text-gray-500 ">
                                 <thead id="order_details_thead" class="hidden text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700">
                                     <tr class="text-center">
@@ -199,8 +199,7 @@ class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 
                                     </tr>
                                     <tr class="text-center">
                                         <th scope="col" class="px-3 py-1.5 border border-gray-700">Code</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">S</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Description</th>
+                                        <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="2">Description</th>
                                         <th scope="col" class="px-3 py-1.5 border border-gray-700">Unit</th>
                                         <th scope="col" class="px-3 py-1.5 border border-gray-700">Price</th>
                                         <th scope="col" class="px-3 py-1.5 border border-gray-700">Quantity</th>
@@ -214,7 +213,7 @@ class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 
                                     </tr>
                                     
                                 </thead>
-                                <tbody id="order_details_tbody" class="border">
+                                <tbody id="order_details_tbody" class="">
                                     <tr id="order_details_no_data" class="bg-white border-b dark:bg-gray-800 
                                     dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer hidden">
                                         <th scope="row" class="font-medium text-gray-900 whitespace-nowrap text-center py-3" 
@@ -223,12 +222,12 @@ class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 
                                         </th>
                                     </tr>
                                 </tbody>
-                                <tfoot>
+                                <tfoot class="w-100">
                                     <tr id="tfoot_tr" class="bg-white border-b dark:bg-gray-800 
-                                    dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer hidden">
+                                    dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer">
                                         <th scope="row" class="font-medium text-gray-900 dark:text-white whitespace-nowrap text-center" 
                                         colspan="14">
-                                            <button id="add_btn_selected_ppmp" class="px-6 py-4 w-full">Add Data</button>
+                                            
                                         </th>
                                     </tr>
                                 </tfoot>
@@ -252,6 +251,8 @@ class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 
                         focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Cancel</button> 
                         <button id="save_btn_selected_ppmp" data-is-active="false" type="button" class="hidden text-white bg-green-500 hover:bg-green-600 
                         focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>
+                        <button id="add_new_data_btn_selected_ppmp" data-is-active="false" type="button" class="hidden text-white bg-blue-500 hover:bg-blue-600 
+                        focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Add New Data</button>
                     </div>
                                            
                 </div>
