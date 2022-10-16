@@ -1,14 +1,15 @@
 import json
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from rest_framework import status
 
-from ppmp.models import ItemDescription, OrderDetails, Ppmp, Prices
+from ppmp.models import ItemDescription, OrderDetails, Ppmp, PpmpTrack, Prices
+
+INVALID_REQUEST = {'msg':"Invalid request"}
+INVALID_ACCESS = {'msg':"Invalid access"}
 
 @login_required(login_url='login_user')
 def update_ppmp_orderitems(request):
-    data = {'msg':"Invalid access"}
     
     if request.method == 'POST':
         json_data = request.POST['data']
@@ -70,4 +71,53 @@ def update_ppmp_orderitems(request):
             
         data = {"msg":"Success"}
         return JsonResponse(data, status=status.HTTP_200_OK)
-    return JsonResponse(data, status=status.HTTP_400_BAD_REQUEST)
+    return JsonResponse(INVALID_ACCESS, status=status.HTTP_400_BAD_REQUEST)
+
+def get_orderitem_logs(request):
+    
+    if request.method == 'GET':
+        orderitem_id = request.GET['orderitem_id']
+        
+        orderdetail_log = PpmpTrack.objects.select_related().filter(orderdetails_id=orderitem_id).order_by('id').all()
+
+        log_records = []
+
+        for log in orderdetail_log:
+            log_record = {
+                'id' : log.id,
+                'datetime' : log.datetime,
+                'cc_name' : log.cc_name,
+                'barcode' : log.barcode
+            }
+
+            log_records.append(log_record)
+
+        item_name = orderdetail_log[0].orderdetails.item_desc.item.general_name
+
+        if orderdetail_log[0].orderdetails.item_desc.spec_1 != 'None':
+            item_name += ' - ' + orderdetail_log[0].orderdetails.item_desc.spec_1
+        if orderdetail_log[0].orderdetails.item_desc.spec_2 != 'None':
+            item_name += ' - ' + orderdetail_log[0].orderdetails.item_desc.spec_2
+        if orderdetail_log[0].orderdetails.item_desc.spec_3 != 'None':
+            item_name += ' - ' + orderdetail_log[0].orderdetails.item_desc.spec_3
+        if orderdetail_log[0].orderdetails.item_desc.spec_4 != 'None':
+            item_name += ' - ' + orderdetail_log[0].orderdetails.item_desc.spec_4
+        if orderdetail_log[0].orderdetails.item_desc.spec_5 != 'None':
+            item_name += ' - ' + orderdetail_log[0].orderdetails.item_desc.spec_5
+
+        data = {
+            'id' : orderitem_id,
+            'item_name' : item_name,
+            'status' : {
+                'app' : orderdetail_log[0].orderdetails.app_status,
+                'received_quotation' : orderdetail_log[0].orderdetails.received_quotation_status,
+                'award_winning' : orderdetail_log[0].orderdetails.award_winning_bidder_status,
+                'obligate_po' : orderdetail_log[0].orderdetails.obligate_po_status,
+                'served' : orderdetail_log[0].orderdetails.served_status
+            },
+            'log_records' : log_records
+        }
+
+        return JsonResponse(data, status=status.HTTP_200_OK)
+
+    return JsonResponse(INVALID_REQUEST, status=status.HTTP_400_BAD_REQUEST)

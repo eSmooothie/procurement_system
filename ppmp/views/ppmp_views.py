@@ -8,7 +8,6 @@ from ..models import Category, CostCenter, CostCenterBudget, CostCenterUser, Ord
 
 logger = logging.getLogger("file_log")
 
-import random
 from babel.numbers import format_currency
 from datetime import date
 

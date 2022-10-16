@@ -31,6 +31,8 @@ function create_ppmp_modal_activity(){
     });
 }
 
+
+
 function toggle_print_btn(){
     let is_active = ($("#print_btn_selected_ppmp").attr("data-is-active") === "true");
 
@@ -45,10 +47,66 @@ function toggle_print_btn(){
     }
 }
 
+function orderdetail_item_log_message_modal(){
+    const _target = document.getElementById('view_log_modal');
+    const _opt = {
+        backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-[44]',
+    };
+
+    const _modal = new Modal(_target, _opt);
+
+    $("#order_details_tbody").on("click", ".view_item_log", function(){
+        let tr_dom = $(this).parent().parent();
+        // do something
+        
+        $.ajax({
+            headers: {'X-CSRFToken': csrftoken},
+            url: base_url + '/api/orderitem/logs',
+            method: "GET",
+            data:{"orderitem_id":$(tr_dom).attr("data-order-detail-id")},
+        }).done(function(data){
+            $("#log_item_name").text(data['item_name']);
+            log_records = data['log_records'];
+            orderitem_status = data['status'];
+
+            $("#app_status").text(orderitem_status['app']);
+            $("#received_quotation_status").text(orderitem_status['received_quotation']);
+            $("#award_winning_bidder_status").text(orderitem_status['award_winning']);
+            $("#obligate_po_status").text(orderitem_status['obligate_po']);
+            $("#served_status").text(orderitem_status['served']);
+
+            $("#log_records").empty();
+            for (const key in log_records) {
+                if (Object.hasOwnProperty.call(log_records, key)) {
+                    const record = log_records[key];
+                    const log_msg = $("<p></p>").append(
+                        $("<span></span>").addClass("font-semibold mr-1").text("["+record['datetime']+"] : "),
+                        $("<span></span>").text("logged at " + record['cc_name'])
+                    );
+
+                    $("#log_records").append(log_msg);
+                }
+            }
+
+        }).fail(function(err){
+            console.log(err);
+        });
+
+        _modal.toggle();
+    });
+
+    $(".close-view-log-modal").on("click", function(){
+        
+        _modal.toggle();
+    });
+}
+
 $(document).ready(function(){
     // toggle_create_modal();
     create_ppmp_modal_activity();
     
+    orderdetail_item_log_message_modal();
+
     if($("#select-category-input").val() !== ""){
         var cat_id = getUrlParameter("cat_id");
         var cc_id = $("#modal_cost_center_paragraph").attr("data-cc-id");
@@ -212,6 +270,7 @@ $(document).ready(function(){
         });
     });
 
+
     $("#print_btn_selected_ppmp").on("click", function(e){
         e.preventDefault();
         var is_active = ($(this).attr("data-is-active") === "true");
@@ -251,7 +310,7 @@ $(document).ready(function(){
 });
 
 
-var generateTableRowOrderItemDetails = function generateTableRowOrderItemDetails({item_id="",item_name="",price_unit="",generic_item_id="",
+var generateTableRowOrderItemDetails = function generateTableRowOrderItemDetails({orderdetail_id="", item_id="",item_name="",price_unit="",generic_item_id="",
 price="", price_id="", first_quant="0",second_quant="0",third_quant="0",fourth_quant="0",is_new=false}){
     
     const item_code_td = $("<th></th>").addClass("px-3 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap").attr("scope","row").text(generic_item_id);
@@ -277,21 +336,26 @@ price="", price_id="", first_quant="0",second_quant="0",third_quant="0",fourth_q
     const fourth_ammt_td = $("<td></td>").addClass("px-3 py-2").text(moneyParser(ammount));
     
     const log_opt_td = $("<td></td>").addClass("px-3 py-2 view_log_container").append(
-        $("<button></button>").addClass("view_log text-blue-500 hover:underline").text("logs")
+        $("<button></button>").addClass("view_item_log text-blue-500 hover:underline").text("logs")
     ).attr({
         'ppmp_id': getUrlParameter("ppmp_id"),
         'item_id' : item_id
     });
 
+    if(is_new){
+        $(log_opt_td).addClass("hidden");
+    }
+
     const delete_opt_td = $("<td></td>").addClass("px-3 py-2 hidden delete_item_container").append(
         $("<button></button>").addClass("delete_item hover:underline text-red-500").text("Remove")
-        );
+    );
 
     const tr = $("<tr></tr>").addClass("bg-white border-b hover:cursor-pointer text-xs order_item_details").attr("id",item_id).append(
         item_code_td, item_desc_td, unit_td, price_td, first_quant_td, first_ammt_td, second_quant_td, 
         second_ammt_td, third_quant_td, third_ammt_td, fourth_quant_td, fourth_ammt_td, delete_opt_td, log_opt_td);
     
     tr.attr({
+        "data-order-detail-id":orderdetail_id,
         "data-first-quant":first_quant,
         "data-second-quant":second_quant,
         "data-third-quant":third_quant,
@@ -354,7 +418,7 @@ var getCostCenterPPMPDetails  = function getCostCenterPPMPDetails(sof_id, cc_id,
         for (const key in data.order_details) {
             if (Object.hasOwnProperty.call(data.order_details, key)) {
                 const order_detail = data.order_details[key];
-
+                
                 let item_name = order_detail.item_desc.item.general_name;
 
                 if(order_detail.item_desc.spec_1 !== "None"){
@@ -374,6 +438,7 @@ var getCostCenterPPMPDetails  = function getCostCenterPPMPDetails(sof_id, cc_id,
                 }
 
                 const tr = generateTableRowOrderItemDetails({
+                    orderdetail_id:order_detail.id,
                     item_id:order_detail.item_desc.id,
                     item_name:item_name,
                     price_unit:order_detail.price.unit,

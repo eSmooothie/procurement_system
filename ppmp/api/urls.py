@@ -10,6 +10,7 @@ urlpatterns = [
     path('categories', CategoryAPI.as_view(), name="CategoryAPIsearch"),
     path('cost_center/ppmp_detail', CostCenterPPMPDetails.as_view(), name="CostCenterOrderDetailsAPIsearch"),
     path('orderitem/update', order_item.update_ppmp_orderitems, name="OrderItem"),
+    path('orderitem/logs', order_item.get_orderitem_logs, name="OrderItemLogs"),
     path('items', ItemAPI.as_view(), name="ItemAPIsearch"),
 ]
     
