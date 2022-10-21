@@ -4,7 +4,6 @@
  - python 3.9 or higher
  - pip install virtualenv
  - nodejs
- - wkhtmltopdf[https://github.com/incuna/django-wkhtmltopdf]
 -----------
 
 ### Setup

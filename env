@@ -1,0 +1,29 @@
+# > py manage.py runserver 
+# MIGRATION
+# > py manage.py makemigrations <app_name>
+# > py manage.py migrate
+# > py manage.py showmigrations
+# TO RUN TAILWIND CSS
+# > py manage.py tailwind start
+
+
+DB_ENGINE = 'django.db.backends.postgresql'
+DB_NAME = 'Procurement_DB'
+DB_USER = ''
+DB_PASS = ''
+DB_HOST = '127.0.0.1'
+DB_PORT = '5432'
+
+
+# TO GENERATE A SECRET KEY
+# $> py manage.py shell
+# $> from django.core.management.utils import get_random_secret_key
+# $> print(get_random_secret_key())
+
+# COPY THE KEY
+
+
+DJANGO_SECRET_KEY = ''
+DJANGO_DEBUG = True
+
+
