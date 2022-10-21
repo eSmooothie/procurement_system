@@ -27,12 +27,6 @@ py -m venv <env_name>
 pip install -r requirement.txt
 ```
 
-or
-
-```
-py -m pip install -r requirement.txt
-```
-
 4. Rename `env` to `.env` and modify variables
 
 5. Change `NPM_BIN_PATH` to your nodejs installation (for development only)
