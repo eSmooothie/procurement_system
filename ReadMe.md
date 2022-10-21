@@ -2,8 +2,8 @@
 
 ### Requirement
  - python 3.9 or higher
- - pip install virtualenv
- - nodejs
+ - pip install virtualenv (if venv fail)
+ - nodejs (for development)
 -----------
 
 ### Setup
