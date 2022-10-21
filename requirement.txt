@@ -40,6 +40,7 @@ executing==0.8.3
 filelock==3.7.0
 folium==0.12.1.post1
 fonttools==4.33.3
+fpdf2==2.5.7
 future==0.18.2
 google-api-core==2.8.0
 google-api-python-client==2.49.0
@@ -119,6 +120,7 @@ sniffio==1.2.0
 SQLAlchemy==1.4.39
 sqlparse==0.4.2
 stack-data==0.2.0
+svg.path==6.2
 svglib==1.4.1
 tablib==3.2.1
 tinycss2==1.1.1
