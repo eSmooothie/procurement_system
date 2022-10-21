@@ -68,14 +68,14 @@ class Ppmp(models.Model):
     def __str__(self):
         return "ppmp_id:{}-{}".format(self.id, self.year)
 
-class ppmp_key_log(models.Model):
-    datetime = models.DateTimeField(auto_now=True)
-    ppmp = models.ForeignKey(Ppmp, on_delete=models.RESTRICT)
-    sof = models.ForeignKey(SourceOfFund, on_delete=models.RESTRICT)
-    cc = models.ForeignKey(CostCenter, on_delete=models.RESTRICT)
-    cat = models.ForeignKey(Category, on_delete=models.RESTRICT)
-    user = models.ForeignKey(User, on_delete=models.RESTRICT)
-    is_lock = models.BooleanField(blank=True, default=False)
+# class ppmp_key_log(models.Model):
+#     datetime = models.DateTimeField(auto_now=True)
+#     ppmp = models.ForeignKey(Ppmp, on_delete=models.RESTRICT)
+#     sof = models.ForeignKey(SourceOfFund, on_delete=models.RESTRICT)
+#     cc = models.ForeignKey(CostCenter, on_delete=models.RESTRICT)
+#     cat = models.ForeignKey(Category, on_delete=models.RESTRICT)
+#     user = models.ForeignKey(User, on_delete=models.RESTRICT)
+#     is_lock = models.BooleanField(blank=True, default=False)
 
     def __str__(self):
         return "DT:{} PPMP: {} is_lock: {} User: {}".format(self.datetime, self.ppmp.id, self.is_lock, self.user.id)
