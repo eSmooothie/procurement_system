@@ -6,6 +6,12 @@
 *.pot
 *.pyc
 __pycache__/
+theme/__pycache__/
+procurement_system/__pycache__/
+ppmp/__pycache__/
+ppmp/api/__pycache__/
+ppmp/migrations/__pycache__/
+ppmp/views/__pycache__/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
