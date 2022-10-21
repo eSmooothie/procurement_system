@@ -11,6 +11,13 @@
 ```
 py -m virtualenv <env_name>
 ```
+
+or
+
+```
+py -m venv <env_name>
+```
+
 2. Activate virtual environment
 ```
 <env_name>\Scripts\activate
@@ -26,16 +33,16 @@ or
 py -m pip install -r requirement.txt
 ```
 
-4. Modify `.env` variables
+4. Rename `env` to `.env` and modify variables
 
-5. Change `NPM_BIN_PATH` to your nodejs installation
+5. Change `NPM_BIN_PATH` to your nodejs installation (for development only)
 
 6. Start django serer
 ```
 py manage.py runserver [port]
 ```
 
-7. Start django tailwind
+7. Start django tailwind (for development only)
 ```
 py manage.py tailwind start
 ```
