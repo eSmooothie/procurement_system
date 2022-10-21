@@ -70,11 +70,11 @@ class Ppmp(models.Model):
 
 class ppmp_key_log(models.Model):
     datetime = models.DateTimeField(auto_now=True)
-    ppmp = models.ForeignKey(Ppmp, on_delete=models.RESTRICT)
-    sof = models.ForeignKey(SourceOfFund, on_delete=models.RESTRICT)
-    cc = models.ForeignKey(CostCenter, on_delete=models.RESTRICT)
-    cat = models.ForeignKey(Category, on_delete=models.RESTRICT)
-    user = models.ForeignKey(User, on_delete=models.RESTRICT)
+    ppmp = models.ForeignKey(Ppmp, on_delete=models.RESTRICT, null=True)
+    sof = models.ForeignKey(SourceOfFund, on_delete=models.RESTRICT, null=True)
+    cc = models.ForeignKey(CostCenter, on_delete=models.RESTRICT, null=True)
+    cat = models.ForeignKey(Category, on_delete=models.RESTRICT, null=True)
+    user = models.ForeignKey(User, on_delete=models.RESTRICT, null=True)
     is_lock = models.BooleanField(blank=True, default=False)
 
     def __str__(self):
