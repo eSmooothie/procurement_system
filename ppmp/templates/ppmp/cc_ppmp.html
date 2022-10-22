@@ -1,16 +1,4 @@
 {% extends "ppmp/menu.html" %}
-{% block menu_buttons %}
-    {% if selected_app %}
-        <a href="{% url 'ppmp' %}"><button class="px-5 py-3 bg-cyan-500 uppercase">PPMP</button></a>
-    {% else %}
-        <a href="{% url 'ppmp' %}"><button class="px-5 py-3 hover:bg-cyan-500 uppercase">PPMP</button></a>
-    {% endif %}
-    <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">APP</button></a>   
-    <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">view prs</button></a>
-    <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">group items</button></a>
-    <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">create rfq</button></a>
-    <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">set price</button></a>
-{% endblock menu_buttons %}
 {% block content %}
     <div class="">
         <div class="p-3 space-y-3 sm:flex items-center flex-col">
@@ -132,7 +120,6 @@
     <script src="{% static 'js/ppmp/_modal_script.js' %}"></script>
 {% endblock content %}
 {% block modals %}
-
 <!-- CREATE PPMP MODAL -->
 <div id="create-ppmp-modal" tabindex="-2" aria-hidden="true"  data-modal-placement="top-center"
 class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-[45] w-full md:inset-0 h-modal md:h-full">

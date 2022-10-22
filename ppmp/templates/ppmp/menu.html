@@ -1,14 +1,39 @@
 {% include "theme/header.html" %}
+
 <div class="">
-    <div class=" bg-cyan-400 text-black font-medium flex justify-between h-auto">
+        <div class=" bg-cyan-400 text-black font-medium flex justify-between h-auto">
         <div class="">
             {% block menu_buttons %}
-                <a href="{% url 'ppmp' %}"><button class="px-5 py-3 hover:bg-cyan-500 uppercase">PPMP</button></a>
-                <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">APP</button></a>   
-                <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">view prs</button></a>
-                <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">group items</button></a>
-                <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">create rfq</button></a>
-                <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">set price</button></a>
+                {% if selected_app == 'ppmp' %}
+                    <a href="{% url 'ppmp' %}"><button class="px-5 py-3 bg-cyan-500 uppercase">PPMP</button></a>
+                {% else %}
+                    <a href="{% url 'ppmp' %}"><button class="px-5 py-3 hover:bg-cyan-500 uppercase">PPMP</button></a>
+                {% endif %}
+                {% if selected_app == 'app' %}
+                    <a href="{% url 'app' %}"><button class="px-5 py-3 bg-cyan-500 uppercase">APP</button></a>
+                {% else %}
+                    <a href="{% url 'app' %}"><button class="px-5 py-3 hover:bg-cyan-500 uppercase">APP</button></a>
+                {% endif %}
+                {% if selected_app == 'prs' %}
+                    <a href=""><button class="px-5 py-3 bg-cyan-500 uppercase">view prs</button></a>
+                {% else %}
+                    <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">view prs</button></a>
+                {% endif %}
+                {% if selected_app == 'group_items' %}
+                    <a href=""><button class="px-5 py-3 bg-cyan-500 uppercase">group items</button></a>
+                {% else %}
+                    <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">group items</button></a>
+                {% endif %}
+                {% if selected_app == 'rfq' %}
+                    <a href=""><button class="px-5 py-3 bg-cyan-500 uppercase">create rfq</button></a>
+                {% else %}
+                    <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">create rfq</button></a>
+                {% endif %}
+                {% if selected_app == 'set_price' %}
+                    <a href=""><button class="px-5 py-3 bg-cyan-500 uppercase">set price</button></a>
+                {% else %}
+                    <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">set price</button></a>
+                {% endif %}
             {% endblock menu_buttons %}
         </div>
         <div class="grid grid-cols-2 gap-x-3">

@@ -1,0 +1,142 @@
+{% extends "ppmp/menu.html" %}
+{% block content %}
+<div class="">
+    <div class=" border h-full px-5">
+        <form id="filter_app" class=" space-y-4">
+            <div class=" grid grid-cols-4 gap-x-4">
+                <select name="sof" id="" class="" required>
+                    {% for fund in sof %}
+                        <option value="{{ fund.id }}">{{ fund.description }}</option>
+                    {% endfor %}
+                </select>
+                <select name="type" id="" class="" required>
+                    {% for data in distinct_app_type %}
+                        <option value="{{ data.type }}">{{ data.type }}</option>
+                    {% endfor %}
+                </select>
+                <select name="year" id="" class="" required>
+                    {% for data in distinct_app_year %}
+                        <option value="{{ data.year }}">{{ data.year }}</option>
+                    {% endfor %}
+                </select>
+                <select name="quarter" id="" class="" required>
+                    <option value="1" selected>FIRST QUARTER</option>
+                    <option value="2" >SECOND QUARTER</option>
+                    <option value="3" >THIRD QUARTER</option>
+                    <option value="4" >FOURTH QUARTER</option>
+                </select>
+            </div>
+            <div class=" grid grid-cols-6 gap-x-4">
+                <input type="hidden" name="cat_id" value="">
+                <input type="search" name="search_category" id="" class="col-span-5" placeholder="Search category" required>
+                <!-- <input type="text" class=" w-full col-span-5" id="" placeholder="Search category"> -->
+                <button type="submit" class=" col-span-1 hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-md font-medium">Submit</button>
+            </div>
+        </form>
+        
+        <div class="overflow-x-auto relative mt-5 space-y-3">
+            <div>
+                <button class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-md font-medium w-28">
+                    Print
+                </button>
+            </div>
+            <table class="w-full text-sm text-left text-gray-500 border border-gray-100 drop-shadow-md">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th scope="col" class="py-3 px-6">
+                            ID
+                        </th>
+                        <th scope="col" class="py-3 px-6">
+                            Item
+                        </th>
+                        <th scope="col" class="py-3 px-6">
+                            Unit
+                        </th>
+                        <th scope="col" class="py-3 px-6">
+                            Unit Price
+                        </th>
+                        <th scope="col" class="py-3 px-6">
+                            Quantity
+                        </th>
+                        <th scope="col" class="py-3 px-6">
+                            Amount
+                        </th>
+                        <th scope="col" class="py-3 px-6">
+                            PMO/END-USER
+                        </th>
+                        <th scope="col" class="py-3 px-6">
+                            Mode of procurement
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="odd:bg-white even:bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            ID
+                        </th>
+                        <td class="py-4 px-6">
+                            Sliver
+                        </td>
+                        <td class="py-4 px-6">
+                            Unit
+                        </td>
+                        <td class="py-4 px-6">
+                            Unit Price
+                        </td>
+                        <td class="py-4 px-6">
+                            Quantity
+                        </td>
+                        <td class="py-4 px-6">
+                            Amount
+                        </td>
+                        <td class="py-4 px-6">
+                            END-USER
+                        </td>
+                        <td class="py-4 px-6">
+                            MOP
+                        </td>
+                    </tr>
+                    <tr class="odd:bg-white even:bg-gray-100 border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            ID
+                        </th>
+                        <td class="py-4 px-6">
+                            Sliver
+                        </td>
+                        <td class="py-4 px-6">
+                            Unit
+                        </td>
+                        <td class="py-4 px-6">
+                            Unit Price
+                        </td>
+                        <td class="py-4 px-6">
+                            Quantity
+                        </td>
+                        <td class="py-4 px-6">
+                            Amount
+                        </td>
+                        <td class="py-4 px-6">
+                            END-USER
+                        </td>
+                        <td class="py-4 px-6">
+                            MOP
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot class="">
+                    <tr>
+                        <th colspan="8" class="font-medium text-center">
+                            NO DATA
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+{% load static %}
+<script src="{% static 'js/app/main.js' %}"></script>
+
+{% endblock content %}
