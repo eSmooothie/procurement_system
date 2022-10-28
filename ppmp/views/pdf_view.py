@@ -54,8 +54,11 @@ class PPMP_PDF(FPDF):
 		self.set_margin(self.margin)
 		self.set_title(title=f'''ppmp_{self.ppmp.id}_report''')
 		self.auto_page_break = True
-		
+	
+	# override function
 	def header(self):
+		'''PDF header for PPMP documents
+		'''
 		msu_iit_seal = os.path.join(settings.TAILWIND_STATIC_DIR, 'images/logo/msu_iit_seal.png')
 		qr_code_path = os.path.join(settings.TAILWIND_STATIC_DIR, 'images/logo/sample_qr_code.png')
 		self.image(qr_code_path, w=25, h=25, x=self.epw-(25-self.margin), y=self.margin)
@@ -79,7 +82,9 @@ class PPMP_PDF(FPDF):
 		self.order_details()
 		
 	def asignature(self):
-		summary = {}
+		'''Designated persons who required to sign the documents
+		'''
+		
 		dist_quarters = [0] * 4
 		for item in self.orderdetails:
 			info = ItemInfo(item)
@@ -88,7 +93,7 @@ class PPMP_PDF(FPDF):
 				amnt = distrib[i][1]
 				dist_quarters[i] += amnt
 		
-		
+		# summarize all
 		self.set_font('Arial', size=8, style="B")
 		self.cell(w=14, txt=" ", border=1, align='C', ln=0, h=5)
 		self.cell(w=51, txt="Running Total>>", border=1, align='R', h=5)
@@ -102,8 +107,6 @@ class PPMP_PDF(FPDF):
 
 		
 		self.set_y(self.eph - 20)
-		print("a:",self.get_y())
-		# self.ln(10)
 		self.set_font('Arial', size=8)
 		self.cell(w=54.6, txt="Prepared By:", border=self.debug)
 		self.cell(w=54.6 * 3 - 10, txt="Recommendeding Approval:", border=self.debug)
@@ -132,6 +135,8 @@ class PPMP_PDF(FPDF):
 		self.cell(w=44.6, h=5, txt="Chancellor", align='C')
 
 	def detail(self):
+		'''PPMP details
+		'''
 		self.set_font('Arial', size=10, style="B")
 		self.cell(w=self.epw, txt=f'''PROJECT PROCUREMENT MANAGEMENT PLAN, YYYY''', border=self.debug)
 		
@@ -169,6 +174,8 @@ class PPMP_PDF(FPDF):
 		self.set_font('Arial', size=10)
 
 	def order_details(self):
+		'''Order detail table header
+		'''
 		self.set_font('Arial', size=9, style='B')
 		cell_h = 5
 		self.cell(w=14, txt="Unit", border=1, align='C', h=10)
@@ -200,14 +207,13 @@ class PPMP_PDF(FPDF):
 		self.cell(w=27, txt="AMOUNT", border=1, align='C', h=cell_h, ln=1)
 		self.set_font('Arial', size=8)
 		
-	def items(self):
+	def list_all_items(self):
 		for item in self.orderdetails:
 					
 			self.item_cell(item=ItemInfo(item))
-			# add page break
-			# modify to depending on the current x and y
+
+			# check current cursor's y position 
 			curr_y = self.get_y()
-			print("curr_y: ",curr_y)
 			if curr_y >= 160:
 				self.add_page()
 
@@ -269,24 +275,21 @@ class PPMP_PDF(FPDF):
 		self.add_page()
 		self.header()
 		
-		self.items()
+		self.list_all_items()
 		
 		self.asignature()
 
+		# for page numbering
 		self.alias_nb_pages(alias='np')
 		return self.output()
 
 
-def create_pdf(request):
+def create_ppmp_doc(request):
 	
 	if request.method == 'POST':
 		cc_id = request.POST['cc_id']
 		ppmp_id = request.POST['ppmp_id']
 		cat_id = request.POST['cat_id']
-	
-	# cc_id = 1
-	# ppmp_id = 13
-	# cat_id = 912
 	
 		pdf = PPMP_PDF(cc_id=cc_id, ppmp_id=ppmp_id, cat_id=cat_id, debug=False)
 

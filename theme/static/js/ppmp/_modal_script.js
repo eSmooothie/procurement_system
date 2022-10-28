@@ -285,7 +285,7 @@ $(document).ready(function(){
         
             $.ajax({
                 headers: {'X-CSRFToken': csrftoken},
-                url: base_url + "/pdf/download/",
+                url: base_url + "/pdf/download/ppmp",
                 method: "POST",
                 data:data,
                 xhrFields: {

@@ -18,5 +18,5 @@ urlpatterns = [
     #app
     path('home/app', app_views.index, name='app'),
     #pdf
-    path('pdf/download/', pdf_view.create_pdf, name='generate_pdf'),
+    path('pdf/download/ppmp', pdf_view.create_ppmp_doc, name='generate_pdf'),
 ]

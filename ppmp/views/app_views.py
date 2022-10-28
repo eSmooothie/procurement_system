@@ -24,7 +24,6 @@ def index(request):
 
     distinct_app_type = App.objects.order_by('-type').distinct('type').values('type')
 
-    print(distinct_app_year)
     context = page_context(
         user_fn = user_fn,
         selected_app=selected_app,
