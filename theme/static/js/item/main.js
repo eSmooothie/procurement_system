@@ -1,4 +1,13 @@
-var base_url = window.location.origin;
+
+function paging(page_no){
+    let url = new URL(window.location.href);
+    let search_params = url.searchParams;
+    search_params.set('page', page_no);
+
+    url.search = search_params.toString();
+
+    window.location.href = url.toString();
+}
 
 var sendRequest = function send_request({method = "GET", url="",data={}, done=function(data){console.log(data);}, fail=function(xhr){console.log(xhr);}}){
 
@@ -9,22 +18,6 @@ var sendRequest = function send_request({method = "GET", url="",data={}, done=fu
         data:data,
     }).done(done).fail(fail);
 }
-
-var getUrlParameter = function getUrlParameter(sParam) {
-    var sPageURL = window.location.search.substring(1),
-        sURLVariables = sPageURL.split('&'),
-        sParameterName,
-        i;
-
-    for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
-
-        if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
-        }
-    }
-    return false;
-};
 
 var categoryCheckbox = function categoryCheckbox(cat_code, cat_name){
     // console.log(cat_name)
@@ -48,7 +41,25 @@ var categoryCheckbox = function categoryCheckbox(cat_code, cat_name){
 }
 
 $(document).ready(function(){
-    $("input[name=search_category]").autocomplete({
+
+    $(".pagination").on('click', function(){
+        const page_no = $(this).attr('page-number');
+        paging(page_no);
+    });
+
+    $("#clear_search").on('click', function(){
+        let url = new URL(window.location.href);
+        let search_params = url.searchParams;
+        search_params.delete('keyword');
+        url.search = search_params.toString();
+        window.location.href = url.toString();
+    });
+
+    $(".modal_close").on('click', function(){
+        $("#category-checkbox-container").empty();
+    });
+
+    $("#new-item-form input[name=search_category]").autocomplete({
         autoFocus: true,
         minLength:2,
         source: base_url + "/api/categories",
@@ -62,27 +73,18 @@ $(document).ready(function(){
         }
     });
 
-    $("#create-app-form").submit(function (e){
+    $("#new-item-form").submit(function(e){
         e.preventDefault();
-
         var data = $(this).serializeArray();
 
-        console.log(data);
-        //TODO: Send data to backend
-    });
-
-    $("input[name=consolidate]","#create-app-form").change(function(){
-        var val = $(this).val();
-        // console.log(val);
-        if(val == 1){
-            $("#search-category").attr({
-                disabled: true
-            }).addClass("hidden").removeClass("block").val("");
-            $("#category-checkbox-container").empty();
-        }else{
-            $("#search-category").attr({
-                disabled: false
-            }).addClass("block").removeClass("hidden");
-        }
+        
+        sendRequest({
+            method: 'POST',
+            url:"/api/item/add",
+            data:data,
+            done : function(data){
+                window.location.reload();
+            },
+        })
     });
 });

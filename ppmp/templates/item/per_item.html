@@ -1,0 +1,40 @@
+{% extends "ppmp/menu.html" %}
+{% block content %}
+{% load static %}
+
+<div class="border border-red-600 px-3 space-y-3">
+    <div>
+        <ul class="flex text-xs font-medium text-gray-500 space-x-2">
+            <li class="">
+                <a href="{% url 'item' %}" class="hover:underline">Item</a>
+            </li>
+            <li class="before:content-['>']">
+                <a href="{% url 'single_item' item_id=item.id %}" class="hover:underline">{{ item.name }}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="">
+        <ul>
+            <li>Description: {{ item.name }}</li>
+            <li>Unit: {{ item.unit }}</li>
+            <li>Account Code</li>
+            <li>Edit / Set Price</li>
+        </ul>
+    </div>
+    <div>
+        <table class=" w-96 table-fixed text-xs">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th  class="border border-black ">Date</th>
+                    <th  class="border border-black ">Price</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<script src="{% static 'js/item/request_item.js' %}"></script>
+{% endblock content %}
+{% block modals %}
+
+{% endblock modals %}

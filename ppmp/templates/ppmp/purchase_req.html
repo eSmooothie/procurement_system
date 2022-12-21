@@ -1,0 +1,79 @@
+{% extends "ppmp/menu.html" %}
+{% block content %}
+<div class="px-3 space-y-3">
+    <p class="font-medium">Purchase Request</p>
+    <div>
+        <p>PR No. {% if order_detail.purchase_request %}{{order_detail.purchase_request.id}}{% else %}None{% endif %}</p>
+        <p>Cost Center: {{ order_detail.ppmp.cost_center.name }}</p>
+        <p></p>
+    </div>
+    
+    <form id="purchase-request-form" class="border border-gray-500 rounded-md p-3">
+        <input type="hidden" name="order_id" value="{{ order_detail.id }}">
+        <div class="mb-6">
+            <label for="item-unit" class="block mb-2 text-sm font-medium text-gray-900 ">Unit</label>
+            <div class="flex">
+            <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600  dark:border-gray-600">
+                Unit
+            </span>
+            <input readonly value="{{ order_detail.item.unit }}" type="text" name="item_unit" id="item-unit" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5" placeholder="Unit">
+            </div>
+            <p class="mt-2 text-xs text-gray-500 ">Read Only</p>
+        </div>  
+        <div class="mb-6">
+            <label for="item-name" class="block mb-2 text-sm font-medium text-gray-900 ">Item Description</label>
+            <textarea id="item-name" name="item_name" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " 
+            placeholder="Item Description"  required>{% if order_detail.purchase_request %}{{ order_detail.purchase_request.specification_details }}{% endif %}</textarea>
+            <p class="mt-2 text-sm text-gray-500 "></p>
+        </div>
+        <div class="mb-6">
+            <label for="item-qty" class="block mb-2 text-sm font-medium text-gray-900 ">Quantity</label>
+            <div class="flex">
+            <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600  dark:border-gray-600">
+                Qty
+            </span>
+            <input required type="number" name="item_qty" min="1" id="item-qty" {% if order_detail.purchase_request %}value="{{ order_detail.purchase_request.qty }}"{% endif %} class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5" placeholder="Quantity">
+            </div>
+        </div>
+        <div class="mb-6">
+            <label for="item-price" class="block mb-2 text-sm font-medium text-gray-900 ">Price</label>
+            <div class="flex">
+            <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600  dark:border-gray-600">
+                ₱
+            </span>
+            <input required type="number" name="item_price" min="0" id="item-price" {% if order_detail.purchase_request %}value="{{ order_detail.purchase_request.unit_cost }}"{% endif %} class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5" placeholder="Price">
+            </div>
+        </div>
+        <div class="mb-6">
+            <label for="item-purpose" class="block mb-2 text-sm font-medium text-gray-900 ">Purpose</label>
+            <textarea id="item-purpose" name="item_purpose" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " 
+            placeholder="Purpose" required>{% if order_detail.purchase_request %}{{ order_detail.purchase_request.purpose }}{% endif %}</textarea>
+            <p class="mt-2 text-sm text-gray-500 "></p>
+        </div>
+        <div class="flex justify-end">
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 
+            focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 
+            text-center">Save</button>
+        </div>
+    </form>
+</div>
+{% load static %}
+<script>
+    $("#purchase-request-form").on('submit', function(e){
+      e.preventDefault();
+      let data = $(this).serializeArray();
+
+      console.log(data);
+
+      $.ajax({
+            headers: {'X-CSRFToken': csrftoken},
+            url: base_url + "/api/orderitem/purchase_request",
+            method: "POST",
+            data: data,
+        }).done(function(data){
+            window.location.reload();
+        });
+   });
+</script>
+
+{% endblock content %}

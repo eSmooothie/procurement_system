@@ -1,0 +1,280 @@
+{% extends "ppmp/menu.html" %}
+{% block content %}
+<div class="p-3 space-y-3 sm:flex items-center flex-col">
+    <div class=" sm:w-[90%] flex justify-between items-center">
+        <a href="{% url 'cc_ppmp' cc_code=ppmp.cc_code %}" class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-sm font-medium" 
+        data-tooltip-target="tooltip-select-cc" >
+            <button class="flex items-center space-x-2">
+                {% load static %}
+                <img src="{% static 'images/icon/arrow-left-solid.svg' %}" alt="arrow-left-solid" class=" h-4 w-4">
+            <span>Back</span>
+        </button></a>
+        <div class="space-x-2">
+            <button data-modal-toggle="req-item-modal" id="suggest_item_btn" class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-sm font-medium w-36">Suggest Item</button>
+            {% if category %}
+            <a href="{% url 'view_logs' ppmp_id=ppmp.id cat_code=category.code %}"><button id="item_logs_btn" class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-sm font-medium w-36">Logs</button></a>
+            <a href="{% url 'generate_ppmp_pdf' cc_code=cc.code ppmp_id=ppmp.id cat_code=category.code%}" target="_blank"><button id="print_ppmp_btn" class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-sm font-medium w-36" >Print</button></a>
+            <button id="edit_ppmp_btn" class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-sm font-medium w-36" >Edit</button>
+            
+            <button id="cancel_edit_ppmp_btn" class="hover:bg-red-400 bg-red-300 px-5 py-2.5 rounded-sm font-medium w-36 hidden" >Cancel</button>
+            <button id="save_edit_ppmp_btn" class="hover:bg-green-400 bg-green-300 px-5 py-2.5 rounded-sm font-medium w-36 hidden" >Save</button>
+            <button id="add_item_ppmp_btn" class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-sm font-medium w-36 hidden" >Add Item</button>
+            {% else %}
+            <button class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-sm font-medium w-36" disabled>Logs</button>
+            <button class="hover:bg-gray-400 bg-gray-300 px-5 py-2.5 rounded-sm font-medium w-36" disabled>Print</button>
+            <button class="hover:bg-gray-400 bg-gray-300 px-5 py-2.5 rounded-sm font-medium w-36" disabled>Edit</button>
+            {% endif %}
+        </div>
+    </div>
+    <div class="sm:w-[90%] flex justify-start items-center">
+        <div class=" flex flex-col space-y-2" id="ppmp_info" data-ppmp-id="{{ ppmp.id }}">
+            <p>Cost Center:&ensp;<span class=" font-medium">({{ cc.code }})</span>&ensp;<span class=" font-medium">{{ cc.name }}</span></p>
+            <p>Source of Fund:&ensp;<span class=" font-medium">{{ ppmp.sof.description }}</span></p>
+            <p>Year:&ensp;<span class=" font-medium">{{ ppmp.year }}</span></p>
+            <p>Type:&ensp;<span class=" font-medium">{{ ppmp.type }}</span></p>
+            <p>Budget:&ensp;<span class=" font-medium">{{ curr_budget }}</span></p>
+        </div>
+    </div>
+    <div class="sm:w-[90%] flex justify-start items-center">
+        <form class="w-full" id="search-category-form" method="get">   
+            <label for="search-category" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300">Search</label>
+            <div class="relative">
+                <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                {% if category %}
+                <input type="hidden" name="category_selected" value="{{ category.code }}">
+                <input type="text" id="search-category" 
+                    class="block p-4 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-500 focus:ring-blue-500 focus:border-blue-500 " 
+                    placeholder="Search Category" value="{{ category.name }} ({{ category.code }})" required>
+                {% else %}
+                <input type="hidden" name="category_selected" value="">
+                <input type="text" id="search-category" 
+                    class="block p-4 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-500 focus:ring-blue-500 focus:border-blue-500 " 
+                    placeholder="Search Category" value="" required>
+                {% endif %}
+                <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Enter</button>
+            </div>
+        </form>
+    </div>
+    <div class="sm:w-[90%] flex flex-col justify-start items-center">
+        <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 border-b border-gray-300" style="position: -webkit-sticky; position: sticky; top: 0;">
+                <tr class=" text-center">
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500" colspan="3">Item</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500" colspan="2">Unit Details</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500" colspan="2">First Quarter</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500" colspan="2">Second Quarter</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500" colspan="2">Third Quarter</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500" colspan="2">Fourth Quarter</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500 edit_mode" rowspan="2"></th>
+                </tr>
+                <tr class=" text-center">
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500">Code</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500" colspan="2">Description</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500">Unit</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500">Price</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500">Quantity</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500">Amount</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500">Quantity</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500">Amount</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500">Quantity</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500">Amount</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500">Quantity</th>
+                    <th scope="col" class="px-3 py-1.5 border border-gray-500">Amount</th>
+                </tr>
+            </thead>
+            <tbody id="orderdetails_container_tbody">
+                {% for order in orderdetails %}
+                <tr class="bg-white border border-gray-300 text-xs" 
+                id="{{ order.item_id }}"
+                data-order-id="{{ order.id }}">
+                    <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ order.item_id }}
+                    </th>
+                    <td class="py-4 px-6 break-words w-28" colspan="2">
+                        {{ order.item_name }}
+                    </td>
+                    <td class="py-4 px-6">
+                        {{ order.item_unit }}
+                    </td>
+                    <td class="py-4 px-6">
+                        {{ order.item_price }}
+                    </td>
+                    <td class="py-4 px-6 editable" data-quart="1">
+                        {{ order.first_quart.0 }}
+                    </td>
+                    <td class="py-4 px-6">
+                        {{ order.first_quart.1 }}
+                    </td>
+                    <td class="py-4 px-6 editable" data-quart="2">
+                        {{ order.second_quart.0 }}
+                    </td>
+                    <td class="py-4 px-6">
+                        {{ order.second_quart.1 }}
+                    </td>
+                    <td class="py-4 px-6 editable" data-quart="3">
+                        {{ order.third_quart.0 }}
+                    </td>
+                    <td class="py-4 px-6">
+                        {{ order.third_quart.1 }}
+                    </td>
+                    <td class="py-4 px-6 editable" data-quart="4">
+                        {{ order.fourth_quart.0 }}
+                    </td>
+                    <td class="py-4 px-6">
+                        {{ order.fourth_quart.1 }}
+                    </td>
+                    <td class="items-center py-4 px-6 space-x-3 pr_td" id="">
+                        <a 
+                        href="{% url 'view_pr' ppmp_id=ppmp.id cat_code=category.code orderitem_id=order.id %}" 
+                        target="_blank"
+                        class=" text-blue-600 font-medium">{% if order.pr %}View{% else %}Add{% endif %} PR</a>
+                    </td>
+                    <td class="py-4 px-6 space-y-3 hidden edit_mode">
+                        <a href="{% url 'view_pr' ppmp_id=ppmp.id cat_code=category.code orderitem_id=order.id %}" 
+                        target="_blank"
+                        class=" text-blue-600 font-medium">{% if order.pr %}View{% else %}Add{% endif %} PR</a>
+                        <button type="button" class="font-medium text-red-600 dark:text-red-500 hover:underline remove_item_btn block">Remove Item</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% if orderdetails is None %}
+            <tfoot>
+                <tr>
+                    <th class="text-center font-medium py-2" colspan="12">
+                        No Data
+                    </th>
+                </tr>
+            </tfoot>
+            {% endif %}
+        </table>
+    </div>
+</div>
+{% load static %}
+<script src="{% static 'js/ppmp/_ppmp_detail.js' %}"></script>
+{% endblock content%}
+{% block modals %}
+<div id="add_item_ppmp_modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Add new item to ppmp
+                </h3>
+                <button  type="button" class="close_add_item_ppmp_modal text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <form id="search_item_form">
+                <!-- Modal body -->
+                <div class="p-6 space-y-6">
+                    <label for="search_item" class="sr-only">Search</label>
+                    <div class="relative w-full">
+                        <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+                        </div>
+                        <input type="text" id="search_item" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" required>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="flex items-center justify-between p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+                    <button type="button" class="close_add_item_ppmp_modal text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Close</button>
+                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="req-item-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full">
+    <div class="relative w-full max-w-7xl h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600">
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-900 ">
+                        Request Item
+                    </h3>
+                    <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 ">
+                        The requested item will be reviewed.
+                    </p>
+                </div>
+                
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="req-item-modal">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <form id="req-item-form">
+                <div class="p-6 grid grid-cols-2 gap-2">
+                    <div class="col-span-1">
+                        <p class=""></p>
+                        <div class="mb-6">
+                            <label for="item-name" class="block mb-2 text-sm font-medium text-gray-900 ">Item name</label>
+                            <textarea id="item-name" name="item_name" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " 
+                            placeholder="Item Name" required></textarea>
+                            <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 ">Observe naming consistency</p>
+                        </div>
+                        <div class="mb-6">
+                            <label for="item-unit" class="block mb-2 text-sm font-medium text-gray-900 ">Unit</label>
+                            <div class="flex">
+                            <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600  dark:border-gray-600">
+                                U
+                            </span>
+                            <input required type="text" name="item_unit" id="item-unit" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5" placeholder="Unit">
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label for="item-price" class="block mb-2 text-sm font-medium text-gray-900 ">Price</label>
+                            <div class="flex">
+                            <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600  dark:border-gray-600">
+                                ₱
+                            </span>
+                            <input required type="number" name="item_price" min="0" id="item-price" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5" placeholder="Price">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-1 border-l border-gray-500 pl-2">
+                        <div class=" space-y-2">
+                            <div>
+                                <p class="font-medium">Account code</p>
+                                <p class="text-xs font-normal text-gray-500">Unchecked the account code or category to disregard.</p>
+                            </div>
+                            <div>
+                                <input type="text" name="search_category"
+                                    class=" p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border
+                                    focus:ring-blue-500 focus:border-blue-500" 
+                                    placeholder="Search Category" value="">
+                            </div>
+                            <ul class="w-full text-sm font-medium text-gray-900 bg-white rounded-lg border" 
+                            id="category-checkbox-container">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="flex justify-between items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+                    <button data-modal-toggle="req-item-modal" type="reset" class="text-gray-500 bg-white hover:bg-gray-100 
+                    focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm 
+                    font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Close</button>
+                    <div class="">
+                        
+                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 
+                        focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 
+                        text-center">Submit</button>
+                    </div>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock modals %}

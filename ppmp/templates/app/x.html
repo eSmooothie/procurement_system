@@ -1,0 +1,155 @@
+<div class="space-y-3">
+    <form action="" method="get" class="space-y-3">
+        <div class="flex space-x-4">
+            
+            <div class="flex flex-1 items-center space-x-3">
+                <label for="select_sof" class="flex-none text-sm font-medium text-gray-900 dark:text-white">Source of Fund</label>
+                <select id="select_sof" name="f_sof" class="w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    {% for i in sof %}
+                    {% if 'f_sof' in request.GET and i.code == request.GET.f_sof %}
+                    <option selected value="{{ i.code }}">{{ i.description }}</option>
+                    {% else %}
+                    <option value="{{ i.code }}">{{ i.description }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex flex-1 items-center space-x-3">
+                <label for="select_year" class="text-sm font-medium text-gray-900 dark:text-white">Year</label>
+                <select id="select_year" name="f_year" class="w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    {% for i in ppmp_year %}
+                    {% if 'f_year' in request.GET and i.0 == request.GET.f_year %}
+                    <option selected value="{{ i.0 }}">{{ i.0 }}</option>
+                    {% else %}
+                    <option value="{{ i.0 }}">{{ i.0 }}</option>
+                    {% endif %}
+                    
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex space-x-3">
+                <div class="flex items-center">
+                    {% if 'f_unconsolidated' in request.GET %}
+                    <input checked name="f_unconsolidated" id="checkbox_unconsolidated" type="checkbox" value="" class="checkbox_filter w-4 
+                    h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 
+                    dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    {% else %}
+                    <input name="f_unconsolidated" id="checkbox_unconsolidated" type="checkbox" value="" class="checkbox_filter w-4 
+                    h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 
+                    dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    {% endif %}
+                    <label for="checkbox_unconsolidated" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Unconsolidated</label>
+                </div>
+                <div class="flex items-center">
+                    {% if 'f_primary' in request.GET %}
+                    <input checked name="f_primary" id="checkbox_primary" type="checkbox" value="" class="checkbox_filter w-4 
+                    h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-bslue-500 
+                    dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    {% else %}
+                    <input name="f_primary" id="checkbox_primary" type="checkbox" value="" class="checkbox_filter w-4 
+                    h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-bslue-500 
+                    dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    {% endif %}
+                    <label for="checkbox_primary" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Primary</label>
+                </div>
+                <div class="flex items-center">
+                    {% if 'f_sup' in request.GET %}
+                    <input checked name="f_sup" id="checkbox_sup" type="checkbox" value="" class="checkbox_filter w-4 
+                    h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 
+                    dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    {% else %}
+                    <input name="f_sup" id="checkbox_sup" type="checkbox" value="" class="checkbox_filter w-4 
+                    h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 
+                    dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    {% endif %}
+                    <label for="checkbox_sup" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Supplementary</label>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="flex items-center space-x-3">
+            <div class="flex flex-1 items-center space-x-3">
+                <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
+                {% if 'search_category' in request.GET and request.GET.search_category != "" %}
+                <input type="text" id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 
+                dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                name="search_category" value="{{ request.GET.search_category }}">
+                {% else %}
+                <input type="text" id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 
+                dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                name="search_category" placeholder="All">
+                {% endif %}
+            </div>
+            <div class="flex items-center">
+                <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 
+                focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2">Apply</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="flex flex-col space-y-2">
+    <div class="rounded-md">
+        <table class="w-full table-fixed text-xs">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th rowspan="2" class=" w-64 border border-black">Item Description</th>
+                    <th rowspan="2" class=" w-14 border border-black">Unit</th>
+                    <th rowspan="2" class=" w-20 border border-black">Unit Price</th>
+                    <th colspan="2" class=" border border-black">First Quarter</th>
+                    <th colspan="2" class=" border border-black">Second Quarter</th>
+                    <th colspan="2" class=" border border-black">Third Quarter</th>
+                    <th colspan="2" class=" border border-black">Fourth Quarter</th>
+                    <th rowspan="2" class=" w-48 border border-black">PMO/End-User</th>
+                    <th rowspan="2" class=" w-32 border border-black">Mode of Procurement</th>
+                </tr>
+                <tr>
+                    <th class=" border border-black">Qty</th>
+                    <th class=" border border-black">Amount</th>
+                    <th class=" border border-black">Qty</th>
+                    <th class=" border border-black">Amount</th>
+                    <th class=" border border-black">Qty</th>
+                    <th class=" border border-black">Amount</th>
+                    <th class=" border border-black">Qty</th>
+                    <th class=" border border-black">Amount</th>
+                </tr>
+            </thead>
+            <tbody class="bg-gray-100">
+                {% for item in items %}
+                <tr class="text-left">
+                    <th scope="row" class="border border-gray-300">{{ item.orderdetail.item.name }}</th>
+                    <td class="border border-gray-300">{{ item.orderdetail.item.unit }}</td>
+                    <td class="border border-gray-300">{{ item.orderdetail.get_current_price_formatted }}</td>
+                    <td class="border border-gray-300">{{ item.orderdetail.first_quant }}</td>
+                    <td class="border border-gray-300">{{ item.orderdetail.compute_amnt_formatted.0 }}</td>
+                    <td class="border border-gray-300">{{ item.orderdetail.second_quant }}</td>
+                    <td class="border border-gray-300">{{ item.orderdetail.compute_amnt_formatted.1 }}</td>
+                    <td class="border border-gray-300">{{ item.orderdetail.third_quant }}</td>
+                    <td class="border border-gray-300">{{ item.orderdetail.compute_amnt_formatted.2 }}</td>
+                    <td class="border border-gray-300">{{ item.orderdetail.fourth_quant }}</td>
+                    <td class="border border-gray-300">{{ item.orderdetail.compute_amnt_formatted.3 }}</td>
+                    <td class="border border-gray-300">{{ item.orderdetail.get_costcenter.name }}</td>
+                    <td class="border border-gray-300">{{ item.mode }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div>
+    <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+        Category
+        <span class="text-red-600 text-xs font-normal">* Leave blank to consolidate all category</span>
+    </label>
+    <input type="text" id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+    focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 
+    dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+    name="search_category">
+</div>
+
+
+

@@ -4,43 +4,35 @@
         <div class=" bg-cyan-400 text-black font-medium flex justify-between h-auto">
         <div class="">
             {% block menu_buttons %}
+                {% if selected_app == 'dashboard' %}
+                    <a href="{% url 'home' %}" class=""><button class="px-5 py-3 bg-cyan-500 uppercase">Dashboard</button></a>
+                {% else %}
+                    <a href="{% url 'home' %}" class=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">Dashboard</button></a>
+                {% endif %}
                 {% if selected_app == 'ppmp' %}
                     <a href="{% url 'ppmp' %}"><button class="px-5 py-3 bg-cyan-500 uppercase">PPMP</button></a>
                 {% else %}
                     <a href="{% url 'ppmp' %}"><button class="px-5 py-3 hover:bg-cyan-500 uppercase">PPMP</button></a>
                 {% endif %}
-                {% if selected_app == 'app' %}
-                    <a href="{% url 'app' %}"><button class="px-5 py-3 bg-cyan-500 uppercase">APP</button></a>
-                {% else %}
-                    <a href="{% url 'app' %}"><button class="px-5 py-3 hover:bg-cyan-500 uppercase">APP</button></a>
-                {% endif %}
-                {% if selected_app == 'prs' %}
-                    <a href=""><button class="px-5 py-3 bg-cyan-500 uppercase">view prs</button></a>
-                {% else %}
-                    <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">view prs</button></a>
-                {% endif %}
-                {% if selected_app == 'group_items' %}
-                    <a href=""><button class="px-5 py-3 bg-cyan-500 uppercase">group items</button></a>
-                {% else %}
-                    <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">group items</button></a>
-                {% endif %}
-                {% if selected_app == 'rfq' %}
-                    <a href=""><button class="px-5 py-3 bg-cyan-500 uppercase">create rfq</button></a>
-                {% else %}
-                    <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">create rfq</button></a>
-                {% endif %}
-                {% if selected_app == 'set_price' %}
-                    <a href=""><button class="px-5 py-3 bg-cyan-500 uppercase">set price</button></a>
-                {% else %}
-                    <a href=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">set price</button></a>
+                {% if is_admin %}
+                    {% if selected_app == 'app' %}
+                        <a href="{% url 'app' %}"><button class="px-5 py-3 bg-cyan-500 uppercase">APP</button></a>
+                    {% else %}
+                        <a href="{% url 'app' %}"><button class="px-5 py-3 hover:bg-cyan-500 uppercase">APP</button></a>
+                    {% endif %}
+                    {% if selected_app == 'item' %}
+                        <a href="{% url 'item' %}"><button class="px-5 py-3 bg-cyan-500 uppercase">Items</button></a>
+                    {% else %}
+                        <a href="{% url 'item' %}"><button class="px-5 py-3 hover:bg-cyan-500 uppercase">Items</button></a>
+                    {% endif %}
                 {% endif %}
             {% endblock menu_buttons %}
         </div>
-        <div class="grid grid-cols-2 gap-x-3">
-            <span class=" col-span-1 flex items-center">
+        <div class="flex justify-end space-x-2">
+            <span class="flex items-center">
                 Hello! {{ user_fn }}
             </span>
-            <div class=" col-span-1">
+            <div class="">
                 <a href="{% url 'logout_user' %}" class=" min-h-full">
                     <button class="px-5 py-3 bg-red-400 hover:bg-red-500 uppercase flex items-center min-h-full space-x-2">
                         {% load static %}
@@ -53,6 +45,13 @@
 
     </div>
     <div class="pt-5">
+        {% if messages %}
+        <ul class="messages px-3">
+            {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
         {% block content %}{% endblock content  %}
     </div>
 </div>

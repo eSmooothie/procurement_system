@@ -1,0 +1,196 @@
+{% extends "ppmp/menu.html" %}
+{% block content %}
+{% load static %}
+{% load filter %}
+<div class=" grid grid-cols-12 gap-x-2 pb-10">
+    <div class="col-span-2 border border-red-500 px-2">
+        <div>
+            <button data-modal-toggle="new-item-modal" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 
+            focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 text-left">Add Item</button>
+            <a href="{% url 'req_item_view' %}" class="flex items-left justify-between space-x-2 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 
+            focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 ">
+                <span>Requested Items</span>
+                {% if unapproved_req_item > 0 %}
+                <div class=" border border-red-500 bg-red-500 text-white rounded-lg px-1 text-center">{{ unapproved_req_item }}</div>
+                {% endif %}
+            </a>
+        </div>
+        
+        <div class="border-t border-gray-500 pt-2 space-y-2">
+            <p>Filter</p>
+            <input type="text" 
+            class=" p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border
+            focus:ring-blue-500 focus:border-blue-500 search-category" 
+            placeholder="Search Category" value="">
+    
+            <ul class="">
+                <li class="">
+                    <a href="" class="flex items-center space-x-2 hover:underline">
+                        <img src="{% static 'images/icon/xmark-solid.svg' %}" style="height:16px;filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);" alt="X">
+                        <span class="cat_code"  data-tooltip-target="tooltip-cat_code" data-tooltip-placement="right">cat_code</span>
+                    </a> 
+                    <div id="tooltip-cat_code" role="tooltip" class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 shadow-sm opacity-0 tooltip">
+                        cat_desc
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="border border-red-500">
+                + sorting opt here
+            </div>
+        </div>
+
+    </div>
+    <!-- TABLE -->
+    <div class="col-span-10 border border-red-500 pr-3 space-y-2">
+        <div class=" space-y-1">
+            <form method="get" action="">   
+                <label for="search-item" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                <div class="flex space-x-2">
+                    <div class="flex flex-1">
+                        <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600  dark:border-gray-600">
+                            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+                        </span>
+                        <input type="search" value="{{ search_keyword }}" minlength="2" id="search-item" name="keyword" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5" placeholder="Search Item" required>    
+                    </div>
+                    <button type="submit" class="text-white right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+                </div>
+
+                {% if search_keyword %}
+                    <button id="clear_search" type="button" class="my-2 flex border border-gray-400 bg-gray-300 px-2.5 py-1.5 space-x-2 rounded-md text-xs">
+                        <img src="{% static 'images/icon/xmark-solid.svg' %}" style="height:16px" alt="X"> 
+                        <span>Clear Search</span>
+                    </button>
+                {% endif %}
+            </form>
+
+            <div class="flex items-start space-x-2">
+                <span class="text-xs">Pages:</span>
+                <div class="p-0 hover:cursor-pointer">
+                    {% for n in no_pages %}
+                    {% if selected_page == n %}
+                        <span page-number="{{n}}" class="text-blue-500 hover:underline text-sm m-0 font-bold pagination">{{ n }}</span>
+                    {% else %}
+                        <span page-number="{{n}}" class="text-blue-500 hover:underline text-xs m-0 pagination ">{{ n }}</span>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                
+            </div>
+        </div>
+
+        <table class="w-full table-fixed text-xs">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="border border-black ">Item Description</th>
+                    <th class="border border-black w-44">Account Codes</th>
+                    <th class="border border-black w-44">Unit</th>
+                    <th class="border border-black w-44">Current Price</th>
+                    <th class="border border-black w-44">Previous Price</th>
+                </tr>
+            </thead>
+            <tbody class="bg-gray-100">
+                {% for item in items %}
+                <tr class="text-left odd:bg-white even:bg-gray-200">
+                    <td class="border border-gray-300">
+                        <a href="{% url 'single_item' item_id=item.id %}" class=" text-blue-500 hover:underline">{{ item.name|highlight:search_keyword }}</a>
+                    </td>
+                    <td class="border border-gray-300">
+                        <ul class=" list-none">
+                            {% for cat in item.categories %}
+                            <li>{{cat.cat_code}}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td class="border border-gray-300">{{ item.unit }}</td>
+                    <td class="border border-gray-300">{{ item.curr_price }}</td>
+                    <td class="border border-gray-300">{{ item.prev_price }}</td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="{% static 'js/item/main.js' %}"></script>
+{% endblock content %}
+{% block modals %}
+<div id="new-item-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full">
+    <div class="relative w-full max-w-7xl h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 ">
+                    New Item
+                </h3>
+                <button type="button" class="modal_close text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="new-item-modal">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <form id="new-item-form">
+                <div class="p-6 grid grid-cols-2 gap-2">
+                    <div class="col-span-1">
+                        <p class=""></p>
+                        <div class="mb-6">
+                            <label for="item-name" class="block mb-2 text-sm font-medium text-gray-900 ">Item name</label>
+                            <textarea id="item-name" name="item_name" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " 
+                            placeholder="Item Name" required></textarea>
+                            <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 ">Observe naming consistency</p>
+                        </div>
+                        <div class="mb-6">
+                            <label for="item-unit" class="block mb-2 text-sm font-medium text-gray-900 ">Unit</label>
+                            <div class="flex">
+                            <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600  dark:border-gray-600">
+                                U
+                            </span>
+                            <input required type="text" name="item_unit" id="item-unit" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5" placeholder="Unit">
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label for="item-price" class="block mb-2 text-sm font-medium text-gray-900 ">Price</label>
+                            <div class="flex">
+                            <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600  dark:border-gray-600">
+                                ₱
+                            </span>
+                            <input required type="number" name="item_price" min="0" id="item-price" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5" placeholder="Price">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-1 border-l border-gray-500 pl-2">
+                        <div class=" space-y-2">
+                            <div>
+                                <p class="font-medium">Account code</p>
+                                <p class="text-xs font-normal text-gray-500">Unchecked the account code or category to disregard.</p>
+                            </div>
+                            <div>
+                                <input type="text" name="search_category"
+                                    class=" p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border
+                                    focus:ring-blue-500 focus:border-blue-500" 
+                                    placeholder="Search Category" value="">
+                            </div>
+                            <ul class="w-full text-sm font-medium text-gray-900 bg-white rounded-lg border" 
+                            id="category-checkbox-container">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="flex justify-between items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+                    <button data-modal-toggle="new-item-modal" type="reset" class="modal_close text-gray-500 bg-white hover:bg-gray-100 
+                    focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm 
+                    font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Close</button>
+                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 
+                    focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 
+                    text-center">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock modals %}

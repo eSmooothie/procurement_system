@@ -32,7 +32,6 @@ class CostCenterPPMPDetails(APIView):
         sof_id = request.query_params.get('sof_id')
         ppmp_id = request.query_params.get('ppmp_id')
 
-        #TODO: Query all ppmp data related to 
         data = dict()
         cost_center = CostCenter.objects.get(id=cc_id)
         cost_center_serializer = CostCenterSerializer(cost_center)

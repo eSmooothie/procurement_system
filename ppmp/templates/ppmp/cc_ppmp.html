@@ -3,7 +3,7 @@
     <div class="">
         <div class="p-3 space-y-3 sm:flex items-center flex-col">
             <div class="sm:w-[90%] flex justify-start items-center">
-                <a href="{% url 'ppmp' %}" class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-md font-medium" 
+                <a href="{% url 'ppmp' %}" class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-sm font-medium" 
                 data-tooltip-target="tooltip-select-cc" >
                     <button class="flex items-center space-x-2">
                         {% load static %}
@@ -44,17 +44,11 @@
                 <span class="col-span-1"></span>
                 <span class="col-span-1"></span>
                 <div>
-                    {% if selected_ppmp %}
-                        <button id="create_selected_ppmp_btn" class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-md font-medium col-span-1 w-full" 
-                        >
-                            <p class="truncate">Create PPMP</p>
-                        </button>
-                    {% else %}
-                        <button id="create_selected_ppmp_btn" class="hover:bg-gray-400 bg-gray-300 px-5 py-2.5 rounded-md font-medium col-span-1 w-full" 
-                         disabled>
-                            <p class="truncate">Create PPMP</p>
-                        </button>
-                    {% endif %}
+                    <button id="create_selected_ppmp_btn" 
+                    class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-sm font-medium col-span-1 w-full"
+                    data-modal-toggle="create-ppmp-modal">
+                        <p class="truncate">Create PPMP</p>
+                    </button>
                 </div>
             </div>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg border border-gray-200 sm:w-[90%]">
@@ -66,23 +60,18 @@
                             <th scope="col" class="px-6 py-3">ppmp year</th>
                             <th scope="col" class="px-6 py-3">ppmp type</th>
                             <th scope="col" class="px-6 py-3">fund code</th>
-                            <th scope="col" class="px-6 py-3">fund source</th>
+                            <th scope="col" class="px-6 py-3">source of fund</th>
                         </tr>
                     </thead>
                     <tbody id="ppmp_list_tbody">
                         {% for ppmp_data in cc_ppmp_list %}
-                            {% if selected_ppmp.id == ppmp_data.id %}
-                            <tr id="{{ ppmp_data }}" data-ppmp-id="{{ ppmp_data.id }}" class=" bg-gray-200 border-b 
-                                hover:cursor-pointer cost_center_ppmp_list ">
-                            {% else %}
                             <tr id="{{ ppmp_data }}" data-ppmp-id="{{ ppmp_data.id }}" class="bg-white border-b hover:bg-gray-200 
                                 hover:cursor-pointer cost_center_ppmp_list ">
-                            {% endif %}
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                                     {{ ppmp_data.id }}
                                 </th>
                                 <td class="px-6 py-4">
-                                    {{ ppmp_data.cc.name }}
+                                    {{ ppmp_data.cc_code }}
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ ppmp_data.year }}
@@ -117,175 +106,60 @@
 
     {% load static %}
     <script src="{% static 'js/ppmp/_script.js' %}"></script>
-    <script src="{% static 'js/ppmp/_modal_script.js' %}"></script>
 {% endblock content %}
 {% block modals %}
 <!-- CREATE PPMP MODAL -->
-<div id="create-ppmp-modal" tabindex="-2" aria-hidden="true"  data-modal-placement="top-center"
-class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-[45] w-full md:inset-0 h-modal md:h-full">
-    <div id="ppmp-container" class="relative p-4 w-full max-w-7xl h-full md:h-auto ">
+<div id="create-ppmp-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+    <div class="relative p-4 w-full max-w-4xl h-full md:h-auto">
         <!-- Modal content -->
-        <div id="crt-ppmp-content-div" class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-            <!-- Modal header -->
-            <div class="flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                    Create PPMP
-                </h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white close-create-ppmp-modal">
-                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-            <!-- Modal body -->
-            <!-- <form action=""> -->
-                <div class="p-6 space-y-6">
-                    <div class=" space-y-2">
-                        <p id="modal_cost_center_paragraph" data-cc-id="{{ selected_ppmp.cc.id }}" data-ppmp-id="{{ selected_ppmp.id }}">
-                            Cost Center: <span class=" font-medium">({{ selected_ppmp.cc.code }})</span> <span class=" font-medium">{{ selected_ppmp.cc.name }}</span></p>
-                        <div class="">
-                            <p id="modal_sof_p" data-sof-id="{{ selected_ppmp.sof.id }}">
-                                Source of Fund: <span class=" font-medium">{{ selected_ppmp.sof.description }}</span></p>
-                            <p>Year: <span class=" font-medium">{{ selected_ppmp.year }}</span></p>
-                            <p>Type: <span class=" font-medium">{{ selected_ppmp.type }}</span></p>
-                        </div>
-                        
-                        <div class="">
-                            <p>Budget: <span class=" font-medium" id="cc_ppmp_budget"></span></p>
-                            <div class="grid grid-cols-3 py-2 gap-x-3">
-                                
-                            </div>
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" 
+            data-modal-toggle="create-ppmp-modal">
+                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                <span class="sr-only">Close modal</span>
+            </button>
+            <div class="py-6 px-6 lg:px-8">
+                <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Create PPMP</h3>
+                <form id="create_ppmp_form" class="space-y-6">
+                    <div class="space-y-6">
+                        <input type="hidden" name="cc_code" value="{{ cost_center_data.code }}">
+                        <div>
+                            <label for="select_ppmp_year" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Select Year</label>
+                            <select required id="select_ppmp_year" name="year" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                                <option value="" selected>Choose Year</option>
+                                {% for opt in form_year_opt %}
+                                    <option value="{{ opt }}">{{ opt }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <div>
-                            <div class="relative">
-                                <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"></div>
-                                {% if category_data %}
-                                    <input id="select-category-input" type="text" 
-                                    class="block p-4 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border 
-                                    border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Select Category" required
-                                    value = "{{category_data.name}} ({{category_data.code}})">
-                                {% else %}
-                                    <input id="select-category-input" type="text" 
-                                    class="block p-4 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border 
-                                    border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Select Category" required>
-                                {% endif %}
-                            </div>
+                            <label for="select_type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Select Type</label>
+                            <select required id="select_type" name="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                                <option value="" selected >Choose Type</option>
+                                {% for opt in form_type_opt %}
+                                    <option value="{{ opt }}">{{ opt }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
-                        <div id="ppmp_item_list" class="overflow-y-auto max-h-[300px]">
-                            <table class="w-full text-sm text-left text-gray-500 ">
-                                <thead id="order_details_thead" class="hidden text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700">
-                                    <tr class="text-center">
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="3">Item</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="2">Unit Details</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="2">First Quarter</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="2">Second Quarter</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="2">Third Quarter</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="2">Fourth Quarter</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700" rowspan="2">
-
-                                        </th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Code</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700" colspan="2">Description</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Unit</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Price</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Quantity</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Amount</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Quantity</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Amount</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Quantity</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Amount</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Quantity</th>
-                                        <th scope="col" class="px-3 py-1.5 border border-gray-700">Amount</th>
-                                    </tr>
-                                    
-                                </thead>
-                                <tbody id="order_details_tbody" class="">
-                                    <tr id="order_details_no_data" class="bg-white border-b dark:bg-gray-800 
-                                    dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer hidden">
-                                        <th scope="row" class="font-medium text-gray-900 whitespace-nowrap text-center py-3" 
-                                        colspan="14">
-                                            <span>NO ORDERED ITEMS</span>
-                                        </th>
-                                    </tr>
-                                </tbody>
-                                <tfoot class="w-100">
-                                    <tr id="tfoot_tr" class="bg-white border-b dark:bg-gray-800 
-                                    dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer">
-                                        <th scope="row" class="font-medium text-gray-900 dark:text-white whitespace-nowrap text-center" 
-                                        colspan="14">
-                                            
-                                        </th>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                        <div>
+                            <label for="select_sof" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Select Source of Fund</label>
+                            <select  id="select_sof" name="sof" 
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " required>
+                                <option value="" selected>Choose Source of Fund</option>
+                                {% for opt in form_sof_opt %}
+                                    <option value="{{ opt.id }}">{{ opt.description }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
-                </div>
-                <!-- Modal footer -->
-                <div class="flex items-center justify-between p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
-                    <button  type="button" class="text-gray-500 close-create-ppmp-modal bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 
-                    hover:text-gray-900 focus:z-10">Close</button>
-                    <div class="space-x-3">
-                        <button id="suggest_item_btn_selected_ppmp" type="button" class="text-white bg-blue-700 hover:bg-blue-800 
-                        focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Suggest item</button>
-                        <button id="print_btn_selected_ppmp" data-is-active="false" type="button" class="text-white bg-gray-400 hover:bg-gray-400 
-                        focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Print</button> 
-                        <button id="edit_btn_selected_ppmp" data-is-active="false" type="button" class="text-white bg-gray-400 hover:bg-gray-400 
-                        focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Edit</button>
-                        
-                        <button id="cancel_btn_selected_ppmp" data-is-active="false" type="button" class="hidden text-white bg-red-500 hover:bg-red-600 
-                        focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Cancel</button> 
-                        <button id="save_btn_selected_ppmp" data-is-active="false" type="button" class="hidden text-white bg-green-500 hover:bg-green-600 
-                        focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>
-                        <button id="add_new_data_btn_selected_ppmp" data-is-active="false" type="button" class="hidden text-white bg-blue-500 hover:bg-blue-600 
-                        focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Add New Data</button>
+                    <!-- Modal footer -->
+                    <div class="flex items-center justify-between py-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+                        <button data-modal-toggle="create-ppmp-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 ">Close</button>
+                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create</button>
                     </div>
-                                           
-                </div>
-            <!-- </form> -->
-        </div>
-    </div>
-</div>
-
-<!-- LOG MODAL -->
-<div id="view_log_modal" tabindex="-1" aria-hidden="true"  data-modal-placement="top-center"
-class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-[50] w-full md:inset-0 h-modal md:h-full">
-    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-        <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 drop-shadow-lg">
-            <!-- Modal header -->
-            <div class="flex justify-between items-start p-5 rounded-t border-b dark:border-gray-600">
-                <h3 class="text-xl font-semibold text-gray-900 lg:text-2xl dark:text-white">
-                    Log Record
-                </h3>
-                <button type="button" class="close-view-log-modal text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
-                </button>
-            </div>
-            <!-- Modal body -->
-            <div class="p-6 space-y-6">
-                <div>
-                    <h4 id="log_item_name" class="text-lg font-semibold text-gray-900 lg:text-xl dark:text-white"></h4>
-                </div>
-                <div>
-                    <div class=" grid grid-cols-2">
-                        <p>Create APP status: <span id="app_status">F</span></p>
-                        <p>Received Quotation status: <span id="received_quotation_status">F</span></p>
-                        <p>Award Winning Bidder status: <span id="award_winning_bidder_status">F</span></p>
-                        <p>Obligate PO status: <span id="obligate_po_status">F</span></p>
-                        <p>Served status: <span id="served_status">F</span></p>
-                    </div>
-                </div>
-                <hr />
-                <div id="log_records" class="flex flex-col max-h-96 overflow-y-auto overflow-x-hidden space-y-2">
-                </div>
-            </div>
-            <!-- Modal footer -->
-            <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600 justify-end">
-                <button type="button" class="close-view-log-modal text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600">Close</button>
+                </form>
             </div>
         </div>
     </div>
-</div>
+</div> 
 {% endblock modals %}

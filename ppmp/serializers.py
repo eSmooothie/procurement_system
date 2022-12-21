@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import App, CostCenter, CostCenterBudget, Item, ItemDescription, OrderDetails, Ppmp, Category, Prices
+from .models import App, CostCenter, CostCenterBudget, Item, ItemCategory, OrderDetails, Ppmp, Category, Prices
 
 def required(value):
     if value is None:
@@ -34,22 +34,21 @@ class ItemSerializer(serializers.ModelSerializer):
         model = Item
         fields = '__all__'
 
-class ItemDescriptionSerializer(serializers.ModelSerializer):
+class ItemCategorySerializer( serializers.ModelSerializer):
     item = ItemSerializer(read_only=True)
     class Meta:
-        model = ItemDescription
+        model = ItemCategory
         fields = '__all__'
 
 class PriceSerializer(serializers.ModelSerializer):
-    item = ItemDescriptionSerializer(read_only=True)
+    item = ItemSerializer(read_only=True)
     class Meta:
         model = Prices
         fields = '__all__'
 
 class OrderDetailsSerializer(serializers.ModelSerializer):
-    item_desc = ItemDescriptionSerializer(read_only=True)
+    item = ItemSerializer(read_only=True)
     ppmp = PpmpSerializer(read_only=True)
-    app = APPSerializer(read_only=True)
     price = PriceSerializer(read_only=True)
     class Meta:
         model = OrderDetails

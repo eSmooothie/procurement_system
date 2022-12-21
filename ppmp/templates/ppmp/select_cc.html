@@ -16,7 +16,7 @@
                     </thead>
                     <tbody>
                         {% for user_cost_center in user_cost_centers %}
-                            <tr id="cc_{{ user_cost_center.cc.id }}" data-cost-center-id="{{ user_cost_center.cc.id }}" class="
+                            <tr id="cc_{{ user_cost_center.cc.id }}" data-cost-center-code="{{ user_cost_center.cc.code }}" class="
                             bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 hover:cursor-pointer 
                             cost_center_list">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">

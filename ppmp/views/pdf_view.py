@@ -1,4 +1,5 @@
-from fpdf import FPDF, XPos, YPos
+from datetime import date, datetime
+from fpdf import FPDF
 from django.http import HttpResponse, HttpResponseNotFound
 from django.conf import settings
 import os
@@ -7,52 +8,47 @@ from ..models import Category, CostCenter, OrderDetails, Ppmp
 
 class ItemInfo:
 	def __init__(self, item:OrderDetails):
-		item_specs = []
-			
-		if item.item_desc.spec_1 != 'None':
-			item_specs.append(item.item_desc.spec_1)
-		if item.item_desc.spec_2 != 'None':
-			item_specs.append(item.item_desc.spec_2)
-		if item.item_desc.spec_3 != 'None':
-			item_specs.append(item.item_desc.spec_3)
-		if item.item_desc.spec_4 != 'None':
-			item_specs.append(item.item_desc.spec_4)
-		if item.item_desc.spec_5 != 'None':
-			item_specs.append(item.item_desc.spec_5)
-
-		self.unit = item.price.unit
-		self.name = item.item_desc.item.general_name + "-" + ",".join(item_specs)
-		self.unit_price = item.price.price
-		self.qty_quart_distrib = (item.first_quart_quant, item.second_quart_quant, item.third_quart_quant, item.fourth_quart_quant)
+		self.name = item.item.name
+		self.id = item.item.id
+		self.cat = item.cat_code
+		self.qty_distrib = [item.first_quant, item.second_quant, item.third_quant, item.fourth_quant]
+		self.unit = item.item.unit
+		self.price = item.item.get_price(datetime=date(year=int(item.ppmp.year), month=1, day=1))
 
 	def compute_quarter_amnt(self, quarter:int):
-		qty = float(self.qty_quart_distrib[quarter-1])
-		price = float(self.unit_price)
+		if quarter <= 0 and quarter > 4:
+			return round(0,2)
+
+		qty = float(self.qty_distrib[quarter-1])
+		price = float(self.price)
 		amnt = qty * price
 		return round(amnt, 2)
 
 	def get_all_quarter_distrib(self):
 		out = []
 
-		for i in range(1, len(self.qty_quart_distrib) + 1):
-			qty = self.qty_quart_distrib[i-1]
+		for i in range(1, len(self.qty_distrib) + 1):
+			qty = self.qty_distrib[i-1]
 			amnt = self.compute_quarter_amnt(quarter=i)
 			out.append((int(qty), amnt))
 
 		return out
+
 class PPMP_PDF(FPDF):
-	def __init__(self, cc_id, ppmp_id, cat_id, debug=False):
+	def __init__(self, cc_code, ppmp_id, cat_code, debug=False):
 		super().__init__(orientation='landscape', format='letter')
 		
-		self.cc = CostCenter.objects.get(id=cc_id)
+		self.cc = CostCenter.objects.get(code=cc_code)
 		self.ppmp = Ppmp.objects.get(id=ppmp_id)
-		self.cat = Category.objects.get(id=cat_id)
-		self.orderdetails = OrderDetails.objects.select_related().filter(ppmp_id=ppmp_id).filter(item_desc__item__category_id=cat_id).all()
+		self.cat = Category.objects.get(code=cat_code)
+		self.orderdetails = OrderDetails.objects.select_related().filter(ppmp_id=ppmp_id, cat_code=cat_code).all()
 
 		self.margin = 8
 		self.debug = debug
+		
+		today = datetime.now().strftime("%Y%m%d")
 		self.set_margin(self.margin)
-		self.set_title(title=f'''ppmp_{self.ppmp.id}_report''')
+		self.set_title(title=f'''ppmp_{today}''')
 		self.auto_page_break = True
 	
 	# override function
@@ -138,7 +134,7 @@ class PPMP_PDF(FPDF):
 		'''PPMP details
 		'''
 		self.set_font('Arial', size=10, style="B")
-		self.cell(w=self.epw, txt=f'''PROJECT PROCUREMENT MANAGEMENT PLAN, YYYY''', border=self.debug)
+		self.cell(w=self.epw, txt=f'''PROJECT PROCUREMENT MANAGEMENT PLAN, {self.ppmp.year}''', border=self.debug)
 		
 		self.ln(5)
 
@@ -228,8 +224,7 @@ class PPMP_PDF(FPDF):
 			ttl_ammt += ammt
 
 		desc = self.multi_cell(w=51, txt=f'''{item.name}''', align='C',split_only=True)
-		print("DESC: ", desc)	
-
+		
 		display=True
 		
 		border_design = [1,'LTR', 'LR', 'LBR']
@@ -253,7 +248,7 @@ class PPMP_PDF(FPDF):
 			self.cell(w=51,txt=word,border=b, align='C', h=5,)
 
 			if display:
-				self.cell(w=20, txt=f'''{item.unit_price}''', border=b, align='C', h=5)
+				self.cell(w=20, txt=f'''{item.price}''', border=b, align='C', h=5)
 				self.cell(w=10, txt=f'''{ttl_qty}''', border=b, align='C', h=5)
 				self.cell(w=20, txt=f'''{ttl_ammt}''', border=b, align='C', h=5)
 
@@ -283,16 +278,51 @@ class PPMP_PDF(FPDF):
 		self.alias_nb_pages(alias='np')
 		return self.output()
 
+class PR_PDF(FPDF):
+	def __init__(self, ppmp_id, debug=False):
+		super().__init__(orientation='portrait', format='letter')
+		self.debug=debug
+		self.margin = 8
+		self.set_font('Times', size=12)
+		self.set_margin(self.margin)
+		self.set_title(title=f'''purchase_request_{ppmp_id}''')
+		self.auto_page_break = True
 
-def create_ppmp_doc(request):
+		self.ppmp = Ppmp.objects.get(id=ppmp_id)
+		
+	def header(self):
+		"""Header of the pdf"""
+		#TODO: Format header for purchase request pdf
+		self.cell(w=51, txt="THIS IS FOR PR", border=1, align='R', h=5)
+
+		self.ln()
+
+	def footer(self):
+		"""Footer of the pdf"""
+		pass
+
+	def body(self):
+		"""Body of the pdf"""
+		#TODO: Add a table, one row per pr refer to the img sent
+		self.cell(w=15, txt="THIS IS BODY")
+
+	def build(self):
+		"""Build the pdf."""
+		self.add_page()
+		self.body()		
+		# for page numbering
+		#self.alias_nb_pages(alias='np')
+		return self.output()
+
+def create_ppmp_doc(request, ppmp_id, cat_code, cc_code):
 	
-	if request.method == 'POST':
-		cc_id = request.POST['cc_id']
-		ppmp_id = request.POST['ppmp_id']
-		cat_id = request.POST['cat_id']
+	pdf = PPMP_PDF(cc_code=cc_code, ppmp_id=ppmp_id, cat_code=cat_code, debug=False)
+
+	return HttpResponse(bytes(pdf.build()), content_type='application/pdf')
+
+def create_pr_doc(request, ppmp_id):
 	
-		pdf = PPMP_PDF(cc_id=cc_id, ppmp_id=ppmp_id, cat_id=cat_id, debug=False)
+	pdf = PR_PDF(ppmp_id=ppmp_id, debug=False)
 
-		return HttpResponse(bytes(pdf.build()), content_type='application/pdf')
+	return HttpResponse(bytes(pdf.build()), content_type='application/pdf')
 
-	return HttpResponseNotFound("<h1> PAGE NOT FOUND :P </h2>")

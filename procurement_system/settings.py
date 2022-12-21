@@ -160,6 +160,9 @@ REST_FRAMEWORK = {
     ]
 }
 
+# MESSAGE
+# MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
 # Logging
 LOGGING = {
     'version': 1,
