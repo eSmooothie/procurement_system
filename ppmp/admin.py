@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from .models import Category, CostCenter, CostCenterBudget, CostCenterUser, Ppmp, SourceOfFund
-from .models import OrderDetails, Item, Prices, App
+from .models import OrderDetails, Item, Prices, App, RequestItem
 
 admin.site.register(CostCenter)
 admin.site.register(CostCenterUser)
@@ -14,3 +14,4 @@ admin.site.register(OrderDetails)
 admin.site.register(Item)
 admin.site.register(Prices)
 admin.site.register(App)
+admin.site.register(RequestItem)

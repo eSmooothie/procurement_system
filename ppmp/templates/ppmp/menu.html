@@ -56,9 +56,9 @@
     </div>
 </div>
 {% block modals %}{% endblock modals %}
-{% block others %}
-<div id="display_loading_div" class=" bg-gray-400 bg-opacity-50 fixed top-0 right-0 left-0 w-full h-full flex items-center">
-    <div class="bg-white w-64 h-32 block mx-auto rounded-md shadow-lg px-3 py-2 space-y-2">
+{% block loading %}
+<div id="display_loading_div" class=" bg-gray-400 bg-opacity-50 fixed top-0 right-0 left-0 w-full h-full flex items-center z-[100]">
+    <div class="bg-white w-64 h-32 block mx-auto rounded-md shadow-lg px-3 py-2 space-y-2 z-[101]">
         {% load static %}
         <img src="{% static 'images/gif/loading.gif' %}" class="block mx-auto" alt="loading">
         <div class="text-sm text-gray-500 font-medium text-center">
@@ -68,5 +68,5 @@
     </div>
 </div>
 
-{% endblock others %}
+{% endblock loading %}
 {% include "theme/footer.html" %}

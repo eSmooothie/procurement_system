@@ -195,7 +195,7 @@ $(document).ready(function(){
           data:data,
           done : function(data){
             // console.log(data);
-              window.location.reload();
+            window.location.reload();
           },
       });
   });
@@ -298,3 +298,4 @@ var newOrderDetail = function newOrderDetail(item_id, item_name, item_price, ite
 
    return tr
 }
+
