@@ -255,7 +255,7 @@ class RequestItem(models.Model):
         RequestItemCategory.objects.filter(req_item=self).all().delete()
 
 class RequestItemCategory(models.Model):
-    req_item = models.ForeignKey(RequestItem, null=True, on_delete=models.RESTRICT)
+    req_item = models.ForeignKey(RequestItem, null=True, on_delete=models.CASCADE)
     cat_code = models.CharField(blank=True, max_length=255)
 
     @property
