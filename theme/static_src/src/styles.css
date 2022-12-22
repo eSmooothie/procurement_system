@@ -4,19 +4,19 @@
 
 
 @layer components {
-    .error{
+    .system-error{
         @apply border border-red-500 p-2 rounded-md bg-red-500 text-white
     }
 
-    .info{
+    .system-info{
         @apply border border-cyan-500 p-2 rounded-md bg-cyan-500 text-white
     }
 
-    .success{
+    .system-success{
         @apply border border-green-500 p-2 rounded-md bg-green-500 text-white
     }
 
-    .warning{
+    .system-warning{
         @apply border border-yellow-500 p-2 rounded-md bg-yellow-500 text-white
     }
 }
