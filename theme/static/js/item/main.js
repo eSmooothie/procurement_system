@@ -9,7 +9,7 @@ function paging(page_no){
     window.location.href = url.toString();
 }
 
-var sendRequest = function send_request({method = "GET", url="",data={}, done=function(data){console.log(data);}, fail=function(xhr){console.log(xhr);}}){
+var sendRequest = function send_request({method = "GET", url="",data={}, done=function(data){console.log(data);}, fail=function(xhr){window.location.reload();}}){
 
     $.ajax({
         headers: {'X-CSRFToken': csrftoken},
