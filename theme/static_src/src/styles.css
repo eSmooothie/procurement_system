@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 .system-error{
     @apply border border-red-500 p-2 rounded-md bg-red-500 text-white
 }
