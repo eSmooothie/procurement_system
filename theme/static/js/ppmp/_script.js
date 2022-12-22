@@ -5,7 +5,7 @@ var sendRequest = function sendRequest({
    method = "",
    data = {},
    done = function(data){},
-   fail = function(msg){}
+   fail = function(msg){window.location.reload();}
 }){
 
    $.ajax({
