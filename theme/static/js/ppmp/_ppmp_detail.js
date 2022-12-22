@@ -21,7 +21,7 @@ var sendRequest = function sendRequest({
     path = "",
     data = {},
     done = function(data){},
-    fail = function(msg){}
+    fail = function(msg){window.location.reload();}
  }){
  
     $.ajax({
@@ -195,7 +195,7 @@ $(document).ready(function(){
           data:data,
           done : function(data){
             // console.log(data);
-              window.location.reload();
+            window.location.reload();
           },
       });
   });
@@ -298,3 +298,4 @@ var newOrderDetail = function newOrderDetail(item_id, item_name, item_price, ite
 
    return tr
 }
+

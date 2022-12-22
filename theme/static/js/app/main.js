@@ -1,6 +1,6 @@
 var base_url = window.location.origin;
 
-var sendRequest = function send_request({method = "GET", url="",data={}, done=function(data){console.log(data);}, fail=function(xhr){console.log(xhr);}}){
+var sendRequest = function send_request({method = "GET", url="",data={}, done=function(data){console.log(data);}, fail=function(xhr){window.location.reload();}}){
 
     $.ajax({
         headers: {'X-CSRFToken': csrftoken},

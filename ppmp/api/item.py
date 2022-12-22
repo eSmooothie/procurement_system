@@ -5,6 +5,7 @@ READ ABOUT: DJANGO REST FRAMEWORK
 """
 from django.http import JsonResponse
 from django.shortcuts import redirect
+from django.contrib import messages
 from rest_framework import status
 
 from ppmp.models import Item, ItemCategory, Prices, RequestItem, RequestItemCategory
@@ -47,23 +48,25 @@ def add_item(request):
 
     if request.method == 'POST':
         raw_data = request.POST
+        try:
+            item = Item()
+            item.name = raw_data['item_name']
+            item.unit = raw_data['item_unit']
+            item.save()
 
-        item = Item()
-        item.name = raw_data['item_name']
-        item.unit = raw_data['item_unit']
-        item.save()
+            price = Prices()
+            price.item = item
+            price.price = raw_data['item_price']
+            price.save()
 
-        price = Prices()
-        price.item = item
-        price.price = raw_data['item_price']
-        price.save()
-
-        for cat in raw_data.getlist('categories[]'):
-            item_cat = ItemCategory()
-            item_cat.item = item
-            item_cat.cat_code = cat
-            item_cat.save()
-
+            for cat in raw_data.getlist('categories[]'):
+                item_cat = ItemCategory()
+                item_cat.item = item
+                item_cat.cat_code = cat
+                item_cat.save()
+            messages.error(request, "Added new item")
+        except Exception as err:
+            messages.error(request, err)
         return JsonResponse({'msg':'OK'}, status=status.HTTP_200_OK)
 
     return JsonResponse({'msg':'Invalid access'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -73,18 +76,22 @@ def req_item(request):
     if request.method == 'POST':
         raw_data = request.POST
 
-        req_item = RequestItem()
-        req_item.user = request.user
-        req_item.name = raw_data['item_name']
-        req_item.unit = raw_data['item_unit']
-        req_item.price = raw_data['item_price']
-        req_item.save()
+        try:
+            req_item = RequestItem()
+            req_item.user = request.user
+            req_item.name = raw_data['item_name']
+            req_item.unit = raw_data['item_unit']
+            req_item.price = raw_data['item_price']
+            req_item.save()
 
-        for cat in raw_data.getlist('categories[]'):
-            req_cat_item = RequestItemCategory()
-            req_cat_item.req_item = req_item
-            req_cat_item.cat_code = cat
-            req_cat_item.save()
+            for cat in raw_data.getlist('categories[]'):
+                req_cat_item = RequestItemCategory()
+                req_cat_item.req_item = req_item
+                req_cat_item.cat_code = cat
+                req_cat_item.save()
+            messages.success(request, "Request sent")
+        except Exception as err:
+            messages.error(request, err)
 
         return JsonResponse({'msg':'OK'}, status=status.HTTP_200_OK)
 
@@ -114,7 +121,9 @@ def approved_req_item(request, item_id):
             item_cat.item = new_item
             item_cat.cat_code = cat.cat_code
             item_cat.save()
-        
+        messages.success(request, f"Item {new_item.name} approved")
+    else:
+        messages.info(request, "Item already approved")
 
     return redirect('req_item_view')
 
@@ -149,20 +158,23 @@ def get_req_item(request):
 def update_req_item(request):
     if request.method == 'POST':
         raw_data = request.POST
-        print(raw_data)
-
-        req_item = RequestItem.objects.get(id=raw_data['item_id'])
-        req_item.name = raw_data['item_name']
-        req_item.unit = raw_data['item_unit']
-        req_item.price = raw_data['item_price']
-        req_item.delete_categories()
-        req_item.save()
         
-        for cat in raw_data.getlist('categories[]'):
-            req_cat_item = RequestItemCategory()
-            req_cat_item.req_item = req_item
-            req_cat_item.cat_code = cat
-            req_cat_item.save()
+        try:
+            req_item = RequestItem.objects.get(id=raw_data['item_id'])
+            req_item.name = raw_data['item_name']
+            req_item.unit = raw_data['item_unit']
+            req_item.price = raw_data['item_price']
+            req_item.delete_categories()
+            req_item.save()
             
+            for cat in raw_data.getlist('categories[]'):
+                req_cat_item = RequestItemCategory()
+                req_cat_item.req_item = req_item
+                req_cat_item.cat_code = cat
+                req_cat_item.save()
+            messages.success(request, "Item updated")
+        except Exception as err:
+            messages.error(request, err)
+
         return JsonResponse({'msg':'OK'}, status=status.HTTP_200_OK)
     return JsonResponse({'msg':'Invalid access'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)

@@ -1254,6 +1254,14 @@ input:checked + .toggle-bg {
   z-index: 40;
 }
 
+.z-\[100\] {
+  z-index: 100;
+}
+
+.z-\[101\] {
+  z-index: 101;
+}
+
 .col-span-2 {
   grid-column: span 2 / span 2;
 }
