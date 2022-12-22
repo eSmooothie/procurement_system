@@ -23,7 +23,7 @@ DB_PORT = '5432'
 # COPY THE KEY
 
 
-DJANGO_SECRET_KEY = ''
-DJANGO_DEBUG = True
+DJANGO_SECRET_KEY = 'kiid!^(&$7oky%d^xh$cg#trkpcpi31wwc^3^nqs&wg0macko$'
+DJANGO_DEBUG = False
 
 
