@@ -1137,18 +1137,6 @@ input:checked + .toggle-bg {
   }
 }
 
-.error {
-  border-radius: 0.375rem;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(240 82 82 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(240 82 82 / var(--tw-bg-opacity));
-  padding: 0.5rem;
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
 .sr-only {
   position: absolute;
   width: 1px;
@@ -1246,20 +1234,20 @@ input:checked + .toggle-bg {
   z-index: 10;
 }
 
-.z-20 {
-  z-index: 20;
-}
-
-.z-40 {
-  z-index: 40;
-}
-
 .z-\[100\] {
   z-index: 100;
 }
 
 .z-\[101\] {
   z-index: 101;
+}
+
+.z-20 {
+  z-index: 20;
+}
+
+.z-40 {
+  z-index: 40;
 }
 
 .col-span-2 {
