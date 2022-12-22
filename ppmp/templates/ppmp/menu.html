@@ -46,12 +46,13 @@
     </div>
     <div class="pt-5">
         {% if messages %}
-        <ul class="messages px-3">
+        <ul class="messages px-3 fixed bottom-10 w-full">
             {% for message in messages %}
-            <li {% if message.tags %} class=" system-{{ message.tags }}" {% endif %}>{{ message }}</li>
+            <li {% if message.tags %} class="system-{{ message.tags }}" {% endif %}>{{ message }}</li>
             {% endfor %}
         </ul>
         {% endif %}
+        
         {% block content %}{% endblock content  %}
     </div>
 </div>
