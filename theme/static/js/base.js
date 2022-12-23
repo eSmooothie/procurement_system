@@ -1,10 +1,8 @@
 var $loading = $('#display_loading_div').hide();
 
-$(document).on("ajaxSend", function(){
-  $loading.show();
-}).on("ajaxComplete", function(){
-  $loading.hide();
-});
+
+$(document).ajaxStart(function(){$loading.show();});
+$(document).ajaxStop(function(){$loading.hide();});
 
 var sendRequest = function send_request({
   method = "GET", 
