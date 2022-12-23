@@ -34,4 +34,19 @@
         var base_url = window.location.origin;
         const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     </script>
+    {% load static %}
+    
 <body class="h-full sm:bg-gray-50">
+{% block loading %}
+<div id="display_loading_div" class=" bg-gray-400 bg-opacity-50 fixed top-0 right-0 left-0 w-full h-full flex items-center z-[100]">
+    <div class="bg-white w-64 h-32 block mx-auto rounded-md shadow-lg px-3 py-2 space-y-2 z-[101]">
+        {% load static %}
+        <img src="{% static 'images/gif/loading.gif' %}" class="block mx-auto" alt="loading">
+        <div class="text-sm text-gray-500 font-medium text-center">
+            <p>Loading...</p>
+            <p>Do not refresh data might loss.</p>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/base.js' %}"></script>
+{% endblock loading %}

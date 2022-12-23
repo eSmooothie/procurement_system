@@ -1,15 +1,5 @@
 var base_url = window.location.origin;
 
-var sendRequest = function send_request({method = "GET", url="",data={}, done=function(data){console.log(data);}, fail=function(xhr){window.location.reload();}}){
-
-    $.ajax({
-        headers: {'X-CSRFToken': csrftoken},
-        url: base_url + url,
-        method: method,
-        data:data,
-    }).done(done).fail(fail);
-}
-
 var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = window.location.search.substring(1),
         sURLVariables = sPageURL.split('&'),
