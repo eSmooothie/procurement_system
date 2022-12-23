@@ -6,7 +6,7 @@ $(document).ready(function(){
         console.log(data);
         
         sendRequest({
-         path : "/api/add/ppmp",
+         url : "/api/add/ppmp",
          method : "POST",
          data : data,
          done : function (data){

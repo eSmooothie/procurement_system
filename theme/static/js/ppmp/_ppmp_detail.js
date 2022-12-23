@@ -1,21 +1,5 @@
 var is_edit=false;
 
-var getUrlParameter = function getUrlParameter(sParam) {
-   var sPageURL = window.location.search.substring(1),
-       sURLVariables = sPageURL.split('&'),
-       sParameterName,
-       i;
-
-   for (i = 0; i < sURLVariables.length; i++) {
-       sParameterName = sURLVariables[i].split('=');
-
-       if (sParameterName[0] === sParam) {
-           return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
-       }
-   }
-   return false;
-};
-
  var categoryCheckbox = function categoryCheckbox(cat_code, cat_name){
    // console.log(cat_name)
    const li = $("<li></li>").addClass("w-full rounded-t-lg border-b border-gray-200");
@@ -175,7 +159,7 @@ $(document).ready(function(){
       // console.log(data);
       sendRequest({
           method: 'POST',
-          path:"/api/item/add/request",
+          url:"/api/item/add/request",
           data:data,
           done : function(data){
             // console.log(data);
