@@ -1,21 +1,3 @@
-
-
-var sendRequest = function sendRequest({
-   path = "",
-   method = "",
-   data = {},
-   done = function(data){},
-   fail = function(msg){window.location.reload();}
-}){
-
-   $.ajax({
-      headers: {'X-CSRFToken': csrftoken},
-      url: base_url + path,
-      method: method,
-      data: data,
-  }).done(done).fail(fail);
-}
-
 $(document).ready(function(){
    $("#create_ppmp_form").on('submit', function(e){
         e.preventDefault();

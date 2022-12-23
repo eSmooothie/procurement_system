@@ -1226,10 +1226,6 @@ input:checked + .toggle-bg {
   top: 0.75rem;
 }
 
-.bottom-0 {
-  bottom: 0px;
-}
-
 .bottom-10 {
   bottom: 2.5rem;
 }

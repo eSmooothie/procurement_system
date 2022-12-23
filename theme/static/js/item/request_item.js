@@ -9,16 +9,6 @@ function paging(page_no){
     window.location.href = url.toString();
 }
 
-var sendRequest = function send_request({method = "GET", url="",data={}, done=function(data){console.log(data);}, fail=function(xhr){window.location.reload();}}){
-
-    $.ajax({
-        headers: {'X-CSRFToken': csrftoken},
-        url: base_url + url,
-        method: method,
-        data:data,
-    }).done(done).fail(fail);
-}
-
 var categoryCheckbox = function categoryCheckbox(cat_code, cat_name){
     // console.log(cat_name)
     const li = $("<li></li>").addClass("w-full rounded-t-lg border-b border-gray-200");
