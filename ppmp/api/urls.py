@@ -5,7 +5,7 @@ from ppmp.models import Item
 from .Category import CategoryAPI
 from .CostCenter import CostCenterPPMPDetails
 
-from . import item, order_item, app, ppmp, item
+from . import item, order_item, app, ppmp, item, stayup
 
 urlpatterns = [
     path('categories', CategoryAPI.as_view(), name="CategoryAPIsearch"),
@@ -23,5 +23,8 @@ urlpatterns = [
     path('item/approved/<str:item_id>', item.approved_req_item, name="approve_req_item"),
     path('item/get_request', item.get_req_item, name="get_req_item"),
     path('item/request/update', item.update_req_item, name="update_req_item"),
+
+    #ping website to stay awake
+    path('wakeup', stayup.awake, name="replit_ping")
 ]
     
