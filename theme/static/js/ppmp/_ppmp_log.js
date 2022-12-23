@@ -1,19 +1,3 @@
-var getUrlParameter = function getUrlParameter(sParam) {
-   var sPageURL = window.location.search.substring(1),
-       sURLVariables = sPageURL.split('&'),
-       sParameterName,
-       i;
-
-   for (i = 0; i < sURLVariables.length; i++) {
-       sParameterName = sURLVariables[i].split('=');
-
-       if (sParameterName[0] === sParam) {
-           return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
-       }
-   }
-   return false;
-};
-
 $(document).ready(function(){
     // set the modal menu element
     const targetEl = document.getElementById('item_logs_modal');
@@ -28,13 +12,12 @@ $(document).ready(function(){
         const order_id = $(this).parent().parent().attr("data-order-id");
        
         sendRequest({
-            path : "/api/orderitem/logs",
+            url : "/api/orderitem/logs",
             method: "GET",
             data: {
                 'orderitem_id' : order_id
             },
             done: function(data){
-                console.log(data);
                 log_records = data['log_records'];
                 $("#item_name").text(data['item_name']);
                 const log_elem = $("#logs");
@@ -51,16 +34,16 @@ $(document).ready(function(){
                                 $("<p></p>").addClass("text-gray-500").append(
                                     $("<span></span>").addClass("font-medium").text(timestamp), 
                                     $("<span></span>").text(desc)
-                                    )
-                                );
+                                )
+                            );
                         }
                     }
                 }else{
                     $(log_elem).append(
                         $("<p></p>").addClass("text-gray-500").append(
                             $("<span></span>").addClass("font-medium").text("NO LOG")
-                            )
-                        );
+                        )
+                    );
                 }
                 
             }          

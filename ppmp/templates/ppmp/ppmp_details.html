@@ -191,7 +191,7 @@
     </div>
 </div>
 
-
+<!-- REFACTOR: Implement DRY on this modal -->
 <div id="req-item-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full">
     <div class="relative w-full max-w-7xl h-full md:h-auto">
         <!-- Modal content -->
@@ -232,6 +232,7 @@
                             <input required type="text" name="item_unit" id="item-unit" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5" placeholder="Unit">
                             </div>
                         </div>
+                        <!-- TODO: Accepts 2 decimal places -->
                         <div class="mb-6">
                             <label for="item-price" class="block mb-2 text-sm font-medium text-gray-900 ">Price</label>
                             <div class="flex">
