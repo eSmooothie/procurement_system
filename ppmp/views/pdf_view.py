@@ -279,6 +279,8 @@ class PPMP_PDF(FPDF):
 		return self.output()
 
 class PR_PDF(FPDF):
+	page_width = 199.7
+	border_design = [1,'LTR', 'LR', 'LBR']
 	def __init__(self, ppmp_id, debug=False):
 		super().__init__(orientation='portrait', format='letter')
 		self.debug=debug
@@ -292,19 +294,150 @@ class PR_PDF(FPDF):
 		
 	def header(self):
 		"""Header of the pdf"""
-		#TODO: Format header for purchase request pdf
-		self.cell(w=51, txt="THIS IS FOR PR", border=1, align='R', h=5)
-
+		self.set_font('Times', size=12, style="B")
+		self.cell(w=0,txt="PURCHASE REQUEST", border=0, align='C', h=5, ln=1)
+		self.set_font('Times', size=12)
+		self.ln()
+		self.cell(w=25,txt="Entity", border=0, align='C', h=5)
+		self.cell(w=25,txt="X", border=0, align='C', h=5)
+		self.cell(w=50)
+		self.cell(w=25,txt="Fund Cluster", border=0, align='C', h=5)
+		self.cell(w=25,txt="X", border=0, align='C', h=5)
+		self.ln()
+		#table header
+		self.cell(w=self.page_width/4,txt=f"Office/Section: X", border="LTR", h=5)
+		self.cell(w=self.page_width/2,txt=f"PR No: X", border="LTR", h=5)
+		self.cell(w=self.page_width/4,txt=f"Date: X", border="LTR", h=5)
+		self.ln()
+		self.cell(w=self.page_width/4,txt=" ", border="LBR", h=5)
+		self.cell(w=self.page_width/2,txt="Responsibility Center Code: X", border="LBR", h=5)
+		self.cell(w=self.page_width/4,txt=" ",border="LBR", h=5)
+		self.ln()
+		self.cell(w=(self.page_width/4)*0.70,txt="Stock / ", border="LR", h=5, align='C')
+		self.cell(w=(self.page_width/4)*0.30,txt="Unit", border="LR", h=5, align='C')
+		self.cell(w=(self.page_width/2)*0.80,txt="",border="LR", h=5, align='C')
+		self.cell(w=(self.page_width/2)*0.20,txt="", border="LR", h=5, align='C')
+		self.cell(w=(self.page_width/4)*0.50,txt="",border="LR", h=5)
+		self.cell(w=(self.page_width/4)*0.50,txt="",border="LR", h=5)
+		self.ln()
+		self.cell(w=(self.page_width/4)*0.70,txt="Property No.", border="LBR", h=5, align='C')
+		self.cell(w=(self.page_width/4)*0.30,txt="Unit", border="LBR", h=5, align='C')
+		self.cell(w=(self.page_width/2)*0.80,txt="Item Description",border="LBR", h=5, align='C')
+		self.cell(w=(self.page_width/2)*0.20,txt="Quantity", border="LBR", h=5, align='C')
+		self.cell(w=(self.page_width/4)*0.50,txt="Unit Cost",border="LBR", h=5, align='C')
+		self.cell(w=(self.page_width/4)*0.50,txt="Total Cost",border="LBR", h=5, align='C')
 		self.ln()
 
 	def footer(self):
 		"""Footer of the pdf"""
-		pass
+		self.cell(w=(self.page_width/4)*0.70,txt="", border=1, h=5, align='C')
+		self.cell(w=(self.page_width/4)*0.30,txt="", border=1, h=5, align='C')
+		self.cell(w=(self.page_width/2)*0.80,txt="Total:  ",border=1, h=5, align='R')
+		self.cell(w=(self.page_width/2)*0.20,txt="", border=1, h=5, align='C')
+		self.cell(w=(self.page_width/4)*0.50,txt="",border=1, h=5, align='C')
+		self.cell(w=(self.page_width/4)*0.50,txt="XXXX",border=1, h=5, align='C')
+		self.ln()
+
+		purpose = self.split_text(self.page_width*0.90,"qweqwewqewqeqeqweqweqqweqweqweqweq")
+		display=True
+
+		# add additional cells if purpose is only 1 cell
+		if len(purpose) <= 1:
+			for i in range(3):
+				purpose.append("")
+
+		for i in range(len(purpose)):
+			word = purpose[i]
+			if len(purpose) == 1:
+				b = self.border_design[0]
+			elif i == 0: # top cell
+				b = self.border_design[1]
+			elif i == len(purpose) - 1: # buttom cell
+				b = self.border_design[3]
+			else:
+				b = self.border_design[2]
+			if display:
+				self.cell(w=self.page_width*0.10,txt="Purpose:", border=b, h=5, align='C')
+			else:
+				self.cell(w=self.page_width*0.10,txt="", border=b, h=5, align='C')
+			
+			self.cell(w=self.page_width*0.90,txt=f'''{word}''', border=b, h=5, align='L')
+			self.ln()
+			display = False
+
+		self.cell(w=self.page_width*0.15,txt="",border="L", h=5, align='L')
+		self.cell(w=self.page_width*0.35,txt="Requested by:",border=0, h=5, align='L')
+		self.cell(w=self.page_width*0.10,txt="",border=0, h=5, align='L')
+		self.cell(w=self.page_width*0.35,txt="Approved by:",border="", h=5, align='L')
+		self.cell(w=self.page_width*0.05,txt="",border="R", h=5, align='L')
+		self.ln()
+		self.cell(w=self.page_width*0.15,txt="Signature:",border="L", h=5, align='L')
+		self.cell(w=self.page_width*0.35,txt="XXXXX",border="B", h=5, align='L')
+		self.cell(w=self.page_width*0.10,txt="",border=0, h=5, align='L')
+		self.cell(w=self.page_width*0.35,txt="XXXXX",border="B", h=5, align='L')
+		self.cell(w=self.page_width*0.05,txt="",border="R", h=5, align='L')
+		self.ln()
+		self.cell(w=self.page_width*0.15,txt="Printed Name:",border="L", h=5, align='L')
+		self.cell(w=self.page_width*0.35,txt="XXXX",border="B", h=5, align='C')
+		self.cell(w=self.page_width*0.10,txt="",border=0, h=5, align='L')
+		self.cell(w=self.page_width*0.35,txt="XXXX",border="B", h=5, align='C')
+		self.cell(w=self.page_width*0.05,txt="",border="R", h=5, align='L')
+		self.ln()
+		self.cell(w=self.page_width*0.15,txt="Designation:",border="L", h=5, align='L')
+		self.cell(w=self.page_width*0.35,txt="XXXX",border="B", h=5, align='C')
+		self.cell(w=self.page_width*0.10,txt="",border="", h=5, align='L')
+		self.cell(w=self.page_width*0.35,txt="XXXX",border="B", h=5, align='C')
+		self.cell(w=self.page_width*0.05,txt="",border="R", h=5, align='L')
+		self.ln()
+		self.cell(w=self.page_width*0.15,txt="",border="BL", h=5, align='L')
+		self.cell(w=self.page_width*0.35,txt="",border="B", h=5, align='L')
+		self.cell(w=self.page_width*0.10,txt="",border="B", h=5, align='L')
+		self.cell(w=self.page_width*0.35,txt="",border="B", h=5, align='L')
+		self.cell(w=self.page_width*0.05,txt="",border="BR", h=5, align='L')
+		self.ln()
 
 	def body(self):
 		"""Body of the pdf"""
-		#TODO: Add a table, one row per pr refer to the img sent
-		self.cell(w=15, txt="THIS IS BODY")
+		self.add_row(1,2,"TEST TEST TEST TEST TEST TEST", 1, 2, 3)
+
+	def split_text(self,width, text):
+		return self.multi_cell(w=width, txt=f'''{text}''', align='C',split_only=True)
+
+	def add_row(self, stck_no, unit, item_desc, qty, unit_cost, ttl_cost):
+		desc = self.split_text((self.page_width/2)*0.80,item_desc)
+		
+		display=True
+		
+		for i in range(len(desc)):
+			word = desc[i]
+			if len(desc) == 1:
+				b = self.border_design[0]
+			elif i == 0: # top cell
+				b = self.border_design[1]
+			elif i == len(desc) - 1: # buttom cell
+				b = self.border_design[3]
+			else:
+				b = self.border_design[2]
+
+			if display:
+				self.cell(w=(self.page_width/4)*0.70, txt=f'''{stck_no}''', border=b, align='C', h=5)
+				self.cell(w=(self.page_width/4)*0.30,txt=f'''{unit}''', border=b, h=5, align='C')
+			else:
+				self.cell(w=(self.page_width/4)*0.70, txt=f''' ''', border=b, align='C', h=5)
+				self.cell(w=(self.page_width/4)*0.30,txt="", border=b, h=5, align='C')
+
+			self.cell(w=(self.page_width/2)*0.80,txt=word,border=b, align='L', h=5)
+
+			if display:
+				self.cell(w=(self.page_width/2)*0.20,txt=f'''{qty}''', border=b, h=5, align='C')
+				self.cell(w=(self.page_width/4)*0.50,txt=f'''{unit_cost}''',border=b, h=5, align='C')
+				self.cell(w=(self.page_width/4)*0.50,txt=f'''{ttl_cost}''',border=b, h=5, align='C')
+			else:
+				self.cell(w=(self.page_width/2)*0.20,txt="", border=b, h=5, align='C')
+				self.cell(w=(self.page_width/4)*0.50,txt="",border=b, h=5, align='C')
+				self.cell(w=(self.page_width/4)*0.50,txt="",border=b, h=5, align='C')
+			self.ln()
+			display = False
 
 	def build(self):
 		"""Build the pdf."""
