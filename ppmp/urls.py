@@ -26,5 +26,5 @@ urlpatterns = [
     path('home/item/<str:item_id>', item_view.single_item, name='single_item'),
     #pdf
     path('pdf/download/ppmp/<str:cc_code>/<int:ppmp_id>/<str:cat_code>', pdf_view.create_ppmp_doc, name='generate_ppmp_pdf'),
-    path('pdf/download/pr/<int:ppmp_id>', pdf_view.create_pr_doc, name='generate_pr_pdf'),
+    path('pdf/download/pr/<int:ppmp_id>/<str:cat_code>', pdf_view.create_pr_doc, name='generate_pr_pdf'),
 ]

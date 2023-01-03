@@ -206,14 +206,14 @@ class OrderDetails(models.Model):
         return "orddetails_id:{}".format(self.id)
 
 class ProcurementMode(models.Model):
-    orderdetail = models.ForeignKey(OrderDetails, blank=True, related_name = "OrderItem", on_delete=models.RESTRICT)
+    orderdetail = models.ForeignKey(OrderDetails, blank=True, related_name = "OrderItem", on_delete=models.CASCADE)
     app = models.ForeignKey(App, null=True, blank=True, related_name = "APP", on_delete=models.RESTRICT)
     mode = models.CharField(null=True, blank=True, max_length=255)
 
     def __str__(self):
         return f'''{self.orderdetail.id} - {self.app} [{self.mode}]'''
 class PpmpTrack(models.Model):
-    orderdetails = models.ForeignKey(OrderDetails,null=True, on_delete=models.RESTRICT)
+    orderdetails = models.ForeignKey(OrderDetails,null=True, on_delete=models.CASCADE)
     datetime = models.CharField(blank=True,null=True, max_length=255)
     cc_name = models.CharField(blank=True,null=True, max_length=255)
     barcode = models.CharField(blank=True,null=True, max_length=255)
@@ -227,7 +227,7 @@ class PurchaseRequest(models.Model):
     unit_cost = models.CharField(blank=True,null=True, max_length=255)
     qty = models.IntegerField(blank=True,null=True)
     date_created = models.DateTimeField(auto_now=True)
-    order_details = models.ForeignKey(OrderDetails, on_delete=models.RESTRICT)
+    order_details = models.ForeignKey(OrderDetails, on_delete=models.CASCADE)
 
     def __str__(self):
         return "purchreq_id:{}".format(self.id)

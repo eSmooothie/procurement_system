@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.conf import settings
 import os
 
-from ..models import Category, CostCenter, OrderDetails, Ppmp
+from ..models import Category, CostCenter, OrderDetails, Ppmp, PurchaseRequest
 
 class ItemInfo:
 	def __init__(self, item:OrderDetails):
@@ -281,7 +281,10 @@ class PPMP_PDF(FPDF):
 class PR_PDF(FPDF):
 	page_width = 199.7
 	border_design = [1,'LTR', 'LR', 'LBR']
-	def __init__(self, ppmp_id, debug=False):
+	ttl_cost=0
+	dt=datetime.strftime(datetime.now(), "%m/%d/%Y")
+
+	def __init__(self, ppmp_id, cat_code, debug=False):
 		super().__init__(orientation='portrait', format='letter')
 		self.debug=debug
 		self.margin = 8
@@ -291,6 +294,7 @@ class PR_PDF(FPDF):
 		self.auto_page_break = True
 
 		self.ppmp = Ppmp.objects.get(id=ppmp_id)
+		self.pr = PurchaseRequest.objects.filter(order_details__ppmp__id=ppmp_id, order_details__cat_code=cat_code).all()
 		
 	def header(self):
 		"""Header of the pdf"""
@@ -305,12 +309,13 @@ class PR_PDF(FPDF):
 		self.cell(w=25,txt="X", border=0, align='C', h=5)
 		self.ln()
 		#table header
+		
 		self.cell(w=self.page_width/4,txt=f"Office/Section: X", border="LTR", h=5)
 		self.cell(w=self.page_width/2,txt=f"PR No: X", border="LTR", h=5)
-		self.cell(w=self.page_width/4,txt=f"Date: X", border="LTR", h=5)
+		self.cell(w=self.page_width/4,txt=f"Date: {self.dt}", border="LTR", h=5)
 		self.ln()
 		self.cell(w=self.page_width/4,txt=" ", border="LBR", h=5)
-		self.cell(w=self.page_width/2,txt="Responsibility Center Code: X", border="LBR", h=5)
+		self.cell(w=self.page_width/2,txt=f"Responsibility Center Code: {self.ppmp.cost_center.code}", border="LBR", h=5)
 		self.cell(w=self.page_width/4,txt=" ",border="LBR", h=5)
 		self.ln()
 		self.cell(w=(self.page_width/4)*0.70,txt="Stock / ", border="LR", h=5, align='C')
@@ -335,10 +340,10 @@ class PR_PDF(FPDF):
 		self.cell(w=(self.page_width/2)*0.80,txt="Total:  ",border=1, h=5, align='R')
 		self.cell(w=(self.page_width/2)*0.20,txt="", border=1, h=5, align='C')
 		self.cell(w=(self.page_width/4)*0.50,txt="",border=1, h=5, align='C')
-		self.cell(w=(self.page_width/4)*0.50,txt="XXXX",border=1, h=5, align='C')
+		self.cell(w=(self.page_width/4)*0.50,txt=str(self.ttl_cost),border=1, h=5, align='C')
 		self.ln()
 
-		purpose = self.split_text(self.page_width*0.90,"qweqwewqewqeqeqweqweqqweqweqweqweq")
+		purpose = self.split_text(self.page_width*0.90,"")
 		display=True
 
 		# add additional cells if purpose is only 1 cell
@@ -372,21 +377,21 @@ class PR_PDF(FPDF):
 		self.cell(w=self.page_width*0.05,txt="",border="R", h=5, align='L')
 		self.ln()
 		self.cell(w=self.page_width*0.15,txt="Signature:",border="L", h=5, align='L')
-		self.cell(w=self.page_width*0.35,txt="XXXXX",border="B", h=5, align='L')
+		self.cell(w=self.page_width*0.35,txt="",border="B", h=5, align='L')
 		self.cell(w=self.page_width*0.10,txt="",border=0, h=5, align='L')
-		self.cell(w=self.page_width*0.35,txt="XXXXX",border="B", h=5, align='L')
+		self.cell(w=self.page_width*0.35,txt="",border="B", h=5, align='L')
 		self.cell(w=self.page_width*0.05,txt="",border="R", h=5, align='L')
 		self.ln()
 		self.cell(w=self.page_width*0.15,txt="Printed Name:",border="L", h=5, align='L')
-		self.cell(w=self.page_width*0.35,txt="XXXX",border="B", h=5, align='C')
+		self.cell(w=self.page_width*0.35,txt="",border="B", h=5, align='C')
 		self.cell(w=self.page_width*0.10,txt="",border=0, h=5, align='L')
-		self.cell(w=self.page_width*0.35,txt="XXXX",border="B", h=5, align='C')
+		self.cell(w=self.page_width*0.35,txt="",border="B", h=5, align='C')
 		self.cell(w=self.page_width*0.05,txt="",border="R", h=5, align='L')
 		self.ln()
 		self.cell(w=self.page_width*0.15,txt="Designation:",border="L", h=5, align='L')
-		self.cell(w=self.page_width*0.35,txt="XXXX",border="B", h=5, align='C')
+		self.cell(w=self.page_width*0.35,txt="",border="B", h=5, align='C')
 		self.cell(w=self.page_width*0.10,txt="",border="", h=5, align='L')
-		self.cell(w=self.page_width*0.35,txt="XXXX",border="B", h=5, align='C')
+		self.cell(w=self.page_width*0.35,txt="",border="B", h=5, align='C')
 		self.cell(w=self.page_width*0.05,txt="",border="R", h=5, align='L')
 		self.ln()
 		self.cell(w=self.page_width*0.15,txt="",border="BL", h=5, align='L')
@@ -398,7 +403,16 @@ class PR_PDF(FPDF):
 
 	def body(self):
 		"""Body of the pdf"""
-		self.add_row(1,2,"TEST TEST TEST TEST TEST TEST", 1, 2, 3)
+		print(self.pr)
+		for pr in self.pr:
+			stck_no=""
+			unit=pr.order_details.item.unit
+			item_desc=pr.specification_details
+			qty=pr.qty
+			cost=pr.unit_cost
+			ttl_cost = float(cost) * float(qty)
+			self.ttl_cost = self.ttl_cost + ttl_cost
+			self.add_row(stck_no, unit, item_desc, qty, cost, ttl_cost)
 
 	def split_text(self,width, text):
 		return self.multi_cell(w=width, txt=f'''{text}''', align='C',split_only=True)
@@ -453,9 +467,9 @@ def create_ppmp_doc(request, ppmp_id, cat_code, cc_code):
 
 	return HttpResponse(bytes(pdf.build()), content_type='application/pdf')
 
-def create_pr_doc(request, ppmp_id):
+def create_pr_doc(request, ppmp_id, cat_code):
 	
-	pdf = PR_PDF(ppmp_id=ppmp_id, debug=False)
+	pdf = PR_PDF(ppmp_id=ppmp_id, cat_code=cat_code, debug=False)
 
 	return HttpResponse(bytes(pdf.build()), content_type='application/pdf')
 

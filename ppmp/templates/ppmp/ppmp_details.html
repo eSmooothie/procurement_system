@@ -232,14 +232,13 @@
                             <input required type="text" name="item_unit" id="item-unit" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5" placeholder="Unit">
                             </div>
                         </div>
-                        <!-- TODO: Accepts 2 decimal places -->
                         <div class="mb-6">
                             <label for="item-price" class="block mb-2 text-sm font-medium text-gray-900 ">Price</label>
                             <div class="flex">
                             <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600  dark:border-gray-600">
                                 ₱
                             </span>
-                            <input required type="number" name="item_price" min="0" id="item-price" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5" placeholder="Price">
+                            <input required type="number" name="item_price" min="0" step="0.01" id="item-price" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5" placeholder="Price">
                             </div>
                         </div>
                     </div>

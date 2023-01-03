@@ -47,7 +47,7 @@
                                 <a href="{% url 'ppmp_details' ppmp_id=order.ppmp.id %}?category_selected={{ order.cat.code }}" target="_blank" class=" underline text-blue-600">View</a>
                                 <a href="{% url 'generate_ppmp_pdf' cc_code=order.cc.code ppmp_id=order.ppmp.id cat_code=order.cat.code %}" target="_blank" class=" underline text-blue-600">Download PPMP PDF</a>
                                 {% if order.ppmp.has_purchase_request %}
-                                <a href="{% url 'generate_pr_pdf' ppmp_id=order.ppmp.id %}" target="_blank" class=" underline text-blue-600">Download PR PDF</a>
+                                <a href="{% url 'generate_pr_pdf' ppmp_id=order.ppmp.id cat_code=order.cat.code %}" target="_blank" class=" underline text-blue-600">Download PR PDF</a>
                                 {% endif %}
                             </td>
                         </tr>

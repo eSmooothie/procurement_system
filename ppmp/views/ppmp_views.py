@@ -160,6 +160,7 @@ def ppmp_detail(request, ppmp_id):
     curr_budget = format_currency(cc_budget.curr_budget, 'PHP', locale="en_US") if cc_budget else "NO BUDGET"
 
     orderdetails = list()
+  
     if raw_orderdetails:
         for data in raw_orderdetails:
             id = data.id
@@ -271,8 +272,6 @@ def view_pr(request, ppmp_id, cat_code, orderitem_id):
     user_fn = request.user.first_name if request.user.first_name is not None else "No Name"
 
     order_detail = OrderDetails.objects.get(id=orderitem_id)
-
-    print(order_detail.purchase_request)
 
     context = page_context(
         user_fn = user_fn,
