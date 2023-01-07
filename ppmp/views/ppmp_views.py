@@ -46,17 +46,20 @@ def dashboard(request):
     if not is_admin:
         user_cc = CostCenterUser.objects.select_related().filter(user_id = request.user.id).values('cc__code')
         ppmps = Ppmp.objects.select_related().filter(cc_code__in=user_cc).values('id')
-        orderdetails = OrderDetails.objects.select_related().filter(ppmp_id__in=ppmps).order_by('cat_code', '-ppmp__year').distinct('cat_code')
+        orderdetails = OrderDetails.objects.select_related().filter(ppmp_id__in=ppmps).order_by('cat_code', 
+            '-ppmp__year','ppmp__cc_code')
         
     else:
         ppmps = Ppmp.objects.select_related().all()
-        orderdetails = OrderDetails.objects.select_related().filter(ppmp_id__in=ppmps).order_by('cat_code', '-ppmp__year').distinct('cat_code')
+        orderdetails = OrderDetails.objects.select_related().filter(ppmp_id__in=ppmps).order_by('cat_code', '-ppmp__year','ppmp__cc_code')
 
     my_orderdetails = []
 
     for order in orderdetails:
+        if __is_ppmp_exist(my_orderdetails, order.ppmp.id, order.ppmp.cc_code, order.cat_code):
+            continue
+
         data = {
-            'id' : order.id,
             'ppmp' : order.ppmp,
             'cc' : CostCenter.objects.get(code=order.ppmp.cc_code),
             'cat' : Category.objects.get(code=order.cat_code),
@@ -76,6 +79,12 @@ def dashboard(request):
         template_name='ppmp/welcome.html', 
         context=context
     )
+
+def __is_ppmp_exist(ord_list, ppmp_id, cc_code, cat_code):
+    for values in ord_list:
+        if values['ppmp'].id == ppmp_id and values['cc'].code == cc_code and values['cat'].code == cat_code:
+            return True
+    return False
 
 @login_required(login_url='login_user')
 def cc_ppmp(request, cc_code):

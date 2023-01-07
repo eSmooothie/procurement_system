@@ -157,7 +157,7 @@ class OrderDetails(models.Model):
 
     code = models.CharField(blank=True,null=True, max_length=255)
     created_at = models.CharField(blank=True, null=True, max_length=255)
-    
+
     @property
     def compute_amnt(self):
         price = float(self.get_current_price)
