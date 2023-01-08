@@ -3,10 +3,8 @@
 <div class=" grid grid-cols-12 gap-x-3">
     <div class=" col-span-2 gap-6 border border-red-500 px-3">
         <hr class="my-3">
-        <button data-modal-toggle="consolidate_modal" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 
-        focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 ">Generate APP</button>
-        <button class="w-full text-white bg-blue-700 hover:bg-blue-800 
-        focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 ">Print</button>
+        <button data-modal-toggle="consolidate_modal" class="button-main">Generate APP</button>
+        <button class="button-main">Print</button>
         <!-- <button class="w-full text-white bg-blue-700 hover:bg-blue-800 
         focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 ">Archives</button> -->
     </div>
@@ -31,8 +29,8 @@
                     <td class="border border-gray-300">{{ i.item.app.quarter_to_str }}</td>
                     <td class="border border-gray-300">{{ i.ttl_enduser }}</td>
                     <td class="border flex flex-col space-y-2">
-                        <a href="" class="underline text-blue-600">View</a>
-                        <a href="" class="underline text-blue-600">Download</a>
+                        <a href="" class="text-hyperlink">View</a>
+                        <a href="" class="text-hyperlink">Download</a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -110,9 +108,12 @@
                                     <input checked id="consolidate_all" type="radio" value="1" name="consolidate" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                     <label for="consolidate_all" class="py-2 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300">All account code</label>
                                 </div>
+                                <!-- TODO: Consolidate only specific account code -->
                                 <div class="flex-1 flex items-center pl-4 rounded border border-gray-200 dark:border-gray-700">
                                     <input id="specific" type="radio" value="0" name="consolidate" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="specific" class="py-2 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300">Specific account code</label>
+                                    <label for="specific" class="py-2 ml-2 w-full text-sm font-medium dark:text-gray-300">
+                                        Specific account code
+                                    </label>
                                 </div>
                             </div>
                             <div>

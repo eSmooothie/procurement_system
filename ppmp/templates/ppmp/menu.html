@@ -2,28 +2,28 @@
 
 <div class="">
         <div class=" bg-cyan-400 text-black font-medium flex justify-between h-auto">
-        <div class="">
+        <div class="flex">
             {% block menu_buttons %}
                 {% if selected_app == 'dashboard' %}
-                    <a href="{% url 'home' %}" class=""><button class="px-5 py-3 bg-cyan-500 uppercase">Dashboard</button></a>
+                    <a href="{% url 'home' %}" class="m-0"><button class="button-menu-nav-selected">Dashboard</button></a>
                 {% else %}
-                    <a href="{% url 'home' %}" class=""><button class="px-5 py-3 hover:bg-cyan-500 uppercase">Dashboard</button></a>
+                    <a href="{% url 'home' %}" class="m-0"><button class="button-menu-nav">Dashboard</button></a>
                 {% endif %}
                 {% if selected_app == 'ppmp' %}
-                    <a href="{% url 'ppmp' %}"><button class="px-5 py-3 bg-cyan-500 uppercase">PPMP</button></a>
+                    <a href="{% url 'ppmp' %}" class="m-0"><button class="button-menu-nav-selected">PPMP</button></a>
                 {% else %}
-                    <a href="{% url 'ppmp' %}"><button class="px-5 py-3 hover:bg-cyan-500 uppercase">PPMP</button></a>
+                    <a href="{% url 'ppmp' %}" class="m-0"><button class="button-menu-nav">PPMP</button></a>
                 {% endif %}
                 {% if is_admin %}
                     {% if selected_app == 'app' %}
-                        <a href="{% url 'app' %}"><button class="px-5 py-3 bg-cyan-500 uppercase">APP</button></a>
+                        <a href="{% url 'app' %}"><button class="button-menu-nav-selected">APP</button></a>
                     {% else %}
-                        <a href="{% url 'app' %}"><button class="px-5 py-3 hover:bg-cyan-500 uppercase">APP</button></a>
+                        <a href="{% url 'app' %}"><button class="button-menu-nav">APP</button></a>
                     {% endif %}
                     {% if selected_app == 'item' %}
-                        <a href="{% url 'item' %}"><button class="px-5 py-3 bg-cyan-500 uppercase">Items</button></a>
+                        <a href="{% url 'item' %}"><button class="button-menu-nav-selected">Items</button></a>
                     {% else %}
-                        <a href="{% url 'item' %}"><button class="px-5 py-3 hover:bg-cyan-500 uppercase">Items</button></a>
+                        <a href="{% url 'item' %}"><button class="button-menu-nav">Items</button></a>
                     {% endif %}
                 {% endif %}
             {% endblock menu_buttons %}

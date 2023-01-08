@@ -2,7 +2,7 @@
 {% block content %}
 <div class="p-3 space-y-3 sm:flex items-center flex-col">
     <div class=" sm:w-[90%] flex justify-between items-center">
-        <a href="{% url 'ppmp_details' ppmp_id=ppmp.id %}?category_selected={{ category.code }}" class="hover:bg-blue-400 bg-blue-300 px-5 py-2.5 rounded-sm font-medium" 
+        <a href="{% url 'ppmp_details' ppmp_id=ppmp.id %}?category_selected={{ category.code }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2" 
         data-tooltip-target="tooltip-select-cc" >
             <button class="flex items-center space-x-2">
                 {% load static %}
@@ -56,7 +56,7 @@
                         {{ order.serv_status }}
                      </td>
                     <td class="">
-                       <button class=" text-blue-500 text-xs font-medium more_log_btn">More</button>
+                       <p class=" text-hyperlink more_log_btn">More</p>
                     </td>
                 </tr>
                 {% endfor %}

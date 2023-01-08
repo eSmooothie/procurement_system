@@ -21,7 +21,8 @@ $(document).ready(function(){
                 log_records = data['log_records'];
                 $("#item_name").text(data['item_name']);
                 const log_elem = $("#logs");
-
+                $(log_elem).empty();
+                
                 if(log_records.length > 0){
                     for (const i in log_records) {
                         if (Object.hasOwnProperty.call(log_records, i)) {

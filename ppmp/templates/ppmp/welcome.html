@@ -11,45 +11,45 @@
                 <span class="col-span-1"></span>
                 {% endif %}
                 <a href="{% url 'ppmp' %}" class="col-span-1">
-                    <button class="px-5 py-3 bg-cyan-400 uppercase rounded-md w-full hover:bg-cyan-500">CREATE PPMP</button>
+                    <button class="button-main">CREATE PPMP</button>
                 </a>
                 {% if is_admin %}
                 <a href="{% url 'app' %}" class="col-span-1">
-                    <button class="px-5 py-3 bg-cyan-400 uppercase rounded-md w-full hover:bg-cyan-500">APP</button>
+                    <button class="button-main">APP</button>
                 </a>
                 <a href="{% url 'app' %}" class="col-span-1">
-                    <button class="px-5 py-3 bg-cyan-400 uppercase rounded-md w-full hover:bg-cyan-500">Items</button>
+                    <button class="button-main">Items</button>
                 </a>
                 {% endif %}
             </div>
         </div>
         <div class="px-10">
             <p class="">Created PPMP</p>
-            <div class=" border border-black ">
-                <table class="w-full text-left text-xs">
-                    <thead>
+            <div class="">
+                <table class="w-full table-fixed text-xs">
+                    <thead class="bg-gray-200">
                         <tr class="border">
-                            <th class="border">Year</th>
-                            <th class="border">Cost Center</th>
-                            <th class="border">Source of Fund</th>
-                            <th class="border">Category</th>
-                            <th class="border">Type</th>
-                            <th class="border"></th>
+                            <th class="border border-black">Year</th>
+                            <th class="border border-black">Cost Center</th>
+                            <th class="border border-black">Source of Fund</th>
+                            <th class="border border-black">Category</th>
+                            <th class="border border-black">Type</th>
+                            <th class="border border-black">Options</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="bg-gray-100">
                         {% for order in orderdetails %}
-                        <tr class="border">
-                            <td class="border">{{ order.ppmp.year }}</td>
-                            <td class="border">{{ order.cc.name }}</td>
-                            <td class="border">{{ order.sof.description }}</td>
-                            <td class="border">{{ order.cat.name }} ({{ order.cat.code }})</td>
-                            <td class="border">{{ order.ppmp.type }}</td>
+                        <tr class="border text-left">
+                            <td class="border border-gray-300">{{ order.ppmp.year }}</td>
+                            <td class="border border-gray-300">{{ order.cc.name }}</td>
+                            <td class="border border-gray-300">{{ order.sof.description }}</td>
+                            <td class="border border-gray-300">{{ order.cat.name }} ({{ order.cat.code }})</td>
+                            <td class="border border-gray-300">{{ order.ppmp.type }}</td>
                             <td class="border flex flex-col space-y-2">
-                                <a href="{% url 'ppmp_details' ppmp_id=order.ppmp.id %}?category_selected={{ order.cat.code }}" target="_blank" class=" underline text-blue-600">View</a>
-                                <a href="{% url 'generate_ppmp_pdf' cc_code=order.cc.code ppmp_id=order.ppmp.id cat_code=order.cat.code %}" target="_blank" class=" underline text-blue-600">Download PPMP PDF</a>
+                                <a href="{% url 'ppmp_details' ppmp_id=order.ppmp.id %}?category_selected={{ order.cat.code }}" target="_blank" class="text-hyperlink">View</a>
+                                <a href="{% url 'generate_ppmp_pdf' cc_code=order.cc.code ppmp_id=order.ppmp.id cat_code=order.cat.code %}" target="_blank" class="text-hyperlink">Download PPMP PDF</a>
                                 {% if order.ppmp.has_purchase_request %}
-                                <a href="{% url 'generate_pr_pdf' ppmp_id=order.ppmp.id cat_code=order.cat.code %}" target="_blank" class=" underline text-blue-600">Download PR PDF</a>
+                                <a href="{% url 'generate_pr_pdf' ppmp_id=order.ppmp.id cat_code=order.cat.code %}" target="_blank" class="text-hyperlink">Download PR PDF</a>
                                 {% endif %}
                             </td>
                         </tr>

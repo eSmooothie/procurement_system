@@ -3,7 +3,7 @@
 {% load static %}
 {% load filter %}
 <div class=" grid grid-cols-12 gap-x-2 pb-10">
-    <div class="col-span-2 border border-red-500 px-2">
+    <div class="col-span-2 px-2">
         <div>
             <button data-modal-toggle="new-item-modal" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 
             focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 text-left">Add Item</button>
@@ -17,7 +17,7 @@
         </div>
         
         <div class="border-t border-gray-500 pt-2 space-y-2">
-            <p>Filter</p>
+            <p class="">Filter</p>
             <input type="text" 
             class=" p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border
             focus:ring-blue-500 focus:border-blue-500 search-category" 
@@ -43,7 +43,7 @@
 
     </div>
     <!-- TABLE -->
-    <div class="col-span-10 border border-red-500 pr-3 space-y-2">
+    <div class="col-span-10 pr-3 space-y-2">
         <div class=" space-y-1">
             <form method="get" action="">   
                 <label for="search-item" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
@@ -94,7 +94,7 @@
                 {% for item in items %}
                 <tr class="text-left odd:bg-white even:bg-gray-200">
                     <td class="border border-gray-300">
-                        <a href="{% url 'single_item' item_id=item.id %}" class=" text-blue-500 hover:underline">{{ item.name|highlight:search_keyword }}</a>
+                        <a href="{% url 'single_item' item_id=item.id %}" class="text-hyperlink">{{ item.name|highlight:search_keyword }}</a>
                     </td>
                     <td class="border border-gray-300">
                         <ul class=" list-none">
