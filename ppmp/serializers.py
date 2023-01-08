@@ -1,12 +1,17 @@
 from rest_framework import serializers
-from .models import App, CostCenter, CostCenterBudget, Item, ItemCategory, OrderDetails, Ppmp, Category, Prices
+from .models import App, CostCenter, CostCenterBudget, Item, ItemCategory, OrderDetails, Ppmp, Category, Prices, SourceOfFund
 
 def required(value):
     if value is None:
         raise serializers.ValidationError('This field is required')
+class SoFSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SourceOfFund
+        fields = "__all__"
 
 class PpmpSerializer(serializers.ModelSerializer):
-
+    sof = SoFSerializer(read_only=True)
     class Meta:
         model = Ppmp
         fields = '__all__'

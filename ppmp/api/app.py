@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from rest_framework import status
 
-from ppmp.models import App
-from ppmp.serializers import APPSerializer
+from ppmp.models import App, OrderDetails, ProcurementMode, SourceOfFund
+from ppmp.serializers import APPSerializer, OrderDetailsSerializer
 
 INVALID_REQUEST = {'msg':"Invalid request"}
 INVALID_ACCESS = {'msg':"Invalid access"}
@@ -45,3 +45,33 @@ def parse_quarter(q:int):
     elif q == 4:
         return "FOURTH"
     return None
+
+def consolidate_ppmp(request):
+
+    if request.method == "POST":
+        req_data = request.POST
+        sof = req_data['sof']
+        year = req_data['year']
+        quarter = req_data['quarter']
+        consolidate = req_data['consolidate']
+
+        app = App()
+        app.quarter=quarter
+        app.year=year
+        app.sof= SourceOfFund.objects.get(code=sof)
+        app.type = "PRIMARY" if not App.objects.filter(sof__code=sof,quarter=quarter,year=year,type="PRIMARY").exists() else "SUPLEMENTARY"
+        app.save()
+
+        if int(quarter) == 0:
+            orderdetails = OrderDetails.objects.select_related().filter(ppmp__year=year, ppmp__sof__code=sof).all()
+        
+        for order in orderdetails:
+            procure_mode = ProcurementMode()
+            procure_mode.app = app
+            procure_mode.orderdetail = order
+            procure_mode.mode = app.type
+            procure_mode.save()
+
+        return JsonResponse({"msg":"OK"}, status=status.HTTP_201_CREATED, safe=False)
+
+    return JsonResponse(INVALID_REQUEST, status=status.HTTP_400_BAD_REQUEST)

@@ -33,6 +33,7 @@
                             <th class="border">Cost Center</th>
                             <th class="border">Source of Fund</th>
                             <th class="border">Category</th>
+                            <th class="border">Type</th>
                             <th class="border"></th>
                         </tr>
                     </thead>
@@ -43,6 +44,7 @@
                             <td class="border">{{ order.cc.name }}</td>
                             <td class="border">{{ order.sof.description }}</td>
                             <td class="border">{{ order.cat.name }} ({{ order.cat.code }})</td>
+                            <td class="border">{{ order.ppmp.type }}</td>
                             <td class="border flex flex-col space-y-2">
                                 <a href="{% url 'ppmp_details' ppmp_id=order.ppmp.id %}?category_selected={{ order.cat.code }}" target="_blank" class=" underline text-blue-600">View</a>
                                 <a href="{% url 'generate_ppmp_pdf' cc_code=order.cc.code ppmp_id=order.ppmp.id cat_code=order.cat.code %}" target="_blank" class=" underline text-blue-600">Download PPMP PDF</a>

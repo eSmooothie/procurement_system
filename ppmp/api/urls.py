@@ -15,7 +15,9 @@ urlpatterns = [
     path('orderitem/update', order_item.put_ppmp_orderitems, name="OrderItem"),
     path('orderitem/logs', order_item.get_orderitem_logs, name="OrderItemLogs"),
     path('orderitem/purchase_request', order_item.put_purchase_request, name="OrderItemPR"),
+
     path('app/get/consolidated/ppmps', app.get_consolidated_ppmp, name="get_consolidated_ppmp"),
+    path('app/consolidate', app.consolidate_ppmp, name="consolidate_ppmp"),
 
     path('item/autocomplete_search', item.autocomplete_search, name="item_search"),
     path('item/add', item.add_item, name="add_item"),

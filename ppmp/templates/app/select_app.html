@@ -18,18 +18,24 @@
                     <th class="border border-black w-44">Source of Fund</th>
                     <th class="border border-black w-44">Year</th>
                     <th class="border border-black w-44">Quarter</th>
+                    <th class="border border-black w-44">PMO/End-User</th>
                     <th class="border border-black w-44">opt</th>
                 </tr>
             </thead>
             <tbody class="bg-gray-100">
+                {% for i in items %}
                 <tr class="text-left">
-                    <td class="border border-gray-300">DT</td>
-                    <td class="border border-gray-300">INCOME</td>
-                    <td class="border border-gray-300">2023</td>
-                    <td class="border border-gray-300">All</td>
-                    <td class="border border-gray-300">View / Edit / Download</td>
-                    
+                    <td class="border border-gray-300">{{ i.item.orderdetail.category.name }} ({{ i.item.orderdetail.category.code }})</td>
+                    <td class="border border-gray-300">{{ i.item.app.type }}</td>
+                    <td class="border border-gray-300">{{ i.item.app.year }}</td>
+                    <td class="border border-gray-300">{{ i.item.app.quarter_to_str }}</td>
+                    <td class="border border-gray-300">{{ i.ttl_enduser }}</td>
+                    <td class="border flex flex-col space-y-2">
+                        <a href="" class="underline text-blue-600">View</a>
+                        <a href="" class="underline text-blue-600">Download</a>
+                    </td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

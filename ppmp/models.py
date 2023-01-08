@@ -133,6 +133,18 @@ class App(models.Model):
     group_id = models.CharField(blank=True,null=True, max_length=255)
     sof = models.ForeignKey(SourceOfFund, on_delete=models.RESTRICT)
     
+    @property
+    def quarter_to_str(self):
+        if self.quarter == '1':
+            return "1st"
+        elif self.quarter == '2':
+            return "2nd"
+        elif self.quarter == '3':
+            return "3rd"
+        elif self.quarter == '4':
+            return "4th"
+        return "1st-4th"
+
     def __str__(self):
         return "app_id:{}-{}".format(self.id, self.year)
 
@@ -194,6 +206,11 @@ class OrderDetails(models.Model):
         cc_code = self.ppmp.cc_code
         cc = CostCenter.objects.get(code=cc_code)
         return cc
+
+    @property
+    def category(self):
+        cat_code = self.cat_code
+        return Category.objects.get(code=cat_code)
 
     @property
     def purchase_request(self):

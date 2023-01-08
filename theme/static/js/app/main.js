@@ -42,7 +42,19 @@ $(document).ready(function(){
         var data = $(this).serializeArray();
 
         console.log(data);
-        //TODO: Send data to backend
+    
+
+        sendRequest({
+            method:"POST",
+            url:"/api/app/consolidate",
+            data:data,
+            done:function(data){
+                window.location.reload();
+            },
+            fail:function(err){
+                console.log(err);
+            }
+        })
     });
 
     $("input[name=consolidate]","#create-app-form").change(function(){
