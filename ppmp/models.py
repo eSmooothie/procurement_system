@@ -168,7 +168,7 @@ class OrderDetails(models.Model):
     fourth_quant = models.CharField(blank=True,null=True, max_length=255)
 
     code = models.CharField(blank=True,null=True, max_length=255)
-    created_at = models.CharField(blank=True, null=True, max_length=255)
+    created_at = models.DateTimeField(auto_now=True, null=True, max_length=255)
 
     @property
     def compute_amnt(self):
@@ -223,14 +223,14 @@ class OrderDetails(models.Model):
         return "orddetails_id:{}".format(self.id)
 
 class ProcurementMode(models.Model):
-    orderdetail = models.ForeignKey(OrderDetails, blank=True, related_name = "OrderItem", on_delete=models.CASCADE)
+    orderdetail = models.ForeignKey(OrderDetails, blank=True, related_name = "OrderItem", on_delete=models.RESTRICT)
     app = models.ForeignKey(App, null=True, blank=True, related_name = "APP", on_delete=models.RESTRICT)
     mode = models.CharField(null=True, blank=True, max_length=255)
 
     def __str__(self):
         return f'''{self.orderdetail.id} - {self.app} [{self.mode}]'''
 class PpmpTrack(models.Model):
-    orderdetails = models.ForeignKey(OrderDetails,null=True, on_delete=models.CASCADE)
+    orderdetails = models.ForeignKey(OrderDetails,null=True, on_delete=models.RESTRICT)
     datetime = models.CharField(blank=True,null=True, max_length=255)
     cc_name = models.CharField(blank=True,null=True, max_length=255)
     barcode = models.CharField(blank=True,null=True, max_length=255)
@@ -244,7 +244,7 @@ class PurchaseRequest(models.Model):
     unit_cost = models.CharField(blank=True,null=True, max_length=255)
     qty = models.IntegerField(blank=True,null=True)
     date_created = models.DateTimeField(auto_now=True)
-    order_details = models.ForeignKey(OrderDetails, on_delete=models.CASCADE)
+    order_details = models.ForeignKey(OrderDetails, on_delete=models.RESTRICT)
 
     def __str__(self):
         return "purchreq_id:{}".format(self.id)
@@ -272,7 +272,7 @@ class RequestItem(models.Model):
         RequestItemCategory.objects.filter(req_item=self).all().delete()
 
 class RequestItemCategory(models.Model):
-    req_item = models.ForeignKey(RequestItem, null=True, on_delete=models.CASCADE)
+    req_item = models.ForeignKey(RequestItem, null=True, on_delete=models.RESTRICT)
     cat_code = models.CharField(blank=True, max_length=255)
 
     @property

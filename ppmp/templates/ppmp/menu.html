@@ -46,9 +46,9 @@
     </div>
     <div class="pt-5">
         {% if messages %}
-        <ul class="messages px-3 fixed bottom-10 w-full">
+        <ul id="system-messages" class="messages px-3 fixed bottom-10 w-full">
             {% for message in messages %}
-            <li {% if message.tags %} class="system-{{ message.tags }}" {% endif %}>{{ message }}</li>
+            <li {% if message.tags %} class="system-{{ message.tags }} system-message-events" {% endif %}>{{ message }}</li>
             {% endfor %}
         </ul>
         {% endif %}

@@ -34,11 +34,6 @@ def put_ppmp_orderitems(request):
                 order_item.fourth_quant = item['4']
 
                 order_item.save()
-
-                if not ProcurementMode.objects.filter(orderdetail=order_item).exists():
-                    mode = ProcurementMode()
-                    mode.orderdetail = order_item
-                    mode.save()
             else:
                 new_order_item = OrderDetails()
 
@@ -55,11 +50,6 @@ def put_ppmp_orderitems(request):
                 new_order_item.fourth_quant = item['4']
 
                 new_order_item.save()
-
-                if not ProcurementMode.objects.filter(orderdetail=new_order_item).exists():
-                    mode = ProcurementMode()
-                    mode.orderdetail = new_order_item
-                    mode.save()
 
         # removing part
         curr_ordereditems = OrderDetails.objects.select_related().filter(ppmp__id=ppmp_id, cat_code=cat_code).all()
@@ -158,6 +148,7 @@ def put_purchase_request(request):
         purchase_request.order_details = order_detail
         purchase_request.save()
         
-        # messages.success(request, "Success")
+        messages.success(request, "Purchase Request Save")
         return JsonResponse({'msg':'success'}, status=status.HTTP_201_CREATED)
+    messages.error(request, "Purchase Request Fail")
     return JsonResponse({'msg':'Invalid Access.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED) 

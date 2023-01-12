@@ -29,8 +29,8 @@ $(document).ready(function(){
         select: function(event, ui){
             var category_selected = ui.item;
             
-            var checkbox = categoryCheckbox(category_selected['code'], category_selected['value']);         
-
+            var checkbox = categoryCheckbox(category_selected['code'], category_selected['value']);   
+            $("#search-category").val("");
             $("#category-checkbox-container").append(checkbox);
             
         }
@@ -39,10 +39,7 @@ $(document).ready(function(){
     $("#create-app-form").submit(function (e){
         e.preventDefault();
 
-        var data = $(this).serializeArray();
-
-        console.log(data);
-    
+        var data = $(this).serializeArray();   
 
         sendRequest({
             method:"POST",

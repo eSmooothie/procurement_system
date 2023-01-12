@@ -36,3 +36,10 @@ var getUrlParameter = function getUrlParameter(sParam) {
   }
   return false;
 };
+
+$(document).ready(function(){
+  $("#system-messages > li").each(function(){
+    const elem = $(this);
+    setTimeout(function(){elem.fadeOut("slow")}, 5000);
+  });
+});

@@ -34,8 +34,6 @@ def index(request):
         data['item'] = i
         apps.append(data)
     
-
-
     context = page_context(
         user_fn = user_fn,
         is_admin=is_admin,
